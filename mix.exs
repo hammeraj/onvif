@@ -9,12 +9,16 @@ defmodule Onvif.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
 
-      # ex_doc
+      # ex_doc / hex
       name: "Onvif",
       source_url: "https://github.com/hammeraj/onvif",
+      description: "Elixir interface for Onvif functions",
       docs: [
         main: "Onvif", # The main page in the docs
         extras: ["README.md"]
+      ],
+      package: [
+        licenses: ["BSD-3-Clause"]
       ]
     ]
   end

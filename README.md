@@ -1,6 +1,6 @@
 # Onvif
 
-**TODO: Add description**
+**Elixir interface for Onvif functions**
 
 ## Installation
 

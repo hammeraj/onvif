@@ -21,6 +21,7 @@ defmodule Onvif.Discovery do
   @onvif_discovery_port 3702
 
   defmodule Probe do
+    @type t :: %__MODULE__{}
     defstruct [:types, :scopes, :request_guid, :address, :device_ip, :device_port]
   end
 

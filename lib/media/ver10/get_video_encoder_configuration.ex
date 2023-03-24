@@ -17,7 +17,7 @@ defmodule Onvif.Media.Ver10.GetVideoEncoderConfiguration do
     ])
   end
 
-  @spec response(any) :: {:error, Ecto.Changeset.t()} | {:ok, VideoEncoderConfiguration.t()}
+  @spec response(any) :: {:error, Ecto.Changeset.t()} | {:ok, struct()}
   def response(xml_response_body) do
     xml_response_body
     |> parse(namespace_conformant: true, quiet: true)
