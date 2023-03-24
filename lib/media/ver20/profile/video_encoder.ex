@@ -17,7 +17,9 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
     field(:gov_length, :integer)
     field(:profile, :string)
     field(:guaranteed_frame_rate, :boolean, default: false)
-    field(:encoding, Ecto.Enum, values: [jpeg: "JPEG", mpeg4: "MPEG4", h264: "H264"])
+
+    field(:encoding, Ecto.Enum, values: [jpeg: "JPEG", mpeg4: "MPEG4", h264: "H264", h265: "H265"])
+
     field(:quality, :float)
 
     embeds_one :resolution, Resolution, primary_key: false, on_replace: :update do

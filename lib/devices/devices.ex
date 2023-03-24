@@ -12,7 +12,8 @@ defmodule Onvif.Devices do
     "xmlns:tds": "http://www.onvif.org/ver10/device/wsdl"
   ]
 
-  @spec request(String.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) :: {:ok, any} | {:error, String.t()}
+  @spec request(String.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
+          {:ok, any} | {:error, String.t()}
   def request(uri, auth \\ :xml_auth, operation) do
     content = generate_content(operation)
     soap_action = operation.soap_action()

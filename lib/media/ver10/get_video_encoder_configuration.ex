@@ -7,7 +7,8 @@ defmodule Onvif.Media.Ver10.GetVideoEncoderConfiguration do
   @spec soap_action :: String.t()
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetVideoEncoderConfiguration"
 
-  def request(uri, auth \\ :xml_auth, args), do: Onvif.Media.Ver10.Media.request(uri, args, auth, __MODULE__)
+  def request(uri, auth \\ :xml_auth, args),
+    do: Onvif.Media.Ver10.Media.request(uri, args, auth, __MODULE__)
 
   def request_body(configuration_token) do
     element(:"s:Body", [

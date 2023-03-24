@@ -63,7 +63,6 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
       use_count: ~x"./tt:UseCount/text()"i,
       source_token: ~x"./tt:SourceToken/text()"s,
       bounds: ~x"./tt:Bounds"e |> transform_by(&parse_bounds/1)
-
     )
   end
 

@@ -14,7 +14,8 @@ defmodule Onvif.MixProject do
       source_url: "https://github.com/hammeraj/onvif",
       description: "Elixir interface for Onvif functions",
       docs: [
-        main: "Onvif", # The main page in the docs
+        # The main page in the docs
+        main: "Onvif",
         extras: ["README.md"]
       ],
       package: [

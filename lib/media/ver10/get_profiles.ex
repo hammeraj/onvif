@@ -4,7 +4,8 @@ defmodule Onvif.Media.Ver10.GetProfiles do
 
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetProfiles"
 
-  def request(uri, auth \\ :no_auth), do: Onvif.Media.Ver10.Media.request(uri, [], auth, __MODULE__)
+  def request(uri, auth \\ :no_auth),
+    do: Onvif.Media.Ver10.Media.request(uri, [], auth, __MODULE__)
 
   def request_body do
     element(:"s:Body", [element(:"trt:GetProfiles")])

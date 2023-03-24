@@ -30,7 +30,7 @@ defmodule Onvif.Media.Ver20.Profile do
     embeds_one(:metadata_configuration, MetadataConfiguration)
     embeds_one(:ptz_configuration, Onvif.Media.Ver10.Profile.PtzConfiguration)
     embeds_one(:video_analytics_configuration, VideoAnalyticsConfiguration)
-    embeds_one(:video_encoder_configuration, VideoEncoder2)
+    embeds_one(:video_encoder_configuration, VideoEncoder)
     embeds_one(:video_source_configuration, VideoSourceConfiguration)
 
     embeds_one :extension, Extension, primary_key: false do

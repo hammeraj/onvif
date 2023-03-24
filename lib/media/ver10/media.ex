@@ -12,7 +12,8 @@ defmodule Onvif.Media.Ver10.Media do
     "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl"
   ]
 
-  @spec request(String.t(), list, :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) :: {:ok, any} | {:error, String.t()}
+  @spec request(String.t(), list, :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
+          {:ok, any} | {:error, String.t()}
   def request(uri, args \\ [], auth \\ :xml_auth, operation) do
     content = generate_content(operation, args)
     soap_action = operation.soap_action()
