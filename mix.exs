@@ -18,7 +18,8 @@ defmodule Onvif.MixProject do
         extras: ["README.md"]
       ],
       package: [
-        licenses: ["BSD-3-Clause"]
+        licenses: ["BSD-3-Clause"],
+        links: []
       ]
     ]
   end
