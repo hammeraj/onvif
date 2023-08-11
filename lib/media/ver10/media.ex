@@ -6,7 +6,7 @@ defmodule Onvif.Media.Ver10.Media do
   """
   require Logger
 
-  @endpoint "/onvif/media"
+  @endpoint "/onvif/media_service"
 
   @namespaces [
     "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl"

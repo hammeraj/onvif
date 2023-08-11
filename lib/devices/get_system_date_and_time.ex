@@ -49,7 +49,7 @@ defmodule Onvif.Devices.GetSystemDateAndTime do
     {:ok, date} = Date.new(parsed_result.year, parsed_result.month, parsed_result.day)
     {:ok, time} = Time.new(parsed_result.hour, parsed_result.minute, parsed_result.second)
     {:ok, datetime} = DateTime.new(date, time)
-    diff_between_device = DateTime.diff(current, datetime)
+    diff_between_device = DateTime.diff(datetime, current)
 
     {:ok,
      %Onvif.Devices.SystemDateAndTime{
