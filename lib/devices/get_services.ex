@@ -7,7 +7,7 @@ defmodule Onvif.Devices.GetServices do
   def request(uri, auth \\ :xml_auth), do: Onvif.Devices.request(uri, auth, __MODULE__)
 
   def request_body do
-    element(:"s:Body", [element(:"tds:GetServices")])
+    element(:"s:Body", [element(:"tds:GetServices", [element(:"tds:IncludeCapability", "true")])])
   end
 
   def response(xml_response_body) do
