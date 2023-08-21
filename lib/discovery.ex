@@ -39,10 +39,16 @@ defmodule Onvif.Discovery do
       {:udp, _port, device_ip, device_port, udp_response} ->
         probe_response = parse_udp_xml_response(udp_response)
         string_device_ip = device_ip |> :inet.ntoa() |> List.to_string()
+        device_addr = "http://#{string_device_ip}:#{device_port}"
 
         probe = %Probe{probe_response | device_ip: string_device_ip, device_port: device_port}
 
-        receive_message(socket, [probe | acc])
+        updated_probe =
+          Map.update(probe, :address, [device_addr], fn existing_value ->
+            [device_addr | existing_value]
+          end)
+
+        receive_message(socket, [updated_probe | acc])
     after
       @probe_timeout_msec ->
         Logger.debug("Closing socket after not receiving anything for #{@probe_timeout_msec} ms")
