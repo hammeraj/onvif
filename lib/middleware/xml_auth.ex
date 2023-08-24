@@ -45,8 +45,15 @@ defmodule Onvif.Middleware.XmlAuth do
   defp generate_xml_auth_header(url, username: username, password: password)
        when is_binary(username) and is_binary(password) do
     uri = URI.parse(url)
-    {:ok, system_date} = %URI{uri | userinfo: "", path: ""} |> URI.to_string() |> Onvif.Devices.GetSystemDateAndTime.request()
-    created_at = DateTime.utc_now() |> DateTime.add(system_date.current_diff) |> DateTime.to_iso8601()
+
+    {:ok, system_date} =
+      %URI{uri | userinfo: "", path: ""}
+      |> URI.to_string()
+      |> Onvif.Devices.GetSystemDateAndTime.request()
+
+    created_at =
+      DateTime.utc_now() |> DateTime.add(system_date.current_diff) |> DateTime.to_iso8601()
+
     nonce_bytes = :rand.bytes(@nonce_bytesize)
     nonce = Base.encode64(nonce_bytes)
     digest = :sha |> :crypto.hash(nonce_bytes <> created_at <> password) |> Base.encode64()
@@ -55,14 +62,15 @@ defmodule Onvif.Middleware.XmlAuth do
       :"s:Header",
       [
         element(
-          :"wsse:Security", %{"s:mustUnderstand" => "1"},
+          :"wsse:Security",
+          %{"s:mustUnderstand" => "1"},
           [
             element(
-              :"UsernameToken",
+              :UsernameToken,
               [
-                element(:"Username", username),
+                element(:Username, username),
                 element(
-                  :"Password",
+                  :Password,
                   %{
                     "Type" =>
                       "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest"
@@ -70,7 +78,7 @@ defmodule Onvif.Middleware.XmlAuth do
                   digest
                 ),
                 element(
-                  :"Nonce",
+                  :Nonce,
                   %{
                     "EncodingType" =>
                       "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary"
