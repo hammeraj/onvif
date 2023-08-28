@@ -31,10 +31,13 @@ defmodule Onvif.Discovery do
     {:ok, socket} = :gen_udp.open(0, mode: :binary, active: true, multicast_loop: false)
     :gen_udp.send(socket, @onvif_discovery_ip, @onvif_discovery_port, payload)
 
-    socket
-    |> receive_message([])
-    |> Enum.group_by(&(&1.address))
-    |> Enum.reduce([], fn {k, v} , acc -> [Enum.at(v, 0) | acc] end)
+    receive_message(socket, [])
+  end
+
+  @spec unique_probe() :: list(Probe.t())
+  def unique_probe do
+    prob_matches = probe()
+    Enum.uniq_by(prob_matches, &(&1.address))
   end
 
   defp receive_message(socket, acc) do
