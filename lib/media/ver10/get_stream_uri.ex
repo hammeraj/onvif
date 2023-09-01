@@ -2,12 +2,16 @@ defmodule Onvif.Media.Ver10.GetStreamUri do
   import SweetXml
   import XmlBuilder
 
+  @transport_protocols ["UDP", "TCP", "RTSP", "HTTP"]
+  @stream_types ["RTP-Unicast", "RTP-Multicast"]
+
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetStreamUri"
 
   def request(uri, auth \\ :xml_auth, args),
     do: Onvif.Media.Ver10.Media.request(uri, args, auth, __MODULE__)
 
-  def request_body(profile_token, stream_type, protocol) do
+  def request_body(profile_token, stream_type, protocol)
+      when stream_type in @stream_types and protocol in @transport_protocols do
     element(:"s:Body", [
       element(:"trt:GetStreamUri", [
         element(:"trt:StreamSetup", [
