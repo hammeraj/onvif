@@ -9,7 +9,7 @@ defmodule Onvif.Media.Ver20.GetProfiles do
 
   def request_body(profile_token) do
     element(:"s:Body", [
-      element(:"trt:GetProfiles", [
+      element(:"tr2:GetProfiles", [
         element(:"tr2:Token", profile_token),
         element(:"tr2:Type", "All")
       ])

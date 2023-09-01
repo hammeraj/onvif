@@ -9,7 +9,6 @@ defmodule Onvif.Media.Ver20.Media do
   @endpoint "/onvif/media"
 
   @namespaces [
-    "xmlns:trt": "http://www.onvif.org/ver20/media/wsdl",
     "xmlns:tr2": "http://www.onvif.org/ver20/media/wsdl",
     "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
