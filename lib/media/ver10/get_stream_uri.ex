@@ -10,7 +10,7 @@ defmodule Onvif.Media.Ver10.GetStreamUri do
   def request(uri, auth \\ :xml_auth, args),
     do: Onvif.Media.Ver10.Media.request(uri, args, auth, __MODULE__)
 
-  def request_body(profile_token, stream_type, protocol)
+  def request_body(profile_token, stream_type \\ "RTP-Unicast", protocol \\ "RTSP")
       when stream_type in @stream_types and protocol in @transport_protocols do
     element(:"s:Body", [
       element(:"trt:GetStreamUri", [
