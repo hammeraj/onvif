@@ -7,9 +7,17 @@ defmodule Onvif.Media.Ver10.GetStreamUri do
   def request(uri, auth \\ :xml_auth, args),
     do: Onvif.Media.Ver10.Media.request(uri, args, auth, __MODULE__)
 
-  def request_body(profile_token) do
+  def request_body(profile_token, stream_type, protocol) do
     element(:"s:Body", [
-      element(:"tds:GetStreamUri", [element(:"tds:ProfileToken", profile_token)])
+      element(:"trt:GetStreamUri", [
+        element(:"trt:StreamSetup", [
+          element(:"tt:Stream", stream_type),
+          element(:"tt:Transport", [
+            element(:"tt:Protocol", protocol)
+          ])
+        ]),
+        element(:"trt:ProfileToken", profile_token)
+      ])
     ])
   end
 
