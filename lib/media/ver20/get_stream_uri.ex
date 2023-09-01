@@ -7,11 +7,11 @@ defmodule Onvif.Media.Ver20.GetStreamUri do
   def request(uri, auth \\ :xml_auth, args),
     do: Onvif.Media.Ver20.Media.request(uri, args, auth, __MODULE__)
 
-  def request_body(profile_token) do
+  def request_body(profile_token, protocol \\ "RTSP") do
     element(:"s:Body", [
-      element(:"tds:GetStreamUri", [
-        element(:Protocol, "RTSP"),
-        element(:"tds:ProfileToken", profile_token)
+      element(:"tr2:GetStreamUri", [
+        element(:"tr2:Protocol", protocol),
+        element(:"tr2:ProfileToken", profile_token)
       ])
     ])
   end
@@ -22,10 +22,9 @@ defmodule Onvif.Media.Ver20.GetStreamUri do
     stream_uri =
       xpath(
         doc,
-        ~x"//s:Envelope/s:Body/trt:GetStreamUriResponse/tt:Uri/text()"s
+        ~x"//s:Envelope/s:Body/tr2:GetStreamUriResponse/tr2:Uri/text()"s
         |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
-        |> add_namespace("trt", "http://www.onvif.org/ver20/media/wsdl")
-        |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
+        |> add_namespace("tr2", "http://www.onvif.org/ver20/media/wsdl")
       )
 
     {:ok, stream_uri}
