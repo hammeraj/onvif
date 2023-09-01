@@ -34,9 +34,17 @@ defmodule Onvif.Devices do
     operation.response(body)
   end
 
-  defp parse_response({:ok, response}, operation),
-    do: {:error, "Received #{response.status} from #{operation}"}
+  defp parse_response({:ok, %{status: status_code, body: body}}, operation)
+       when status_code >= 400,
+       do:
+         {:error,
+          %{
+            status: status_code,
+            reason: "Received #{status_code} from #{operation}",
+            response: body
+          }}
 
-  defp parse_response({:error, _response}, operation),
-    do: {:error, "Error performing #{operation}"}
+  defp parse_response({:error, response}, operation) do
+    {:error, %{status: nil, reason: "Error performing #{operation}", response: response}}
+  end
 end
