@@ -23,8 +23,8 @@ defmodule Onvif.Device.Service do
         minor: ~x"./tds:Version/tt:Minor/text()"s
       )
 
-    xmap(
-      doc,
+    doc
+    |> xmap(
       namespace: ~x"./tds:Namespace/text()"s,
       xaddr: ~x"./tds:XAddr/text()"s
     )
@@ -38,7 +38,6 @@ defmodule Onvif.Device.Service do
   end
 
   def changeset(module, attrs) do
-    module
-    |> cast(attrs, @profile_permitted)
+    cast(module, attrs, @profile_permitted)
   end
 end

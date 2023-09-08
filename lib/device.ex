@@ -26,9 +26,15 @@ defmodule Onvif.Device do
   @spec init(Onvif.Discovery.Probe.t(), String.t(), String.t(), boolean, boolean) ::
           {:error, any()}
           | %Device{}
-  def init(%Probe{} = probe_match, username, password, use_https? \\ false, use_ipv6? \\ false) do
+  def init(
+        %Probe{} = probe_match,
+        username,
+        password,
+        prefer_https? \\ false,
+        prefer_ipv6? \\ false
+      ) do
     with {:ok, device} <-
-           device_from_probe_match(probe_match, username, password, use_https?, use_ipv6?),
+           device_from_probe_match(probe_match, username, password, prefer_https?, prefer_ipv6?),
          {:ok, device_with_datetime} <- get_date_time(device),
          {:ok, updated_device} <- guess_auth(device_with_datetime) do
       updated_device
@@ -37,14 +43,17 @@ defmodule Onvif.Device do
     end
   end
 
-  defp device_from_probe_match(%Probe{} = probe_match, username, password, use_https?, use_ipv6?) do
-    scheme = if use_https?, do: "https", else: "http"
-
+  defp device_from_probe_match(
+         %Probe{} = probe_match,
+         username,
+         password,
+         prefer_https?,
+         prefer_ipv6?
+       ) do
     uri =
       probe_match.address
-      |> get_address(use_ipv6?)
+      |> get_address(prefer_https?, prefer_ipv6?)
       |> URI.parse()
-      |> Map.put(:scheme, scheme)
       |> Map.put(:userinfo, "#{username}:#{password}")
 
     is_nvr? = if "tds:Device" in probe_match.types, do: false, else: true
@@ -52,7 +61,7 @@ defmodule Onvif.Device do
     device = %Device{
       username: username,
       password: password,
-      ip: URI.to_string(uri),
+      address: URI.to_string(uri),
       port: uri.port,
       scopes: probe_match.scopes,
       is_nvr?: is_nvr?
@@ -61,23 +70,38 @@ defmodule Onvif.Device do
     {:ok, device}
   end
 
-  defp get_address(addresses, use_ipv6?) do
-    ipv6_address =
-      Enum.find(addresses, fn address ->
+  defp get_address(addresses, prefer_https?, prefer_ipv6?) do
+    ipv6_addresses =
+      Enum.filter(addresses, fn address ->
         uri = URI.parse(address)
-        String.contains?(uri.host, ":")
+
+        cond do
+          prefer_https? -> String.contains?(uri.host, ":") and uri.scheme == "https"
+          true -> String.contains?(uri.host, ":")
+        end
       end)
 
-    if use_ipv6? and !is_nil(ipv6_address) do
-      ipv6_address
-    else
-      Enum.at(addresses, 0)
+    ipv4_addresses =
+      Enum.filter(addresses, fn address ->
+        uri = URI.parse(address)
+
+        cond do
+          prefer_https? -> String.contains?(uri.host, ".") and uri.scheme == "https"
+          true -> String.contains?(uri.host, ".")
+        end
+      end)
+
+    cond do
+      prefer_ipv6? and Enum.count(ipv6_addresses) != 0 -> Enum.at(ipv6_addresses, 0)
+      Enum.count(ipv4_addresses) != 0 -> Enum.at(ipv4_addresses, 0)
+      true -> Enum.at(addresses, 0)
     end
   end
 
   defp get_date_time(device) do
-    with {:ok, res} <- Onvif.Devices.GetSystemDateAndTime.request(device.ip) do
-      {:ok, Map.merge(device, Map.from_struct(res))}
+    with {:ok, res} <- Onvif.Devices.GetSystemDateAndTime.request(device.address) do
+      updated_device = %{device | time_diff_from_system_secs: res.current_diff, ntp: res.ntp}
+      {:ok, updated_device}
     end
   end
 
@@ -88,7 +112,7 @@ defmodule Onvif.Device do
       [auth_type | rest] = auth_types
 
       case get_device_information(device, auth_type) do
-        {:ok, %Device{} = updated_device} -> {:ok, Map.put(updated_device, :auth_type, auth_type)}
+        {:ok, %Device{} = updated_device} -> {:ok, %{device | auth_type: auth_type}}
         {:error, _res} -> guess_auth(device, rest)
       end
     end
@@ -97,7 +121,7 @@ defmodule Onvif.Device do
   defp get_device_information(device, auth_type) do
     with {:ok, res} <-
            Onvif.Devices.GetDeviceInformation.request(
-             device.ip,
+             device.address,
              auth_type
            ) do
       {:ok, Map.merge(device, Map.from_struct(res))}
@@ -107,7 +131,7 @@ defmodule Onvif.Device do
   defp get_services(device) do
     with {:ok, res} <-
            Onvif.Devices.GetServices.request(
-             device.ip,
+             device.address,
              device.auth_type
            ) do
       services =
