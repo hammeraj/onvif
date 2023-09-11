@@ -52,42 +52,66 @@ defmodule Onvif.Device do
        ) do
     uri =
       probe_match.address
-      |> get_address(prefer_https?, prefer_ipv6?)
+      |> get_address(prefer_ipv6?, prefer_https?)
       |> URI.parse()
       |> Map.put(:userinfo, "#{username}:#{password}")
-
-    is_nvr? = if "tds:Device" in probe_match.types, do: false, else: true
 
     device = %Device{
       username: username,
       password: password,
       address: URI.to_string(uri),
       port: uri.port,
-      scopes: probe_match.scopes,
-      is_nvr?: is_nvr?
+      scopes: probe_match.scopes
     }
 
     {:ok, device}
   end
 
-  defp get_address(addresses, prefer_https?, prefer_ipv6?) do
+  defp get_address(addresses, prefer_ipv6?, prefer_https?) do
+    # Presidence for the ipv6 and https follow the below order
+    # ipv6 and https
+    # ipv6 and http
+    # ipv4 and https
+    # ipv4 and http
     ipv6_addresses =
       Enum.filter(addresses, fn address ->
-        uri = URI.parse(address)
+        result =
+          address
+          |> URI.parse()
+          |> then(& &1.host)
+          |> :binary.bin_to_list()
+          |> :inet.parse_ipv6strict_address()
 
-        cond do
-          prefer_https? -> String.contains?(uri.host, ":") and uri.scheme == "https"
-          true -> String.contains?(uri.host, ":")
+        case result do
+          {:ok, _} ->
+            cond do
+              prefer_https? -> String.contains?(address, "https://")
+              true -> true
+            end
+
+          {:error, _} ->
+            false
         end
       end)
 
     ipv4_addresses =
       Enum.filter(addresses, fn address ->
-        uri = URI.parse(address)
+        result =
+          address
+          |> URI.parse()
+          |> then(& &1.host)
+          |> :binary.bin_to_list()
+          |> :inet.parse_ipv4strict_address()
 
-        cond do
-          prefer_https? -> String.contains?(uri.host, ".") and uri.scheme == "https"
-          true -> String.contains?(uri.host, ".")
+        case result do
+          {:ok, _} ->
+            cond do
+              prefer_https? -> String.contains?(address, "https://")
+              true -> true
+            end
+
+          {:error, _} ->
+            false
         end
       end)
 
@@ -112,7 +136,7 @@ defmodule Onvif.Device do
       [auth_type | rest] = auth_types
 
       case get_device_information(device, auth_type) do
-        {:ok, %Device{} = updated_device} -> {:ok, %{device | auth_type: auth_type}}
+        {:ok, %Device{} = updated_device} -> {:ok, %{updated_device | auth_type: auth_type}}
         {:error, _res} -> guess_auth(device, rest)
       end
     end
@@ -124,7 +148,14 @@ defmodule Onvif.Device do
              device.address,
              auth_type
            ) do
-      {:ok, Map.merge(device, Map.from_struct(res))}
+      {:ok,
+       %{
+         device
+         | manufacturer: res.manufacturer,
+           model: res.model,
+           serial_number: res.serial_number,
+           hardware_id: res.hardware_id
+       }}
     end
   end
 
