@@ -160,15 +160,11 @@ defmodule Onvif.Device do
   end
 
   defp get_services(device) do
-    with {:ok, res} <-
+    with {:ok, services} <-
            Onvif.Devices.GetServices.request(
              device.address,
              device.auth_type
            ) do
-      services =
-        res
-        |> Enum.map(&elem(&1, 1))
-
       Map.put(device, :services, services)
     end
   end

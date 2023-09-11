@@ -3,6 +3,7 @@ defmodule Onvif.Device.Service do
   A media profile
   """
 
+  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
@@ -35,6 +36,10 @@ defmodule Onvif.Device.Service do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+    |> case do
+      {:ok, data} -> data
+      {:error, _changeset} -> Logger.error("Error in validating device service changeset")
+    end
   end
 
   def changeset(module, attrs) do
