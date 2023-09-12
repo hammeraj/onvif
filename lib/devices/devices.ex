@@ -11,14 +11,13 @@ defmodule Onvif.Devices do
     "xmlns:tds": "http://www.onvif.org/ver10/device/wsdl"
   ]
 
-  @spec request(Device.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
-          {:ok, any} | {:error, map()}
-  def request(%Device{} = device, auth \\ :xml_auth, operation) do
+  @spec request(Device.t(), module()) :: {:ok, any} | {:error, map()}
+  def request(%Device{} = device, operation) do
     content = generate_content(operation)
     soap_action = operation.soap_action()
 
     (device.address <> device.device_service_path)
-    |> Onvif.API.client(auth)
+    |> Onvif.API.client(device.auth_type)
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],

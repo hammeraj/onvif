@@ -8,21 +8,18 @@ defmodule Onvif.Media.Ver20.Media do
 
   alias Onvif.Device
 
-  @endpoint "/onvif/media"
-
   @namespaces [
     "xmlns:tr2": "http://www.onvif.org/ver20/media/wsdl",
     "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
 
-  @spec request(Device.t(), list, :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
-          {:ok, any} | {:error, map()}
-  def request(%Device{} = device, args \\ [], auth \\ :xml_auth, operation) do
+  @spec request(Device.t(), list, module()) :: {:ok, any} | {:error, map()}
+  def request(%Device{} = device, args \\ [], operation) do
     content = generate_content(operation, args)
     soap_action = operation.soap_action()
 
     (device.address <> device.media_service_path)
-    |> Onvif.API.client(auth)
+    |> Onvif.API.client(device.auth_type)
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],
