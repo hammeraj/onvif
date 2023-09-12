@@ -123,7 +123,7 @@ defmodule Onvif.Device do
   end
 
   defp get_date_time(device) do
-    with {:ok, res} <- Onvif.Devices.GetSystemDateAndTime.request(device.address) do
+    with {:ok, res} <- Onvif.Devices.GetSystemDateAndTime.request(device) do
       updated_device = %{device | time_diff_from_system_secs: res.current_diff, ntp: res.ntp}
       {:ok, updated_device}
     end
@@ -135,19 +135,18 @@ defmodule Onvif.Device do
     else
       [auth_type | rest] = auth_types
 
-      case get_device_information(device, auth_type) do
+      guess_device = %{device | auth_type: auth_type}
+
+      case get_device_information(guess_device) do
         {:ok, %Device{} = updated_device} -> {:ok, %{updated_device | auth_type: auth_type}}
         {:error, _res} -> guess_auth(device, rest)
       end
     end
   end
 
-  defp get_device_information(device, auth_type) do
+  defp get_device_information(device) do
     with {:ok, res} <-
-           Onvif.Devices.GetDeviceInformation.request(
-             device.address,
-             auth_type
-           ) do
+           Onvif.Devices.GetDeviceInformation.request(device) do
       {:ok,
        %{
          device
@@ -161,10 +160,7 @@ defmodule Onvif.Device do
 
   defp get_services(device) do
     with {:ok, services} <-
-           Onvif.Devices.GetServices.request(
-             device.address,
-             device.auth_type
-           ) do
+           Onvif.Devices.GetServices.request(device) do
       Map.put(device, :services, services)
     end
   end
