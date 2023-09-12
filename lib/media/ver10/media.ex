@@ -6,10 +6,9 @@ defmodule Onvif.Media.Ver10.Media do
   """
   require Logger
 
-  @endpoint "/onvif/media_service"
-
   @namespaces [
-    "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl"
+    "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl",
+    "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
 
   @spec request(String.t(), list, :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
@@ -18,7 +17,7 @@ defmodule Onvif.Media.Ver10.Media do
     content = generate_content(operation, args)
     soap_action = operation.soap_action()
 
-    (uri <> @endpoint)
+    uri
     |> Onvif.API.client(auth)
     |> Tesla.request(
       method: :post,
