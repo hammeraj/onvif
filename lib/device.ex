@@ -13,7 +13,7 @@ defmodule Onvif.Device do
                 :hardware_id,
                 :ntp,
                 :media_service_path,
-                auth_type: :no_auth,
+                auth_type: :xml_auth,
                 time_diff_from_system_secs: 0,
                 port: 80,
                 supports_media2?: false,
