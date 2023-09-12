@@ -8,8 +8,8 @@ defmodule Onvif.Media.Ver20.GetProfiles do
 
   @spec request(Device.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, list) ::
           {:ok, any} | {:error, map()}
-  def request(uri, auth \\ :xml_auth, args \\ []),
-    do: Onvif.Media.Ver20.Media.request(uri, args, auth, __MODULE__)
+  def request(device, auth \\ :xml_auth, args \\ []),
+    do: Onvif.Media.Ver20.Media.request(device, args, auth, __MODULE__)
 
   def request_body(profile_token) do
     element(:"s:Body", [
