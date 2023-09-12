@@ -6,6 +6,8 @@ defmodule Onvif.Media.Ver20.Media do
   """
   require Logger
 
+  alias Onvif.Device
+
   @endpoint "/onvif/media"
 
   @namespaces [
@@ -13,11 +15,13 @@ defmodule Onvif.Media.Ver20.Media do
     "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
 
-  def request(uri, args \\ [], auth \\ :xml_auth, operation) do
+  @spec request(Device.t(), list, :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
+          {:ok, any} | {:error, map()}
+  def request(%Device{} = device, args \\ [], auth \\ :xml_auth, operation) do
     content = generate_content(operation, args)
     soap_action = operation.soap_action()
 
-    (uri <> @endpoint)
+    (device.address <> device.media_service_path)
     |> Onvif.API.client(auth)
     |> Tesla.request(
       method: :post,

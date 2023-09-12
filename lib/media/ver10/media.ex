@@ -6,19 +6,19 @@ defmodule Onvif.Media.Ver10.Media do
   """
   require Logger
 
-  @endpoint "/onvif/media_service"
+  alias Onvif.Device
 
   @namespaces [
     "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl"
   ]
 
-  @spec request(String.t(), list, :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
-          {:ok, any} | {:error, String.t()}
-  def request(uri, args \\ [], auth \\ :xml_auth, operation) do
+  @spec request(Device.t(), list, :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
+          {:ok, any} | {:error, map()}
+  def request(%Device{} = device, args \\ [], auth \\ :xml_auth, operation) do
     content = generate_content(operation, args)
     soap_action = operation.soap_action()
 
-    (uri <> @endpoint)
+    (device.address <> device.media_service_path)
     |> Onvif.API.client(auth)
     |> Tesla.request(
       method: :post,
