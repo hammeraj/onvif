@@ -2,8 +2,12 @@ defmodule Onvif.Media.Ver10.GetProfile do
   import SweetXml
   import XmlBuilder
 
+  alias Onvif.Device
+
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetProfiles"
 
+  @spec request(Device.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, list) ::
+          {:ok, any} | {:error, map()}
   def request(uri, auth \\ :xml_auth, args),
     do: Onvif.Media.Ver10.Media.request(uri, args, auth, __MODULE__)
 
