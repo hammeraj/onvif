@@ -6,10 +6,9 @@ defmodule Onvif.Media.Ver20.GetProfiles do
 
   def soap_action, do: "http://www.onvif.org/ver20/media/wsdl/GetProfiles"
 
-  @spec request(Device.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, list) ::
-          {:ok, any} | {:error, map()}
-  def request(device, auth \\ :xml_auth, args \\ []),
-    do: Onvif.Media.Ver20.Media.request(device, args, auth, __MODULE__)
+  @spec request(Device.t(), list) :: {:ok, any} | {:error, map()}
+  def request(device, args \\ []),
+    do: Onvif.Media.Ver20.Media.request(device, args, __MODULE__)
 
   def request_body(profile_token) do
     element(:"s:Body", [

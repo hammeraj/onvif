@@ -7,7 +7,11 @@ defmodule Onvif.Devices.GetSystemDateAndTime do
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/GetSystemDateAndTime"
 
   @spec request(Device.t()) :: {:ok, any} | {:error, map()}
-  def request(device), do: Onvif.Devices.request(device, :no_auth, __MODULE__)
+  def request(device) do
+    # Enforce no_auth for GetSystemDateAndTime to comply with ONVIF
+    updated_device = %{device | auth_type: :no_auth}
+    Onvif.Devices.request(updated_device, __MODULE__)
+  end
 
   def request_body do
     element(:"s:Body", [element(:"tds:GetSystemDateAndTime")])
