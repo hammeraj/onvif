@@ -44,12 +44,8 @@ defmodule Onvif.Middleware.XmlAuth do
 
   defp generate_xml_auth_header(url, username: username, password: password)
        when is_binary(username) and is_binary(password) do
-    uri = URI.parse(url)
-
-    {:ok, system_date} =
-      %URI{uri | userinfo: "", path: ""}
-      |> URI.to_string()
-      |> Onvif.Devices.GetSystemDateAndTime.request()
+    device = %Onvif.Device{username: username, password: password, address: url}
+    {:ok, system_date} = Onvif.Devices.GetSystemDateAndTime.request(device)
 
     created_at =
       DateTime.utc_now() |> DateTime.add(system_date.current_diff) |> DateTime.to_iso8601()

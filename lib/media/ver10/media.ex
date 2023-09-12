@@ -9,7 +9,8 @@ defmodule Onvif.Media.Ver10.Media do
   alias Onvif.Device
 
   @namespaces [
-    "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl"
+    "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl",
+    "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
 
   @spec request(Device.t(), list, module()) :: {:ok, any} | {:error, map()}
