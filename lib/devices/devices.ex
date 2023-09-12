@@ -5,20 +5,19 @@ defmodule Onvif.Devices do
     https://www.onvif.org/ver10/device/wsdl/devicemgmt.wsdl
   """
   require Logger
-
-  @endpoint "/onvif/device_service"
+  alias Onvif.Device
 
   @namespaces [
     "xmlns:tds": "http://www.onvif.org/ver10/device/wsdl"
   ]
 
-  @spec request(String.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
-          {:ok, any} | {:error, String.t()}
-  def request(uri, auth \\ :xml_auth, operation) do
+  @spec request(Device.t(), :basic_auth | :digest_auth | :no_auth | :xml_auth, module()) ::
+          {:ok, any} | {:error, map()}
+  def request(%Device{} = device, auth \\ :xml_auth, operation) do
     content = generate_content(operation)
     soap_action = operation.soap_action()
 
-    (uri <> @endpoint)
+    (device.address <> device.device_service_path)
     |> Onvif.API.client(auth)
     |> Tesla.request(
       method: :post,

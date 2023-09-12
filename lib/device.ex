@@ -1,6 +1,8 @@
 defmodule Onvif.Device do
   @enforce_keys [:username, :password, :address]
 
+  @type t :: %__MODULE__{}
+
   defstruct @enforce_keys ++
               [
                 :auth_type,
