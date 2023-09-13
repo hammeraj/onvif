@@ -16,8 +16,8 @@ defmodule Onvif.Devices do
     content = generate_content(operation)
     soap_action = operation.soap_action()
 
-    (device.address <> device.device_service_path)
-    |> Onvif.API.client(device.auth_type)
+    device
+    |> Onvif.API.client()
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],

@@ -18,8 +18,8 @@ defmodule Onvif.Media.Ver10.Media do
     content = generate_content(operation, args)
     soap_action = operation.soap_action()
 
-    (device.address <> device.media_service_path)
-    |> Onvif.API.client(device.auth_type)
+    device
+    |> Onvif.API.client(service_path: :media_service_path)
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],

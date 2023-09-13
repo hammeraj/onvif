@@ -47,10 +47,12 @@ defmodule Onvif.Middleware.DigestAuth do
              headers: env.headers,
              body: env.body
            ) do
+      device = Keyword.fetch!(opts, :device)
+
       {:ok,
        %{
-         username: opts[:username] || "",
-         password: opts[:password] || "",
+         username: device.username || "",
+         password: device.password || "",
          path: URI.parse(env.url).path,
          auth:
            unauthorized_response

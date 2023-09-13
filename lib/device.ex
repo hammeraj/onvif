@@ -54,6 +54,7 @@ defmodule Onvif.Device do
       probe_match.address
       |> get_address(prefer_ipv6?, prefer_https?)
       |> URI.parse()
+      |> Map.put(:path, "")
       |> Map.put(:userinfo, "#{username}:#{password}")
 
     device = %Device{
