@@ -38,8 +38,7 @@ defmodule Onvif.Middleware.PlainAuth do
     end
   end
 
-  defp generate_xml_auth_header(username: username, password: password)
-       when is_binary(username) and is_binary(password) do
+  defp generate_xml_auth_header(device: device) do
     element(
       :"s:Header",
       [
@@ -49,14 +48,14 @@ defmodule Onvif.Middleware.PlainAuth do
             element(
               :"wsse:UsernameToken",
               [
-                element(:"wsse:Username", username),
+                element(:"wsse:Username", device.username),
                 element(
                   :"wsse:Password",
                   %{
                     "Type" =>
                       "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText"
                   },
-                  password
+                  device.password
                 )
               ]
             )

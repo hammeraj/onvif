@@ -25,7 +25,7 @@ defmodule Onvif.Middleware.XmlAuth do
   end
 
   defp inject_xml_auth_header(env, opts) do
-    case generate_xml_auth_header(env.url, opts) do
+    case generate_xml_auth_header(opts) do
       nil ->
         generate(
           element(:"s:Envelope", @standard_namespaces ++ env.body.namespaces, [env.body.content])
@@ -42,21 +42,15 @@ defmodule Onvif.Middleware.XmlAuth do
     end
   end
 
-  defp generate_xml_auth_header(url, username: username, password: password)
-       when is_binary(username) and is_binary(password) do
-    uri = URI.parse(url)
-
-    {:ok, system_date} =
-      %URI{uri | userinfo: "", path: ""}
-      |> URI.to_string()
-      |> Onvif.Devices.GetSystemDateAndTime.request()
+  defp generate_xml_auth_header(device: device) do
+    {:ok, system_date} = Onvif.Devices.GetSystemDateAndTime.request(device)
 
     created_at =
       DateTime.utc_now() |> DateTime.add(system_date.current_diff) |> DateTime.to_iso8601()
 
     nonce_bytes = :rand.bytes(@nonce_bytesize)
     nonce = Base.encode64(nonce_bytes)
-    digest = :sha |> :crypto.hash(nonce_bytes <> created_at <> password) |> Base.encode64()
+    digest = :sha |> :crypto.hash(nonce_bytes <> created_at <> device.password) |> Base.encode64()
 
     element(
       :"s:Header",
@@ -68,7 +62,7 @@ defmodule Onvif.Middleware.XmlAuth do
             element(
               :UsernameToken,
               [
-                element(:Username, username),
+                element(:Username, device.username),
                 element(
                   :Password,
                   %{
@@ -94,5 +88,5 @@ defmodule Onvif.Middleware.XmlAuth do
     )
   end
 
-  defp generate_xml_auth_header(_uri, _opt), do: nil
+  defp generate_xml_auth_header(_uri), do: nil
 end
