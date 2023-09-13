@@ -43,7 +43,7 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
       doc,
       reference_token: ~x"./@token"s,
       profile: ~x"./@Profile"s,
-      gov_length: ~x"./@GovLength"i,
+      gov_length: ~x"./@GovLength"io,
       name: ~x"./tt:Name/text()"s,
       use_count: ~x"./tt:UseCount/text()"i,
       guaranteed_frame_rate: ~x"./tt:GuaranteedFrameRate/text()"s,
