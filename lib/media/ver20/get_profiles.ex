@@ -20,7 +20,7 @@ defmodule Onvif.Media.Ver20.GetProfiles do
   end
 
   def request_body do
-    element(:"s:Body", [element(:"trt:GetProfiles", [element(:"tr2:Type", "All")])])
+    element(:"s:Body", [element(:"tr2:GetProfiles", [element(:"tr2:Type", "All")])])
   end
 
   def response(xml_response_body) do
