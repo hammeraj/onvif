@@ -108,6 +108,10 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+    |> case do
+      {:ok, data} -> data
+      {:error, _changeset} -> Logger.error("Error in validating #{__MODULE__} changeset")
+    end
   end
 
   def changeset(module, attrs) do
