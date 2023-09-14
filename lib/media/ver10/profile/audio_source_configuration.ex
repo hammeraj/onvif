@@ -3,6 +3,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioSourceConfiguration do
 
   """
 
+  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
