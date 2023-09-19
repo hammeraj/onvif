@@ -38,9 +38,9 @@ defmodule Onvif.MixProject do
     [
       {:ecto, "~> 3.9"},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:finch, "~> 0.13"},
+      {:finch, "~> 0.16"},
       {:sweet_xml, "~> 0.7"},
-      {:tesla, "~> 1.5"},
+      {:tesla, "~> 1.7"},
       {:uuid, "~> 1.1"},
       {:xml_builder, "~> 2.1"}
     ]
