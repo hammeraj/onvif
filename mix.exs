@@ -41,7 +41,7 @@ defmodule Onvif.MixProject do
       {:finch, "~> 0.16"},
       {:sweet_xml, "~> 0.7"},
       {:tesla, "~> 1.7"},
-      {:uuid, "~> 1.1"},
+      {:elixir_uuid, "~> 1.2"},
       {:xml_builder, "~> 2.1"}
     ]
   end
