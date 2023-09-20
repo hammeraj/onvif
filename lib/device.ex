@@ -15,7 +15,7 @@ defmodule Onvif.Device do
                 :serial_number,
                 :hardware_id,
                 :ntp,
-                :media_service_path,
+                media_service_path: "/onvif/services",
                 auth_type: :xml_auth,
                 time_diff_from_system_secs: 0,
                 port: 80,
@@ -23,9 +23,46 @@ defmodule Onvif.Device do
                 device_service_path: "/onvif/device_service"
               ]
 
+  @doc """
+  Returns a `Device.t()` struct populated with the bare requirements for making a request to an Onvif
+  enabled device.
+
+  `address` is a http address with the form `http://ip:port`
+  `username` is the onvif enabled username
+  `password` is the password for the username
+
+  As this is an override for the init() function, your mileage may vary here, and some manual struct
+  updates may be required for the onvif requests to succeed. It is recommended to check calls on an
+  authentication required endpoint and swap out auth_type for the one that works.
+  """
+  @spec new(String.t(), String.t(), String.t()) :: __MODULE__.t()
+  def new(address, username, password), do: %__MODULE__{address: address, username: username, password: password}
+
+  @doc """
+  Returns a `Device.t()` struct prepopulated with data required to make an Onvif API
+  request.
+
+  `probe_match` is a valid `Probe.t()` struct for an Onvif compliant device.
+  `username` is an Onvif enabled username. Some manufacturers allow the admin credentials
+      to serve this purpose, but generally you need to enable Onvif for a user in the
+      device's web GUI or create dedicated credentials for Onvif.
+  `password` is the password for the username above.
+  `prefer_https?` will try requests via a probed https address if present. May run into SSL
+      errors so http is generally preferred.
+  `prefer_ipv6?` will try requests via a probed ipv6 address if present.
+
+  `init` will attempt to make requests for the device's system datetime, an authenticated request
+  for device information, and an authenticated request for services to determine what the device's
+  system can provide. As this makes several HTTP/HTTPS requests, there are several points of
+  failure which will return as `{:error, reason}`.
+
+  If `init` fails a device can be initialized with `new/3`, providing the address (in form `http://ip:port`),
+  the username and the password. Then override any other field with a struct update because the
+  init helpers haven't filled in any service paths, scopes, or an auth best guess.
+  """
   @spec init(Onvif.Discovery.Probe.t(), String.t(), String.t(), boolean, boolean) ::
           {:error, any()}
-          | %Device{}
+          | __MODULE__.t()
   def init(
         %Probe{} = probe_match,
         username,
@@ -69,7 +106,7 @@ defmodule Onvif.Device do
   end
 
   defp get_address(addresses, prefer_ipv6?, prefer_https?) do
-    # Presidence for the ipv6 and https follow the below order
+    # Preference for the ipv6 and https follow the below order
     # ipv6 and https
     # ipv6 and http
     # ipv4 and https
