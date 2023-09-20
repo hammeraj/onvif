@@ -148,7 +148,7 @@ defmodule Onvif.Discovery do
   end
 
   defp probe_payload do
-    uuid = UUID.uuid4()
+    uuid = Ecto.UUID.generate()
     content = element(:"d:Probe", [element(:"d.Types", @probe_type)])
 
     envelope([header(uuid), body(content)])
