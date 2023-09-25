@@ -3,7 +3,6 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   Indication which AnalyticsModules shall output metadata. Note that the streaming behavior is undefined if the list includes items that are not part of the associated AnalyticsConfiguration.
   """
 
-  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml

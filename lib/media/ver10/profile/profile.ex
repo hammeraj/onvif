@@ -3,7 +3,6 @@ defmodule Onvif.Media.Ver10.Profile do
   A media profile
   """
 
-  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml

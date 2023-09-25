@@ -3,7 +3,6 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfiguration do
   Optional configuration of the Audio encoder.
   """
 
-  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml

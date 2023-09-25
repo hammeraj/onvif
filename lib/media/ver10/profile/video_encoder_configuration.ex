@@ -3,7 +3,6 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
 
   """
 
-  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml

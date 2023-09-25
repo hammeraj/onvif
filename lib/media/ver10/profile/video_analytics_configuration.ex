@@ -3,7 +3,6 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
   This element contains a list of Analytics configurations.
   """
 
-  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml

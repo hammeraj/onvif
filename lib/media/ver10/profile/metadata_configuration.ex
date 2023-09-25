@@ -3,7 +3,6 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
   Optional configuration of the metadata stream.
   """
 
-  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
