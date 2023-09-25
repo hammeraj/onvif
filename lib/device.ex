@@ -36,7 +36,8 @@ defmodule Onvif.Device do
   authentication required endpoint and swap out auth_type for the one that works.
   """
   @spec new(String.t(), String.t(), String.t()) :: __MODULE__.t()
-  def new(address, username, password), do: %__MODULE__{address: address, username: username, password: password}
+  def new(address, username, password),
+    do: %__MODULE__{address: address, username: username, password: password}
 
   @doc """
   Returns a `Device.t()` struct prepopulated with data required to make an Onvif API

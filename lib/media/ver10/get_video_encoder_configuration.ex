@@ -1,4 +1,6 @@
 defmodule Onvif.Media.Ver10.GetVideoEncoderConfiguration do
+  require Logger
+
   import SweetXml
   import XmlBuilder
 
@@ -32,5 +34,9 @@ defmodule Onvif.Media.Ver10.GetVideoEncoderConfiguration do
     )
     |> VideoEncoderConfiguration.parse()
     |> VideoEncoderConfiguration.to_struct()
+    |> case do
+      {:ok, data} -> data
+      {:error, _changeset} -> Logger.error("Error in validating #{__MODULE__} changeset")
+    end
   end
 end

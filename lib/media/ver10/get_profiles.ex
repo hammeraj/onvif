@@ -1,4 +1,6 @@
 defmodule Onvif.Media.Ver10.GetProfiles do
+  require Logger
+
   import SweetXml
   import XmlBuilder
 
@@ -25,5 +27,9 @@ defmodule Onvif.Media.Ver10.GetProfiles do
     )
     |> Enum.map(&Onvif.Media.Ver10.Profile.parse/1)
     |> Enum.map(&Onvif.Media.Ver10.Profile.to_struct/1)
+    |> case do
+      {:ok, data} -> data
+      {:error, _changeset} -> Logger.error("Error in validating #{__MODULE__} changeset")
+    end
   end
 end

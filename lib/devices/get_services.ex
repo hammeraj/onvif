@@ -1,4 +1,6 @@
 defmodule Onvif.Devices.GetServices do
+  require Logger
+
   import SweetXml
   import XmlBuilder
 
@@ -25,6 +27,10 @@ defmodule Onvif.Devices.GetServices do
       )
       |> Enum.map(&Onvif.Device.Service.parse/1)
       |> Enum.map(&Onvif.Device.Service.to_struct/1)
+      |> case do
+        {:ok, data} -> data
+        {:error, _changeset} -> Logger.error("Error in validating #{__MODULE__} changeset")
+      end
 
     {:ok, result}
   end
