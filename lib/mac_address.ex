@@ -12,7 +12,12 @@ defmodule Onvif.MacAddress do
         {:ok, mac_address |> String.replace("-", ":") |> String.downcase()}
 
       Regex.match?(@mac_regex, mac_address) ->
-        {:ok, mac_address |> String.split("", trim: true) |> Enum.chunk_every(2) |> Enum.join(":") |> String.downcase()}
+        {:ok,
+         mac_address
+         |> String.split("", trim: true)
+         |> Enum.chunk_every(2)
+         |> Enum.join(":")
+         |> String.downcase()}
 
       true ->
         {:error, :invalid_mac}

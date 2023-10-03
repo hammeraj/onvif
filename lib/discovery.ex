@@ -64,7 +64,8 @@ defmodule Onvif.Discovery do
     an onvif scope - `"onvif://www.onvif.org/scope_name/scope_value"`, not guaranteed to be present
     a list of onvif scopes - matches the first one to succeed linking to a probe
   """
-  @spec probe_by(Keyword.t() | String.t() | list(String.t())) :: {:error, :invalid_filter | :invalid_mac | :not_found} | {:ok, Probe.t()}
+  @spec probe_by(Keyword.t() | String.t() | list(String.t())) ::
+          {:error, :invalid_filter | :invalid_mac | :not_found} | {:ok, Probe.t()}
   def probe_by(serial: serial) when is_binary(serial) do
     probe_by(@onvif_scope_prefix <> "serial/" <> serial)
   end
@@ -81,7 +82,10 @@ defmodule Onvif.Discovery do
   def probe_by(mac_address: mac_address) when is_binary(mac_address) do
     with {:ok, mac_with_colons} <- Onvif.MacAddress.mac_with_colons(mac_address),
          {:ok, mac_just_digits} <- Onvif.MacAddress.mac_just_digits(mac_address) do
-      probe_by([@onvif_scope_prefix <> "macaddr/" <> mac_just_digits, @onvif_scope_prefix <> "MAC/" <> mac_with_colons])
+      probe_by([
+        @onvif_scope_prefix <> "macaddr/" <> mac_just_digits,
+        @onvif_scope_prefix <> "MAC/" <> mac_with_colons
+      ])
     end
   end
 
