@@ -2,6 +2,8 @@ defmodule Onvif.Devices.GetServices do
   import SweetXml
   import XmlBuilder
 
+  require Logger
+
   alias Onvif.Device
 
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/GetServices"
@@ -13,6 +15,11 @@ defmodule Onvif.Devices.GetServices do
     element(:"s:Body", [element(:"tds:GetServices", [element(:"tds:IncludeCapability", "true")])])
   end
 
+  @doc """
+  Parses the device response into a `{:ok, services}` tuple where `services`
+  is a list, discarding the invalid transformations from map into a
+  Onvif.Device.Service.t().
+  """
   def response(xml_response_body) do
     result =
       xml_response_body
@@ -24,7 +31,16 @@ defmodule Onvif.Devices.GetServices do
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
       |> Enum.map(&Onvif.Device.Service.parse/1)
-      |> Enum.map(&Onvif.Device.Service.to_struct/1)
+      |> Enum.reduce([], fn raw_service, acc ->
+        case Onvif.Device.Service.to_struct(raw_service) do
+          {:ok, service} ->
+            [service | acc]
+
+          {:error, changeset} ->
+            Logger.error("Discarding invalid service: #{inspect(changeset)}")
+            acc
+        end
+      end)
 
     {:ok, result}
   end
