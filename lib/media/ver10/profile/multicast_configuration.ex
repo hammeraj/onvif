@@ -15,7 +15,7 @@ defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
 
     embeds_one :ip_address, IpAddress, primary_key: false, on_replace: :update do
       field(:type, Ecto.Enum, values: [ipv4: "IPv4", ipv6: "IPv6"])
-      field(:ipv4_address, :string)
+      field(:ipv4_address, :string, default: "0.0.0.0")
       field(:ipv6_address, :string)
     end
   end
