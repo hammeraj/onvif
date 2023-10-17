@@ -43,48 +43,35 @@ defmodule Onvif.Media.Ver20.SetVideoEncoderConfiguration do
               element(:"tt:ConstantBitRate ", video_encoder_config.rate_control.constant_bitrate),
               element(:"tt:BitrateLimit", video_encoder_config.rate_control.bitrate_limit)
             ]),
-            multicast_element(video_encoder_config.multicast_configuration)
+            element(:"tt:Multicast", [
+              element(:"tt:Address", [
+                element(
+                  :"tt:Type",
+                  Keyword.fetch!(
+                    Ecto.Enum.mappings(
+                      video_encoder_config.multicast_configuration.ip_address.__struct__,
+                      :type
+                    ),
+                    video_encoder_config.multicast_configuration.ip_address.type
+                  )
+                ),
+                ip_address_element(video_encoder_config.multicast_configuration)
+              ]),
+              element(:"tt:Port", video_encoder_config.multicast_configuration.port),
+              element(:"tt:TTL", video_encoder_config.multicast_configuration.ttl),
+              element(:"tt:AutoStart", video_encoder_config.multicast_configuration.auto_start)
+            ])
           ]
         )
       ])
     ])
   end
 
-  defp multicast_element(%{ip_address: %{type: :ipv4}} = multicast_configuration) do
-    element(:"tt:Multicast", [
-      element(:"tt:Address", [
-        element(
-          :"tt:Type",
-          Keyword.fetch!(
-            Ecto.Enum.mappings(multicast_configuration.ip_address.__struct__, :type),
-            multicast_configuration.ip_address.type
-          )
-        ),
-        element(:"tt:IPv4Address", multicast_configuration.ipv4_address)
-      ]),
-      element(:"tt:Port", multicast_configuration.port),
-      element(:"tt:TTL", multicast_configuration.ttl),
-      element(:"tt:AutoStart", multicast_configuration.auto_start)
-    ])
-  end
+  defp ip_address_element(%{ip_address: %{type: :ipv4}} = multicast_configuration),
+    do: element(:"tt:IPv4Address", multicast_configuration.ipv4_address)
 
-  defp multicast_element(%{ip_address: %{type: :ipv6}} = multicast_configuration) do
-    element(:"tt:Multicast", [
-      element(:"tt:Address", [
-        element(
-          :"tt:Type",
-          Keyword.fetch!(
-            Ecto.Enum.mappings(multicast_configuration.ip_address.__struct__, :type),
-            multicast_configuration.ip_address.type
-          )
-        ),
-        element(:"tt:IPv6Address", multicast_configuration.ip_address.ipv6_address)
-      ]),
-      element(:"tt:Port", multicast_configuration.port),
-      element(:"tt:TTL", multicast_configuration.ttl),
-      element(:"tt:AutoStart", multicast_configuration.auto_start)
-    ])
-  end
+  defp ip_address_element(multicast_configuration),
+    do: element(:"tt:IPv6Address", multicast_configuration.ip_address.ipv6_address)
 
   def response(xml_response_body) do
     xml_response_body
