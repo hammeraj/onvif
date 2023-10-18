@@ -15,7 +15,6 @@ defmodule Onvif.Device do
                 :serial_number,
                 :hardware_id,
                 :ntp,
-                media_service_path: "/onvif/services",
                 auth_type: :xml_auth,
                 time_diff_from_system_secs: 0,
                 port: 80,
@@ -78,7 +77,6 @@ defmodule Onvif.Device do
          {:ok, updated_device} <- guess_auth(device_with_datetime) do
       updated_device
       |> get_services()
-      |> set_media_service_path()
     end
   end
 
@@ -203,34 +201,5 @@ defmodule Onvif.Device do
            Onvif.Devices.GetServices.request(device) do
       Map.put(device, :services, services)
     end
-  end
-
-  defp set_media_service_path(device) do
-    case get_media_ver20_service_path(device.services) do
-      nil ->
-        path = get_media_ver10_service_path(device.services)
-        Map.put(device, :media_service_path, path)
-
-      path ->
-        device
-        |> Map.put(:media_service_path, path)
-        |> Map.put(:supports_media2?, true)
-    end
-  end
-
-  defp get_media_ver20_service_path(services) do
-    services
-    |> Enum.find(&String.contains?(&1.namespace, "ver20/media"))
-    |> then(& &1.xaddr)
-    |> URI.parse()
-    |> Map.get(:path)
-  end
-
-  defp get_media_ver10_service_path(services) do
-    services
-    |> Enum.find(&String.contains?(&1.namespace, "ver10/media"))
-    |> then(& &1.xaddr)
-    |> URI.parse()
-    |> Map.get(:path)
   end
 end
