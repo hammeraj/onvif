@@ -15,11 +15,11 @@ defmodule Onvif.Device do
                 :serial_number,
                 :hardware_id,
                 :ntp,
-                media_service_path: "/onvif/services",
+                :media_ver10_service_path,
+                :media_ver20_service_path,
                 auth_type: :xml_auth,
                 time_diff_from_system_secs: 0,
                 port: 80,
-                supports_media2?: false,
                 device_service_path: "/onvif/device_service"
               ]
 
@@ -206,31 +206,22 @@ defmodule Onvif.Device do
   end
 
   defp set_media_service_path(device) do
-    case get_media_ver20_service_path(device.services) do
-      nil ->
-        path = get_media_ver10_service_path(device.services)
-        Map.put(device, :media_service_path, path)
-
-      path ->
-        device
-        |> Map.put(:media_service_path, path)
-        |> Map.put(:supports_media2?, true)
-    end
+    device
+    |> Map.put(:media_ver10_service_path, get_media_ver10_service_path(device.services))
+    |> Map.put(:media_ver20_service_path, get_media_ver20_service_path(device.services))
   end
 
   defp get_media_ver20_service_path(services) do
-    services
-    |> Enum.find(&String.contains?(&1.namespace, "ver20/media"))
-    |> then(& &1.xaddr)
-    |> URI.parse()
-    |> Map.get(:path)
+    case Enum.find(services, &String.contains?(&1.namespace, "ver20/media")) do
+      nil -> nil
+      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+    end
   end
 
   defp get_media_ver10_service_path(services) do
-    services
-    |> Enum.find(&String.contains?(&1.namespace, "ver10/media"))
-    |> then(& &1.xaddr)
-    |> URI.parse()
-    |> Map.get(:path)
+    case Enum.find(services, &String.contains?(&1.namespace, "ver10/media")) do
+      nil -> nil
+      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+    end
   end
 end

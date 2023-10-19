@@ -19,7 +19,7 @@ defmodule Onvif.Media.Ver20.Media do
     soap_action = operation.soap_action()
 
     device
-    |> Onvif.API.client(service_path: :media_service_path)
+    |> Onvif.API.client(service_path: :media_ver20_service_path)
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],

@@ -4,7 +4,8 @@ defmodule Onvif.API do
   @spec client(Onvif.Device.t(), Keyword.t()) :: Tesla.Client.t()
   def client(device, opts \\ [service_path: :device_service_path]) do
     adapter = {Tesla.Adapter.Finch, name: Onvif.Finch}
-    service_path = Map.fetch!(device, opts[:service_path])
+    service_path = get_service_path!(device, opts)
+
     uri = device.address <> service_path
     parsed_uri = URI.parse(uri)
     no_userinfo_uri = %URI{parsed_uri | userinfo: nil} |> URI.to_string()
@@ -32,4 +33,11 @@ defmodule Onvif.API do
 
   defp auth_function(%{auth_type: :digest_auth} = device),
     do: {Onvif.Middleware.DigestAuth, device: device}
+
+  def get_service_path!(device, opts) do
+    case Map.fetch!(device, opts[:service_path]) do
+      nil -> raise "The service operation is not supported by the device"
+      service_path -> service_path
+    end
+  end
 end
