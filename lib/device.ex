@@ -16,7 +16,7 @@ defmodule Onvif.Device do
                 :hardware_id,
                 :ntp,
                 :media_ver10_service_path,
-                +:media_ver20_service_path,
+                :media_ver20_service_path,
                 auth_type: :xml_auth,
                 time_diff_from_system_secs: 0,
                 port: 80,
