@@ -17,10 +17,9 @@ defmodule Onvif.Media.Ver10.Media do
   def request(%Device{} = device, args \\ [], operation) do
     content = generate_content(operation, args)
     soap_action = operation.soap_action()
-    service_path = get_service_path(device)
 
     device
-    |> Onvif.API.client(service_path: service_path)
+    |> Onvif.API.client(service_path: :media_ver10_service_path)
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],
@@ -47,12 +46,5 @@ defmodule Onvif.Media.Ver10.Media do
 
   defp parse_response({:error, response}, operation) do
     {:error, %{status: nil, reason: "Error performing #{operation}", response: response}}
-  end
-
-  defp get_service_path(device) do
-    case Enum.find(device.services, &String.contains?(&1.namespace, "ver10/media")) do
-      nil -> raise "Media Ver10 is not supported by the device"
-      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
-    end
   end
 end

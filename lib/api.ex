@@ -2,23 +2,30 @@ defmodule Onvif.API do
   @moduledoc false
 
   @spec client(Onvif.Device.t(), Keyword.t()) :: Tesla.Client.t()
-  def client(device, opts \\ [service_path: "/onvif/device_service"]) do
+  def client(device, opts \\ [service_path: :device_service_path]) do
     adapter = {Tesla.Adapter.Finch, name: Onvif.Finch}
-    uri = device.address <> opts[:service_path]
-    parsed_uri = URI.parse(uri)
-    no_userinfo_uri = %URI{parsed_uri | userinfo: nil} |> URI.to_string()
 
-    middleware = [
-      {Tesla.Middleware.BaseUrl, no_userinfo_uri},
-      auth_function(device),
-      {Tesla.Middleware.Logger, log_level: :info},
-      {Tesla.Middleware.Headers,
-       [
-         {"connection", "keep-alive"}
-       ]}
-    ]
+    case Map.fetch!(device, opts[:service_path]) do
+      nil ->
+        raise "The service operation is not supported by the device"
 
-    Tesla.client(middleware, adapter)
+      service_path ->
+        uri = device.address <> service_path
+        parsed_uri = URI.parse(uri)
+        no_userinfo_uri = %URI{parsed_uri | userinfo: nil} |> URI.to_string()
+
+        middleware = [
+          {Tesla.Middleware.BaseUrl, no_userinfo_uri},
+          auth_function(device),
+          {Tesla.Middleware.Logger, log_level: :info},
+          {Tesla.Middleware.Headers,
+           [
+             {"connection", "keep-alive"}
+           ]}
+        ]
+
+        Tesla.client(middleware, adapter)
+    end
   end
 
   defp auth_function(%{auth_type: :no_auth}), do: Onvif.Middleware.NoAuth
