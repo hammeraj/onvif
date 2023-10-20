@@ -68,7 +68,7 @@ defmodule Onvif.Media.Ver20.SetVideoEncoderConfiguration do
   end
 
   defp ip_address_element(%{ip_address: %{type: :ipv4}} = multicast_configuration),
-    do: element(:"tt:IPv4Address", multicast_configuration.ipv4_address)
+    do: element(:"tt:IPv4Address", multicast_configuration.ip_address.ipv4_address)
 
   defp ip_address_element(multicast_configuration),
     do: element(:"tt:IPv6Address", multicast_configuration.ip_address.ipv6_address)
