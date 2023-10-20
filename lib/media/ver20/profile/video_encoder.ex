@@ -29,7 +29,7 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
 
     embeds_one :rate_control, RateControl, primary_key: false, on_replace: :update do
       field(:constant_bitrate, :boolean)
-      field(:frame_rate_limit, :integer)
+      field(:frame_rate_limit, :float)
       field(:bitrate_limit, :integer)
     end
 
@@ -68,7 +68,7 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
     xmap(
       doc,
       constant_bitrate: ~x"./@ConstantBitRate"s,
-      frame_rate_limit: ~x"./tt:FrameRateLimit/text()"i,
+      frame_rate_limit: ~x"./tt:FrameRateLimit/text()"f,
       bitrate_limit: ~x"./tt:BitrateLimit/text()"i
     )
   end
