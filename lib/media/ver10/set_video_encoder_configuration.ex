@@ -15,6 +15,8 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
     element(:"s:Body", [
       element(:"trt:SetVideoEncoderConfiguration", [
         element(:"trt:Configuration", %{"token" => video_encoder_config.reference_token}, [
+          element(:"tt:Name", video_encoder_config.name),
+          element(:"tt:UseCount", video_encoder_config.use_count),
           element(
             :"tt:Encoding",
             Keyword.fetch!(
@@ -35,8 +37,10 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
             element(:"tt:EncodingInterval", video_encoder_config.rate_control.encoding_interval),
             element(:"tt:BitrateLimit", video_encoder_config.rate_control.bitrate_limit)
           ]),
-          multicast_element(video_encoder_config.multicast_configuration)
-        ])
+          multicast_element(video_encoder_config.multicast_configuration),
+          element(:"tt:SessionTimeout", video_encoder_config.session_timeout)
+        ]),
+        element(:"trt:ForcePersistence", true)
       ])
     ])
   end
@@ -84,6 +88,7 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
       ~x"//s:Envelope/s:Body/trt:SetVideoEncoderConfigurationResponse/text()"s
       |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
       |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
+      |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
     )
   end
 end
