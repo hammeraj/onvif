@@ -74,13 +74,16 @@ defmodule Onvif.Media.Ver20.SetVideoEncoderConfiguration do
     do: element(:"tt:IPv6Address", multicast_configuration.ip_address.ipv6_address)
 
   def response(xml_response_body) do
-    xml_response_body
-    |> parse(namespace_conformant: true, quiet: true)
-    |> xpath(
-      ~x"//s:Envelope/s:Body/tr2:SetVideoEncoderConfigurationResponse/text()"s
-      |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
-      |> add_namespace("tr2", "http://www.onvif.org/ver20/media/wsdl")
-      |> add_namespace("tt", "http://www.onvif.org/ver20/schema")
-    )
+    res =
+      xml_response_body
+      |> parse(namespace_conformant: true, quiet: true)
+      |> xpath(
+        ~x"//s:Envelope/s:Body/tr2:SetVideoEncoderConfigurationResponse/text()"s
+        |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+        |> add_namespace("tr2", "http://www.onvif.org/ver20/media/wsdl")
+        |> add_namespace("tt", "http://www.onvif.org/ver20/schema")
+      )
+
+    {:ok, res}
   end
 end

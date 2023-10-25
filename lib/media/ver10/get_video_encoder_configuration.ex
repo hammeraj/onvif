@@ -22,15 +22,18 @@ defmodule Onvif.Media.Ver10.GetVideoEncoderConfiguration do
 
   @spec response(any) :: {:error, Ecto.Changeset.t()} | {:ok, struct()}
   def response(xml_response_body) do
-    xml_response_body
-    |> parse(namespace_conformant: true, quiet: true)
-    |> xpath(
-      ~x"//s:Envelope/s:Body/trt:GetVideoEncoderConfigurationResponse/trt:Configuration"e
-      |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
-      |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
-      |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
-    )
-    |> VideoEncoderConfiguration.parse()
-    |> VideoEncoderConfiguration.to_struct()
+    res =
+      xml_response_body
+      |> parse(namespace_conformant: true, quiet: true)
+      |> xpath(
+        ~x"//s:Envelope/s:Body/trt:GetVideoEncoderConfigurationResponse/trt:Configuration"e
+        |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+        |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
+        |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
+      )
+      |> VideoEncoderConfiguration.parse()
+      |> VideoEncoderConfiguration.to_struct()
+
+    {:ok, res}
   end
 end
