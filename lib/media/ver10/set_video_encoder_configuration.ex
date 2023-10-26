@@ -82,13 +82,16 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
   end
 
   def response(xml_response_body) do
-    xml_response_body
-    |> parse(namespace_conformant: true, quiet: true)
-    |> xpath(
-      ~x"//s:Envelope/s:Body/trt:SetVideoEncoderConfigurationResponse/text()"s
-      |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
-      |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
-      |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
-    )
+    res =
+      xml_response_body
+      |> parse(namespace_conformant: true, quiet: true)
+      |> xpath(
+        ~x"//s:Envelope/s:Body/trt:SetVideoEncoderConfigurationResponse/text()"s
+        |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+        |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
+        |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
+      )
+
+    {:ok, res}
   end
 end
