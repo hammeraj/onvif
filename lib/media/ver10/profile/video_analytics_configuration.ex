@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
   alias Onvif.Media.Ver10.Profile.{AnalyticsEngineConfiguration, Parameters}
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -20,7 +21,9 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
     embeds_one :rule_engine_configuration, RuleEngineConfiguration,
       primary_key: false,
       on_replace: :update do
+      @derive Jason.Encoder
       embeds_many :rule, Rule, primary_key: false, on_replace: :delete do
+        @derive Jason.Encoder
         field(:name, :string)
         field(:type, :string)
 
@@ -71,6 +74,18 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

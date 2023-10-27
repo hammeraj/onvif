@@ -24,6 +24,7 @@ defmodule Onvif.Discovery do
 
   defmodule Probe do
     @type t :: %__MODULE__{}
+    @derive Jason.Encoder
     defstruct [:types, :scopes, :request_guid, :address, :device_ip, :device_port]
   end
 

@@ -10,8 +10,10 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   alias Onvif.Media.Ver10.Profile.Parameters
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     embeds_many :analytics_module, AnalyticsModule, primary_key: false, on_replace: :delete do
+      @derive Jason.Encoder
       field(:name, :string)
       field(:type, :string)
 
@@ -46,6 +48,18 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

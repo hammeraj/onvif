@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
   alias Onvif.Media.Ver10.Profile.MulticastConfiguration
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -23,11 +24,13 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
     field(:quality, :float)
 
     embeds_one :resolution, Resolution, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:width, :integer)
       field(:height, :integer)
     end
 
     embeds_one :rate_control, RateControl, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:constant_bitrate, :boolean)
       field(:frame_rate_limit, :float)
       field(:bitrate_limit, :integer)
@@ -77,6 +80,18 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver20.Profile.VideoEncoder{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

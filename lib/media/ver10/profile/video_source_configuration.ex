@@ -8,6 +8,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
   import SweetXml
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -16,6 +17,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
     field(:source_token, :string)
 
     embeds_one :bounds, Bounds, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:x, :integer)
       field(:y, :integer)
       field(:width, :integer)
@@ -23,20 +25,26 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
     end
 
     embeds_one :extension, Extension, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       embeds_one :rotate, Rotate, primary_key: false, on_replace: :update do
+        @derive Jason.Encoder
         field(:mode, Ecto.Enum, values: [on: "ON", off: "OFF", auto: "AUTO"])
 
         embeds_one :extension, Extension, primary_key: false, on_replace: :update do
+          @derive Jason.Encoder
           embeds_one :lens_description, LensDescription, primary_key: false, on_replace: :update do
+            @derive Jason.Encoder
             field(:focal_length, :float)
             field(:x_factor, :float)
 
             embeds_one :lens_offset, LensOffset, primary_key: false, on_replace: :update do
+              @derive Jason.Encoder
               field(:x, :float)
               field(:y, :float)
             end
 
             embeds_one :projection, Projection, primary_key: false, on_replace: :update do
+              @derive Jason.Encoder
               field(:angle, :float)
               field(:radius, :float)
               field(:transmittance, :float)
@@ -44,6 +52,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
           end
 
           embeds_one :scene_orientation, SceneOrientation, primary_key: false, on_replace: :update do
+            @derive Jason.Encoder
             field(:mode, Ecto.Enum, values: [manual: "MANUAL", auto: "AUTO"])
             field(:orientation, :string)
           end

@@ -11,6 +11,7 @@ defmodule Onvif.Device.Service do
   @profile_permitted [:namespace, :xaddr, :version]
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:namespace, :string)
     field(:xaddr, :string)
@@ -36,6 +37,18 @@ defmodule Onvif.Device.Service do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Device.Service{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

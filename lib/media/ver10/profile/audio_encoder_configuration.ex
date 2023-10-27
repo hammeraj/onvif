@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfiguration do
   alias Onvif.Media.Ver10.Profile.MulticastConfiguration
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -43,6 +44,18 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfiguration do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver10.Profile.AudioEncoderConfiguration{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

@@ -5,6 +5,7 @@ defmodule Onvif.Media.Ver10.Profile.PtzConfiguration do
 
   use Ecto.Schema
 
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -22,20 +23,25 @@ defmodule Onvif.Media.Ver10.Profile.PtzConfiguration do
     field(:default_ptz_timeout, :string)
 
     embeds_one :default_ptz_speed, DefaultPtzSpeed do
+      @derive Jason.Encoder
       field(:pan_tilt, :string)
       field(:zoom, :string)
     end
 
     embeds_one :pan_tilt_limits, PanTiltLimits do
+      @derive Jason.Encoder
       embeds_one :range, Range do
+        @derive Jason.Encoder
         field(:uri, :string)
 
         embeds_one :x_range, XRange do
+          @derive Jason.Encoder
           field(:min, :float)
           field(:max, :float)
         end
 
         embeds_one :y_range, YRange do
+          @derive Jason.Encoder
           field(:min, :float)
           field(:max, :float)
         end
@@ -43,10 +49,13 @@ defmodule Onvif.Media.Ver10.Profile.PtzConfiguration do
     end
 
     embeds_one :zoom_limits, ZoomLimits do
+      @derive Jason.Encoder
       embeds_one :range, Range do
+        @derive Jason.Encoder
         field(:uri, :string)
 
         embeds_one :x_range, XRange do
+          @derive Jason.Encoder
           field(:min, :float)
           field(:max, :float)
         end
@@ -54,12 +63,16 @@ defmodule Onvif.Media.Ver10.Profile.PtzConfiguration do
     end
 
     embeds_one :extension, Extension do
+      @derive Jason.Encoder
       embeds_one :pt_control_direction, PtControlDirection do
+        @derive Jason.Encoder
         embeds_one :e_flip, EFlip do
+          @derive Jason.Encoder
           field(:mode, Ecto.Enum, values: [on: "ON", off: "OFF", extended: "Extended"])
         end
 
         embeds_one :reverse, Reverse do
+          @derive Jason.Encoder
           field(:mode, Ecto.Enum,
             values: [on: "ON", off: "OFF", auto: "AUTO", extended: "Extended"]
           )

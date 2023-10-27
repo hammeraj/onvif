@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
   alias Onvif.Media.Ver10.Profile.{AnalyticsEngineConfiguration, MulticastConfiguration}
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -21,6 +22,7 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
     field(:session_timeout, :string)
 
     embeds_one :ptz_status, PtzStatus, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:status, :boolean)
       field(:position, :boolean)
     end
@@ -65,6 +67,18 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver10.Profile.MetadataConfiguration{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

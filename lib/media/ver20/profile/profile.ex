@@ -20,6 +20,7 @@ defmodule Onvif.Media.Ver20.Profile do
   @profile_permitted [:reference_token, :fixed, :name]
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:fixed, :boolean)
@@ -34,13 +35,16 @@ defmodule Onvif.Media.Ver20.Profile do
     embeds_one(:video_source_configuration, VideoSourceConfiguration)
 
     embeds_one :extension, Extension, primary_key: false do
+      @derive Jason.Encoder
       embeds_one :audio_decoder_configuration, AudioDecoderConfiguration, primary_key: false do
+        @derive Jason.Encoder
         field(:reference_token, :string)
         field(:name, :string)
         field(:use_count, :integer)
       end
 
       embeds_one :audio_output_configuration, AudioOutputConfiguration do
+        @derive Jason.Encoder
         field(:reference_token, :string)
         field(:name, :string)
         field(:use_count, :integer)
@@ -80,6 +84,18 @@ defmodule Onvif.Media.Ver20.Profile do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver20.Profile{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

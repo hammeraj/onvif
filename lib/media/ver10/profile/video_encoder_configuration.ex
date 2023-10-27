@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
   alias Onvif.Media.Ver10.Profile.MulticastConfiguration
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -20,22 +21,26 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     field(:session_timeout, :string)
 
     embeds_one :resolution, Resolution, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:width, :integer)
       field(:height, :integer)
     end
 
     embeds_one :rate_control, RateControl, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:frame_rate_limit, :integer)
       field(:encoding_interval, :integer)
       field(:bitrate_limit, :integer)
     end
 
     embeds_one :mpeg4_configuration, Mpeg4Configuration, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:gov_length, :integer)
       field(:mpeg4_profile, Ecto.Enum, values: [simple: "SP", advanced_simple: "ASP"])
     end
 
     embeds_one :h264_configuration, H264Configuration, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:gov_length, :integer)
 
       field(:h264_profile, Ecto.Enum,
@@ -108,6 +113,18 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver10.Profile.VideoEncoderConfiguration{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do

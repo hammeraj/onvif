@@ -8,12 +8,14 @@ defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
   import SweetXml
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:port, :integer)
     field(:ttl, :integer)
     field(:auto_start, :boolean)
 
     embeds_one :ip_address, IpAddress, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:type, Ecto.Enum, values: [ipv4: "IPv4", ipv6: "IPv6"])
       field(:ipv4_address, :string)
       field(:ipv6_address, :string)
@@ -47,6 +49,18 @@ defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
+  end
+
+  @spec to_json(%Onvif.Media.Ver10.Profile.MulticastConfiguration{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
   end
 
   def changeset(module, attrs) do
