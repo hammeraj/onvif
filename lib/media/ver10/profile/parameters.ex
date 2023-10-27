@@ -10,14 +10,14 @@ defmodule Onvif.Media.Ver10.Profile.Parameters do
   @primary_key false
   @derive Jason.Encoder
   embedded_schema do
-    @derive Jason.Encoder
     embeds_many :simple_item, SimpleItem, primary_key: false do
+      @derive Jason.Encoder
       field(:name, :string)
       field(:value, :string)
     end
 
-    @derive Jason.Encoder
     embeds_many :element_item, ElementItem, primary_key: false do
+      @derive Jason.Encoder
       field(:name, :string)
     end
   end

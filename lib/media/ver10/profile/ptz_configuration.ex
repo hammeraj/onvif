@@ -23,20 +23,25 @@ defmodule Onvif.Media.Ver10.Profile.PtzConfiguration do
     field(:default_ptz_timeout, :string)
 
     embeds_one :default_ptz_speed, DefaultPtzSpeed do
+      @derive Jason.Encoder
       field(:pan_tilt, :string)
       field(:zoom, :string)
     end
 
     embeds_one :pan_tilt_limits, PanTiltLimits do
+      @derive Jason.Encoder
       embeds_one :range, Range do
+        @derive Jason.Encoder
         field(:uri, :string)
 
         embeds_one :x_range, XRange do
+          @derive Jason.Encoder
           field(:min, :float)
           field(:max, :float)
         end
 
         embeds_one :y_range, YRange do
+          @derive Jason.Encoder
           field(:min, :float)
           field(:max, :float)
         end
