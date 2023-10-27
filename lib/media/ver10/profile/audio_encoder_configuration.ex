@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfiguration do
   alias Onvif.Media.Ver10.Profile.MulticastConfiguration
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)

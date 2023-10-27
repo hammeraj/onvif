@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
   alias Onvif.Media.Ver10.Profile.{AnalyticsEngineConfiguration, MulticastConfiguration}
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -20,12 +21,15 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
     field(:analytics, :boolean)
     field(:session_timeout, :string)
 
+    @derive Jason.Encoder
     embeds_one :ptz_status, PtzStatus, primary_key: false, on_replace: :update do
       field(:status, :boolean)
       field(:position, :boolean)
     end
 
+    @derive Jason.Encoder
     embeds_one(:multicast_configuration, MulticastConfiguration)
+    @derive Jason.Encoder
     embeds_one(:analytics_engine_configuration, AnalyticsEngineConfiguration)
   end
 

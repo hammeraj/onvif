@@ -10,7 +10,9 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   alias Onvif.Media.Ver10.Profile.Parameters
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
+    @derive Jason.Encoder
     embeds_many :analytics_module, AnalyticsModule, primary_key: false, on_replace: :delete do
       field(:name, :string)
       field(:type, :string)

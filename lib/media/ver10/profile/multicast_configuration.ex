@@ -8,11 +8,13 @@ defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
   import SweetXml
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:port, :integer)
     field(:ttl, :integer)
     field(:auto_start, :boolean)
 
+    @derive Jason.Encoder
     embeds_one :ip_address, IpAddress, primary_key: false, on_replace: :update do
       field(:type, Ecto.Enum, values: [ipv4: "IPv4", ipv6: "IPv6"])
       field(:ipv4_address, :string)

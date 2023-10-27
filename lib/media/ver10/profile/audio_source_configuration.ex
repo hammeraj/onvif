@@ -8,6 +8,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioSourceConfiguration do
   import SweetXml
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)

@@ -6,6 +6,7 @@ defmodule Onvif.Device do
 
   @type t :: %__MODULE__{}
 
+  @derive Jason.Encoder
   defstruct @enforce_keys ++
               [
                 :scopes,

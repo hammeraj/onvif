@@ -10,16 +10,20 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
   alias Onvif.Media.Ver10.Profile.{AnalyticsEngineConfiguration, Parameters}
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
     field(:use_count, :integer)
 
+    @derive Jason.Encoder
     embeds_one(:analytics_engine_configuration, AnalyticsEngineConfiguration)
 
+    @derive Jason.Encoder
     embeds_one :rule_engine_configuration, RuleEngineConfiguration,
       primary_key: false,
       on_replace: :update do
+      @derive Jason.Encoder
       embeds_many :rule, Rule, primary_key: false, on_replace: :delete do
         field(:name, :string)
         field(:type, :string)

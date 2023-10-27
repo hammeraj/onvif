@@ -8,12 +8,15 @@ defmodule Onvif.Media.Ver10.Profile.Parameters do
   import SweetXml
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
+    @derive Jason.Encoder
     embeds_many :simple_item, SimpleItem, primary_key: false do
       field(:name, :string)
       field(:value, :string)
     end
 
+    @derive Jason.Encoder
     embeds_many :element_item, ElementItem, primary_key: false do
       field(:name, :string)
     end

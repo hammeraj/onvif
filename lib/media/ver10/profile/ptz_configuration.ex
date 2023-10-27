@@ -5,6 +5,7 @@ defmodule Onvif.Media.Ver10.Profile.PtzConfiguration do
 
   use Ecto.Schema
 
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)

@@ -11,6 +11,7 @@ defmodule Onvif.Device.Service do
   @profile_permitted [:namespace, :xaddr, :version]
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:namespace, :string)
     field(:xaddr, :string)
