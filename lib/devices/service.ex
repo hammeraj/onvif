@@ -39,6 +39,18 @@ defmodule Onvif.Device.Service do
     |> apply_action(:validate)
   end
 
+  @spec to_json(%Onvif.Device.Service{}) ::
+          {:error,
+           %{
+             :__exception__ => any,
+             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
+             optional(atom) => any
+           }}
+          | {:ok, binary}
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
+  end
+
   def changeset(module, attrs) do
     cast(module, attrs, @profile_permitted)
   end
