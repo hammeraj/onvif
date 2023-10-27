@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
   alias Onvif.Media.Ver10.Profile.MulticastConfiguration
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -19,22 +20,26 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     field(:quality, :float)
     field(:session_timeout, :string)
 
+    @derive Jason.Encoder
     embeds_one :resolution, Resolution, primary_key: false, on_replace: :update do
       field(:width, :integer)
       field(:height, :integer)
     end
 
+    @derive Jason.Encoder
     embeds_one :rate_control, RateControl, primary_key: false, on_replace: :update do
       field(:frame_rate_limit, :integer)
       field(:encoding_interval, :integer)
       field(:bitrate_limit, :integer)
     end
 
+    @derive Jason.Encoder
     embeds_one :mpeg4_configuration, Mpeg4Configuration, primary_key: false, on_replace: :update do
       field(:gov_length, :integer)
       field(:mpeg4_profile, Ecto.Enum, values: [simple: "SP", advanced_simple: "ASP"])
     end
 
+    @derive Jason.Encoder
     embeds_one :h264_configuration, H264Configuration, primary_key: false, on_replace: :update do
       field(:gov_length, :integer)
 
@@ -43,6 +48,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
       )
     end
 
+    @derive Jason.Encoder
     embeds_one(:multicast_configuration, MulticastConfiguration)
   end
 
