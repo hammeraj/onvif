@@ -33,17 +33,17 @@ defmodule Onvif.Media.Ver10.Profile do
     embeds_one(:video_encoder_configuration, VideoEncoderConfiguration)
     embeds_one(:video_source_configuration, VideoSourceConfiguration)
 
-    @derive Jason.Encoder
     embeds_one :extension, Extension, primary_key: false do
       @derive Jason.Encoder
       embeds_one :audio_decoder_configuration, AudioDecoderConfiguration, primary_key: false do
+        @derive Jason.Encoder
         field(:reference_token, :string)
         field(:name, :string)
         field(:use_count, :integer)
       end
 
-      @derive Jason.Encoder
       embeds_one :audio_output_configuration, AudioOutputConfiguration do
+        @derive Jason.Encoder
         field(:reference_token, :string)
         field(:name, :string)
         field(:use_count, :integer)

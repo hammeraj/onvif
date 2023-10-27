@@ -16,43 +16,43 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
     field(:view_mode, :string)
     field(:source_token, :string)
 
-    @derive Jason.Encoder
     embeds_one :bounds, Bounds, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:x, :integer)
       field(:y, :integer)
       field(:width, :integer)
       field(:height, :integer)
     end
 
-    @derive Jason.Encoder
     embeds_one :extension, Extension, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
       embeds_one :rotate, Rotate, primary_key: false, on_replace: :update do
+        @derive Jason.Encoder
         field(:mode, Ecto.Enum, values: [on: "ON", off: "OFF", auto: "AUTO"])
 
-        @derive Jason.Encoder
         embeds_one :extension, Extension, primary_key: false, on_replace: :update do
           @derive Jason.Encoder
           embeds_one :lens_description, LensDescription, primary_key: false, on_replace: :update do
+            @derive Jason.Encoder
             field(:focal_length, :float)
             field(:x_factor, :float)
 
-            @derive Jason.Encoder
             embeds_one :lens_offset, LensOffset, primary_key: false, on_replace: :update do
+              @derive Jason.Encoder
               field(:x, :float)
               field(:y, :float)
             end
 
-            @derive Jason.Encoder
             embeds_one :projection, Projection, primary_key: false, on_replace: :update do
+              @derive Jason.Encoder
               field(:angle, :float)
               field(:radius, :float)
               field(:transmittance, :float)
             end
           end
 
-          @derive Jason.Encoder
           embeds_one :scene_orientation, SceneOrientation, primary_key: false, on_replace: :update do
+            @derive Jason.Encoder
             field(:mode, Ecto.Enum, values: [manual: "MANUAL", auto: "AUTO"])
             field(:orientation, :string)
           end

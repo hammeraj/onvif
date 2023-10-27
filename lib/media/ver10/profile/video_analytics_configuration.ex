@@ -16,15 +16,14 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
     field(:name, :string)
     field(:use_count, :integer)
 
-    @derive Jason.Encoder
     embeds_one(:analytics_engine_configuration, AnalyticsEngineConfiguration)
 
-    @derive Jason.Encoder
     embeds_one :rule_engine_configuration, RuleEngineConfiguration,
       primary_key: false,
       on_replace: :update do
       @derive Jason.Encoder
       embeds_many :rule, Rule, primary_key: false, on_replace: :delete do
+        @derive Jason.Encoder
         field(:name, :string)
         field(:type, :string)
 

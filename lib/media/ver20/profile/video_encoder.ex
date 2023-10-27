@@ -10,6 +10,7 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
   alias Onvif.Media.Ver10.Profile.MulticastConfiguration
 
   @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -23,11 +24,13 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
     field(:quality, :float)
 
     embeds_one :resolution, Resolution, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:width, :integer)
       field(:height, :integer)
     end
 
     embeds_one :rate_control, RateControl, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field(:constant_bitrate, :boolean)
       field(:frame_rate_limit, :float)
       field(:bitrate_limit, :integer)
