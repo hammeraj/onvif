@@ -16,7 +16,7 @@ defmodule Onvif.Discovery do
     "xmlns:a": "http://schemas.xmlsoap.org/ws/2004/08/addressing"
   ]
 
-  @probe_type "tds:NetworkVideoTransmitter"
+  @probe_type "dn:NetworkVideoTransmitter tds:Device"
   @probe_timeout_msec :timer.seconds(2)
   @onvif_discovery_ip {239, 255, 255, 250}
   @onvif_discovery_port 3702
@@ -154,7 +154,7 @@ defmodule Onvif.Discovery do
 
   defp probe_payload do
     uuid = Ecto.UUID.generate()
-    content = element(:"d:Probe", [element(:"d.Types", @probe_type)])
+    content = element(:"d:Probe", [element(:"d:Types", @probe_type)])
 
     envelope([header(uuid), body(content)])
   end
