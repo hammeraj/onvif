@@ -56,12 +56,12 @@ defmodule Onvif.Discovery do
   to the UDP multicast message. As this uses `probe/0` under the hood it is subject to
   the same limitations and the default probe timeout.
 
-  `filter` can be a keyword list containing one of:
+    `filter` can be a keyword list containing one of:
     `serial` - device serial number, not guaranteed to be present
     `ip_address` - device ip that responded to the onvif multicast
     `mac_address` - device mac address, not guaranteed to be present. Accepts colon separated, dash separated, and only digits
     `name` - device name, usually the model number or something manufacturer determined
-  `filter` can also be:
+    `filter` can also be:
     an onvif scope - `"onvif://www.onvif.org/scope_name/scope_value"`, not guaranteed to be present
     a list of onvif scopes - matches the first one to succeed linking to a probe
   """
