@@ -138,12 +138,22 @@ defmodule Onvif.Discovery do
 
     receive do
       {:udp, _port, device_ip, device_port, udp_response} ->
-        probe_response = parse_udp_xml_response(udp_response)
-        string_device_ip = device_ip |> :inet.ntoa() |> List.to_string()
+        valid_probes =
+          case parse_udp_xml_response(udp_response) do
+            {:ok, probe_response} ->
+              string_device_ip = device_ip |> :inet.ntoa() |> List.to_string()
 
-        probe = %Probe{probe_response | device_ip: string_device_ip, device_port: device_port}
+              [
+                %Probe{probe_response | device_ip: string_device_ip, device_port: device_port}
+                | acc
+              ]
 
-        receive_message(socket, opts, [probe | acc])
+            error ->
+              Logger.debug(inspect(error))
+              acc
+          end
+
+        receive_message(socket, opts, valid_probes)
     after
       timeout ->
         Logger.debug("Closing socket after not receiving anything for #{@probe_timeout_msec} ms")
@@ -184,45 +194,68 @@ defmodule Onvif.Discovery do
   defp parse_udp_xml_response(udp_xml_response) do
     parsed_xml_response = parse(udp_xml_response, namespace_conformant: true)
 
-    header =
-      xpath(
-        parsed_xml_response,
-        add_namespace(~x"//s:Envelope/s:Header"e, "s", "http://www.w3.org/2003/05/soap-envelope")
-      )
+    case parse_request_guid(parsed_xml_response) do
+      nil ->
+        {:error, {:bad_probe, udp_xml_response}}
 
+      request_guid ->
+        created_probe =
+          parsed_xml_response |> parse_discovery_attrs() |> create_probe(request_guid)
+
+        {:ok, created_probe}
+    end
+  end
+
+  defp parse_request_guid(parsed_response) do
+    parsed_response
+    |> xpath(
+      add_namespace(~x"//s:Envelope/s:Header"e, "s", "http://www.w3.org/2003/05/soap-envelope")
+    )
+    |> case do
+      nil ->
+        nil
+
+      header_xml ->
+        xpath(
+          header_xml,
+          ~x"./wsa:RelatesTo/text()"s
+          |> add_namespace("wsa", "http://schemas.xmlsoap.org/ws/2004/08/addressing")
+          |> transform_by(&String.replace_leading(&1, "uuid:", ""))
+        )
+    end
+  end
+
+  defp parse_discovery_attrs(parsed_response) do
     body =
       xpath(
-        parsed_xml_response,
-        add_namespace(~x"//s:Envelope/s:Body"e, "s", "http://www.w3.org/2003/05/soap-envelope")
+        parsed_response,
+        add_namespace(
+          ~x"//s:Envelope/s:Body"e,
+          "s",
+          "http://www.w3.org/2003/05/soap-envelope"
+        )
       )
 
-    request_guid =
-      xpath(
-        header,
-        ~x"./wsa:RelatesTo/text()"s
-        |> add_namespace("wsa", "http://schemas.xmlsoap.org/ws/2004/08/addressing")
-        |> transform_by(&String.replace_leading(&1, "uuid:", ""))
-      )
+    xpath(
+      body,
+      ~x"./tns:ProbeMatches/tns:ProbeMatch"
+      |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery"),
+      types:
+        ~x"./tns:Types/text()"s
+        |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery")
+        |> transform_by(&String.split/1),
+      scopes:
+        ~x"./tns:Scopes/text()"s
+        |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery")
+        |> transform_by(&String.split/1),
+      address:
+        ~x"./tns:XAddrs/text()"s
+        |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery")
+        |> transform_by(&String.split/1)
+    )
+  end
 
-    discovery_attrs =
-      xpath(
-        body,
-        ~x"./tns:ProbeMatches/tns:ProbeMatch"
-        |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery"),
-        types:
-          ~x"./tns:Types/text()"s
-          |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery")
-          |> transform_by(&String.split/1),
-        scopes:
-          ~x"./tns:Scopes/text()"s
-          |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery")
-          |> transform_by(&String.split/1),
-        address:
-          ~x"./tns:XAddrs/text()"s
-          |> add_namespace("tns", "http://schemas.xmlsoap.org/ws/2005/04/discovery")
-          |> transform_by(&String.split/1)
-      )
-
+  defp create_probe(discovery_attrs, request_guid) do
     %Probe{}
     |> Map.merge(discovery_attrs)
     |> Map.put(:request_guid, request_guid)

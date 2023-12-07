@@ -15,7 +15,11 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfiguration do
     field(:reference_token, :string)
     field(:name, :string)
     field(:use_count, :integer)
-    field(:encoding, Ecto.Enum, values: [g711: "G711", g726: "G726", aac: "AAC", pcmu: "PCMU", pcma: "PCMA"])
+
+    field(:encoding, Ecto.Enum,
+      values: [g711: "G711", g726: "G726", aac: "AAC", pcmu: "PCMU", pcma: "PCMA"]
+    )
+
     field(:bitrate, :integer)
     field(:sample_rate, :integer)
     field(:session_timeout, :string)
