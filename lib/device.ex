@@ -30,7 +30,9 @@ defmodule Onvif.Device do
   enabled device.
 
     `address` is a http address with the form `http://ip:port`
+
     `username` is the onvif enabled username
+
     `password` is the password for the username
 
   As this is an override for the init() function, your mileage may vary here, and some manual struct
@@ -47,12 +49,16 @@ defmodule Onvif.Device do
   request.
 
     `probe_match` is a valid `Probe.t()` struct for an Onvif compliant device.
+
     `username` is an Onvif enabled username. Some manufacturers allow the admin credentials
     to serve this purpose, but generally you need to enable Onvif for a user in the
     device's web GUI or create dedicated credentials for Onvif.
+
     `password` is the password for the username above.
+
     `prefer_https?` will try requests via a probed https address if present. May run into SSL
     errors so http is generally preferred.
+
     `prefer_ipv6?` will try requests via a probed ipv6 address if present.
 
   `init` will attempt to make requests for the device's system datetime, an authenticated request
