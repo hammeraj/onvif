@@ -43,7 +43,7 @@ defmodule Onvif.Device do
   end
 
   @doc """
-  Returns a `Device.t()` struct prepopulated with data required to make an Onvif API
+  Returns a `{:ok, Device.t()}` tuple with device struct prepopulated with data required to make an Onvif API
   request.
 
     `probe_match` is a valid `Probe.t()` struct for an Onvif compliant device.
@@ -66,7 +66,7 @@ defmodule Onvif.Device do
   """
   @spec init(Onvif.Discovery.Probe.t(), String.t(), String.t(), boolean, boolean) ::
           {:error, any()}
-          | __MODULE__.t()
+          | {:ok, __MODULE__.t()}
   def init(
         %Probe{} = probe_match,
         username,
@@ -78,9 +78,10 @@ defmodule Onvif.Device do
            device_from_probe_match(probe_match, username, password, prefer_https?, prefer_ipv6?),
          {:ok, device_with_datetime} <- get_date_time(device),
          {:ok, updated_device} <- guess_auth(device_with_datetime) do
-      updated_device
-      |> get_services()
-      |> set_media_service_path()
+      {:ok,
+       updated_device
+       |> get_services()
+       |> set_media_service_path()}
     end
   end
 
