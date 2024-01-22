@@ -22,7 +22,8 @@ defmodule Onvif.Device do
                 auth_type: :xml_auth,
                 time_diff_from_system_secs: 0,
                 port: 80,
-                device_service_path: "/onvif/device_service"
+                device_service_path: "/onvif/device_service",
+                events_service_path: "/onvif/events"
               ]
 
   @doc """
