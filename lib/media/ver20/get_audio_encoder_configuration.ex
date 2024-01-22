@@ -25,7 +25,7 @@ defmodule Onvif.Media.Ver20.GetAudioEncoderConfiguration do
     xml_response_body
     |> parse(namespace_conformant: true, quiet: true)
     |> xpath(
-      ~x"//s:Envelope/s:Body/trt:GetAudioEncoderConfigurationResponse/trt:Configuration"e
+      ~x"//s:Envelope/s:Body/tr2:GetAudioEncoderConfigurationResponse/trt:Configuration"e
       |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
       |> add_namespace("tr2", "http://www.onvif.org/ver20/media/wsdl")
       |> add_namespace("tt", "http://www.onvif.org/ver20/schema")
