@@ -14,8 +14,8 @@ defmodule Onvif.Media.Ver10.GetAudioEncoderConfiguration do
 
   def request_body(configuration_token) do
     element(:"s:Body", [
-      element(:"tds:GetAudioEncoderConfiguration", [
-        element(:"tds:ConfigurationToken", configuration_token)
+      element(:"trt:GetAudioEncoderConfiguration", [
+        element(:"trt:ConfigurationToken", configuration_token)
       ])
     ])
   end
