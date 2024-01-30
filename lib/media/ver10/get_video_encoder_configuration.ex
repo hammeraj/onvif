@@ -14,8 +14,8 @@ defmodule Onvif.Media.Ver10.GetVideoEncoderConfiguration do
 
   def request_body(configuration_token) do
     element(:"s:Body", [
-      element(:"tds:GetVideoEncoderConfiguration", [
-        element(:"tds:ConfigurationToken", configuration_token)
+      element(:"trt:GetVideoEncoderConfiguration", [
+        element(:"trt:ConfigurationToken", configuration_token)
       ])
     ])
   end
