@@ -2,6 +2,8 @@ defmodule Onvif.Media.Ver20.GetAudioEncoderConfigurations do
   import SweetXml
   import XmlBuilder
 
+  require Logger
+
   alias Onvif.Device
   alias Onvif.Media.Ver10.Profile.AudioEncoderConfiguration
 
@@ -12,7 +14,21 @@ defmodule Onvif.Media.Ver20.GetAudioEncoderConfigurations do
   def request(device, args \\ []),
     do: Onvif.Media.Ver20.Media.request(device, args, __MODULE__)
 
-  def request_body(configuration_token \\ nil, profile_token \\ nil) do
+  def request_body() do
+    element(:"s:Body", [
+      element(:"tr2:GetAudioEncoderConfigurations")
+    ])
+  end
+
+  def request_body(configuration_token) do
+    element(:"s:Body", [
+      element(:"tr2:GetAudioEncoderConfigurations", [
+        element(:"tr2:ConfigurationToken", configuration_token)
+      ])
+    ])
+  end
+
+  def request_body(configuration_token, profile_token) do
     element(:"s:Body", [
       element(:"tr2:GetAudioEncoderConfigurations", [
         element(:"tr2:ConfigurationToken", configuration_token),
