@@ -1,6 +1,6 @@
 defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
   @moduledoc """
-  Optional configuration of the Audio encoder.
+  Optional configuration of the Video encoder.
   """
 
   use Ecto.Schema
