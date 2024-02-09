@@ -37,6 +37,7 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
             element(:"tt:EncodingInterval", video_encoder_config.rate_control.encoding_interval),
             element(:"tt:BitrateLimit", video_encoder_config.rate_control.bitrate_limit)
           ]),
+          List.flatten(encoder_config_element(video_encoder_config)),
           multicast_element(video_encoder_config.multicast_configuration),
           element(:"tt:SessionTimeout", video_encoder_config.session_timeout)
         ]),
@@ -93,5 +94,48 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
       )
 
     {:ok, res}
+  end
+
+  defp encoder_config_element(%VideoEncoderConfiguration{
+         h264_configuration: nil,
+         mpeg4_configuration: nil
+       }) do
+    [{}]
+  end
+
+  defp encoder_config_element(%VideoEncoderConfiguration{
+         h264_configuration: h264_configuration,
+         mpeg4_configuration: nil
+       }) do
+    [
+      element(:"tt:H264", [
+        element(:"tt:GovLength", h264_configuration.gov_length),
+        element(
+          :"tt:H264Profile",
+          Keyword.fetch!(
+            Ecto.Enum.mappings(h264_configuration.__struct__, :h264_profile),
+            h264_configuration.h264_profile
+          )
+        )
+      ])
+    ]
+  end
+
+  defp encoder_config_element(%VideoEncoderConfiguration{
+         h264_configuration: nil,
+         mpeg4_configuration: mpeg4_configuration
+       }) do
+    [
+      element(:"tt:MPEG4", [
+        element(:"tt:GovLength", mpeg4_configuration.gov_length),
+        element(
+          :"tt:Mpeg4Profile",
+          Keyword.fetch!(
+            Ecto.Enum.mappings(mpeg4_configuration.__struct__, :mpeg4_profile),
+            mpeg4_configuration.mpeg4_profile
+          )
+        )
+      ])
+    ]
   end
 end
