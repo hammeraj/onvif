@@ -12,10 +12,12 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
     do: Onvif.Media.Ver10.Media.request(device, args, __MODULE__)
 
   def request_body(%VideoEncoderConfiguration{} = video_encoder_config) do
-    List.flatten([
-      element(:"s:Body", [
-        element(:"trt:SetVideoEncoderConfiguration", [
-          element(:"trt:Configuration", %{"token" => video_encoder_config.reference_token}, [
+    element(:"s:Body", [
+      element(:"trt:SetVideoEncoderConfiguration", [
+        element(
+          :"trt:Configuration",
+          %{"token" => video_encoder_config.reference_token},
+          List.flatten([
             element(:"tt:Name", video_encoder_config.name),
             element(:"tt:UseCount", video_encoder_config.use_count),
             element(
@@ -44,9 +46,9 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
             encoder_config_element(video_encoder_config),
             multicast_element(video_encoder_config.multicast_configuration),
             element(:"tt:SessionTimeout", video_encoder_config.session_timeout)
-          ]),
-          element(:"trt:ForcePersistence", true)
-        ])
+          ])
+        ),
+        element(:"trt:ForcePersistence", true)
       ])
     ])
   end
