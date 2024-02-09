@@ -256,7 +256,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
       quality_range: ~x"./tt:QualityRange"e |> transform_by(&parse_int_range/1),
       jpeg: ~x"./tt:JPEG"eo |> transform_by(&parse_jpeg/1),
       mpeg4: ~x"./tt:MPEG4"eo |> transform_by(&parse_mpeg4/1),
-      h264: ~x"./tt:H264"eo |> transform_by(&parse_h264/1)
+      h264: ~x"./tt:H264"eo |> transform_by(&parse_h264/1),
+      extension: ~x"./tt:Extension"eo |> transform_by(&parse_extension/1)
     )
   end
 
@@ -330,7 +331,9 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
       resolutions_available:
         ~x"./tt:ResolutionsAvailable"el |> transform_by(&parse_resolutions_available/1),
       frame_rate_range: ~x"./tt:FrameRateRange"e |> transform_by(&parse_int_range/1),
-      encoding_interval_range: ~x"./tt:EncodingIntervalRange"e |> transform_by(&parse_int_range/1)
+      encoding_interval_range:
+        ~x"./tt:EncodingIntervalRange"e |> transform_by(&parse_int_range/1),
+      bitrate_range: ~x"./tt:BitrateRange"eo |> transform_by(&parse_int_range/1)
     )
   end
 
@@ -347,7 +350,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
       frame_rate_range: ~x"./tt:FrameRateRange"e |> transform_by(&parse_int_range/1),
       encoding_interval_range:
         ~x"./tt:EncodingIntervalRange"e |> transform_by(&parse_int_range/1),
-      h264_profiles_supported: ~x"./tt:MPEG4ProfilesSupported/text()"sl
+      h264_profiles_supported: ~x"./tt:MPEG4ProfilesSupported/text()"sl,
+      bitrate_range: ~x"./tt:BitrateRange"eo |> transform_by(&parse_int_range/1)
     )
   end
 
@@ -364,7 +368,21 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
       frame_rate_range: ~x"./tt:FrameRateRange"e |> transform_by(&parse_int_range/1),
       encoding_interval_range:
         ~x"./tt:EncodingIntervalRange"e |> transform_by(&parse_int_range/1),
-      h264_profiles_supported: ~x"./tt:H264ProfilesSupported/text()"sl
+      h264_profiles_supported: ~x"./tt:H264ProfilesSupported/text()"sl,
+      bitrate_range: ~x"./tt:BitrateRange"eo |> transform_by(&parse_int_range/1)
+    )
+  end
+
+  defp parse_extension(nil) do
+    nil
+  end
+
+  defp parse_extension(doc) do
+    xmap(
+      doc,
+      jpeg: ~x"./tt:JPEG"eo |> transform_by(&parse_jpeg/1),
+      mpeg4: ~x"./tt:MPEG4"eo |> transform_by(&parse_mpeg4/1),
+      h264: ~x"./tt:H264"eo |> transform_by(&parse_h264/1)
     )
   end
 
@@ -376,6 +394,10 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
         height: ~x"./tt:Height/text()"i
       )
     end)
+  end
+
+  defp parse_int_range(nil) do
+    nil
   end
 
   defp parse_int_range(doc) do
