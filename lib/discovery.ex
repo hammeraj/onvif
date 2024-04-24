@@ -202,7 +202,7 @@ defmodule Onvif.Discovery do
     parsed_xml_response = parse(udp_xml_response, namespace_conformant: true)
 
     case parse_request_guid(parsed_xml_response) do
-      nil ->
+      request_guid when request_guid in [nil, ""] ->
         {:error, {:bad_probe, udp_xml_response}}
 
       request_guid ->
