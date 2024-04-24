@@ -4,8 +4,7 @@ defmodule Onvif.API do
   @spec client(Onvif.Device.t(), Keyword.t()) :: Tesla.Client.t()
   def client(device, opts \\ [service_path: :device_service_path])
 
-  def client(device, opts = [endpoint: uri]) do
-    IO.inspect(opts)
+  def client(device, [endpoint: uri]) do
     adapter = {Tesla.Adapter.Finch, name: Onvif.Finch}
     parsed_uri = URI.parse(uri)
     no_userinfo_uri = %URI{parsed_uri | userinfo: nil} |> URI.to_string()

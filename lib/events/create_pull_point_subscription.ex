@@ -14,9 +14,13 @@ defmodule Onvif.Events.CreatePullPointSubscription do
   def request_body do
     element(:"s:Body", [
       element(:"tev:CreatePullPointSubscription", [
-        element(:"Filter", %{"Dialect" => "http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet"}, "tns1:RuleEngine/CellMotionDetector/Motion"),
-        element(:"InitialTerminationTime", "PT5M"),
-        element(:"tev:SubscriptionPolicy", [element(:"tev:ChangedOnly", true)])
+        element(
+          :Filter,
+          %{"Dialect" => "http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet"},
+          "tns1:RuleEngine/CellMotionDetector/Motion"
+        ),
+        element(:InitialTerminationTime, "PT5M"),
+        element(:"wsnt:SubscriptionPolicy", [element(:"wsnt:ChangedOnly", true), element(:"wsnt:UseRaw", true)])
       ])
     ])
   end

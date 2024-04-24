@@ -1,5 +1,5 @@
 defmodule Onvif.Media.Ver10.GetVideoSources do
-  import SweetXml
+  # import SweetXml
   import XmlBuilder
 
   alias Onvif.Device
