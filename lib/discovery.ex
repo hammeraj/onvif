@@ -35,15 +35,18 @@ defmodule Onvif.Discovery do
   Duplicate probes may be returned and it is up to the calling application to
   choose how to filter out a duplicate.
 
-  `opts` are a keyword list of options, currently just `:probe_timeout` which is
-  how long the probe will wait between new probe responses before closing out the
+  `opts` are a keyword list of options,
+  - `:probe_timeout` which is how long the probe will wait between new probe responses before closing out the
   listener. There currently is no forced duration so if the network continuously
   generates probe messages this has the possibility to hang.
+  - `:multicat_loop?` defaults to false. Enabling it will allow host to echoing the multicast packets back to itself.
+  This is useful when this library runs in same device where you simulate a ONVIF device (https://www.happytimesoft.com/products/onvif-server/index.html)
   """
   @spec probe(Keyword.t()) :: list(Probe.t())
-  def probe(opts \\ [probe_timeout: @probe_timeout_msec]) do
+  def probe(opts \\ [probe_timeout: @probe_timeout_msec, multicat_loop?: false]) do
     payload = probe_payload()
-    {:ok, socket} = :gen_udp.open(0, mode: :binary, active: true, multicast_loop: true)
+    multicat_loop? = Keyword.get(opts, :multicat_loop?, false)
+    {:ok, socket} = :gen_udp.open(0, mode: :binary, active: true, multicast_loop: multicat_loop?)
     :gen_udp.send(socket, @onvif_discovery_ip, @onvif_discovery_port, payload)
 
     receive_message(socket, opts, [])
