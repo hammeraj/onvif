@@ -75,8 +75,8 @@ defmodule Onvif.Device do
           | {:ok, __MODULE__.t()}
   def init(
         %Probe{} = probe_match,
-        username \\ "",
-        password \\ "",
+        username,
+        password,
         prefer_https? \\ false,
         prefer_ipv6? \\ false
       ) do
