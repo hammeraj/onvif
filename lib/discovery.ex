@@ -36,7 +36,7 @@ defmodule Onvif.Discovery do
   choose how to filter out a duplicate.
 
   `opts` are a keyword list of options,
-  - `:probe_timeout` which is how long the probe will wait between new probe responses before closing out the
+  - `:probe_timeout` denotes how long the probe will wait between new probe responses before closing out the
   listener. There currently is no forced duration so if the network continuously
   generates probe messages this has the possibility to hang.
   - `:multicast_loop?` defaults to false. Enabling it will allow host to echoing the multicast packets back to itself.
