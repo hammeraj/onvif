@@ -43,7 +43,7 @@ defmodule Onvif.Discovery do
   @spec probe(Keyword.t()) :: list(Probe.t())
   def probe(opts \\ [probe_timeout: @probe_timeout_msec]) do
     payload = probe_payload()
-    {:ok, socket} = :gen_udp.open(0, mode: :binary, active: true, multicast_loop: false)
+    {:ok, socket} = :gen_udp.open(0, mode: :binary, active: true, multicast_loop: true)
     :gen_udp.send(socket, @onvif_discovery_ip, @onvif_discovery_port, payload)
 
     receive_message(socket, opts, [])
