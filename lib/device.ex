@@ -103,7 +103,6 @@ defmodule Onvif.Device do
       |> get_address(prefer_ipv6?, prefer_https?)
       |> URI.parse()
       |> Map.put(:path, "")
-      |> Map.put(:userinfo, "#{username}:#{password}")
 
     device = %Device{
       username: username,
