@@ -11,11 +11,7 @@ defmodule Onvif.API do
     middleware = [
       {Tesla.Middleware.BaseUrl, url},
       auth_function(device),
-      {Tesla.Middleware.Logger, log_level: :info},
-      {Tesla.Middleware.Headers,
-       [
-         {"connection", "keep-alive"}
-       ]}
+      {Tesla.Middleware.Logger, log_level: :info}
     ]
 
     Tesla.client(middleware, adapter)
