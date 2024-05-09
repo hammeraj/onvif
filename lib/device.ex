@@ -27,6 +27,20 @@ defmodule Onvif.Device do
     field(:device_service_path, :string, default: "/onvif/device_service")
   end
 
+  def to_struct(parsed) do
+    %__MODULE__{}
+    |> changeset(parsed)
+    |> apply_action(:validate)
+  end
+
+  def to_json(%__MODULE__{} = schema) do
+    Jason.encode(schema)
+  end
+
+  def changeset(device, attrs) do
+    cast(device, attrs, @required)
+  end
+
   @doc """
   Returns a `Device.t()` struct populated with the bare requirements for making a request to an Onvif
   enabled device.
