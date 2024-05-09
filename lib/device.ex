@@ -1,29 +1,31 @@
 defmodule Onvif.Device do
+  use Ecto.Schema
+
   alias Onvif.Device
   alias Onvif.Discovery.Probe
 
-  @enforce_keys [:username, :password, :address]
+  @required [:username, :password, :address]
 
   @type t :: %__MODULE__{}
 
+  @primary_key false
   @derive Jason.Encoder
-  defstruct @enforce_keys ++
-              [
-                :scopes,
-                :manufacturer,
-                :model,
-                :firmware_version,
-                :serial_number,
-                :hardware_id,
-                :ntp,
-                :media_ver10_service_path,
-                :media_ver20_service_path,
-                :services,
-                auth_type: :xml_auth,
-                time_diff_from_system_secs: 0,
-                port: 80,
-                device_service_path: "/onvif/device_service"
-              ]
+  embedded_schema do
+    field(:scopes, {:array, :string}, default: [])
+    field(:manufacturer, :string)
+    field(:model, :string)
+    field(:firmware_version, :string)
+    field(:serial_number, :string)
+    field(:hardware_id, :string)
+    field(:ntp, :string)
+    field(:media_ver10_service_path, :string)
+    field(:media_ver20_service_path, :string)
+    field(:services, {:array, :map}, default: [])
+    field(:auth_type, Ecto.Enum, values: [:xml_auth, :digest_auth, :basic_auth, :no_auth])
+    field(:time_diff_from_system_secs, :integer, default: 0)
+    field(:port, :integer, default: 80)
+    field(:device_service_path, :string, default: "/onvif/device_service")
+  end
 
   @doc """
   Returns a `Device.t()` struct populated with the bare requirements for making a request to an Onvif
