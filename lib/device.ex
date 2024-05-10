@@ -40,7 +40,7 @@ defmodule Onvif.Device do
     field(:ntp, :string)
     field(:media_ver10_service_path, :string)
     field(:media_ver20_service_path, :string)
-    field(:services, {:array, :map}, default: [])
+    embeds_many(:services, Onvif.Device.Service, primary_key: false, on_replace: :update)
 
     field(:auth_type, Ecto.Enum,
       default: :xml_auth,
@@ -83,6 +83,7 @@ defmodule Onvif.Device do
   def changeset(%__MODULE__{} = device, attrs \\ %{}) do
     device
     |> cast(attrs, @required ++ @optional)
+    |> cast_embed(:services, with: &Onvif.Device.Service.changeset/2)
     |> validate_required(@required)
   end
 
