@@ -1,5 +1,6 @@
 defmodule Onvif.Device do
   use Ecto.Schema
+  import Ecto.Changeset
 
   alias Onvif.Device
   alias Onvif.Discovery.Probe
@@ -11,6 +12,9 @@ defmodule Onvif.Device do
   @primary_key false
   @derive Jason.Encoder
   embedded_schema do
+    field(:username, :string)
+    field(:password, :string)
+    field(:address, :string)
     field(:scopes, {:array, :string}, default: [])
     field(:manufacturer, :string)
     field(:model, :string)
@@ -27,18 +31,35 @@ defmodule Onvif.Device do
     field(:device_service_path, :string, default: "/onvif/device_service")
   end
 
-  def to_struct(parsed) do
+  @doc """
+  Returns a `{:ok, Device.t()}` if the map can be properly parsed into a struct
+  or `{:error, Ecto.Changeset.t()}` if not.
+  """
+  @spec to_struct(map()) :: {:ok, Device.t()} | {:error, Ecto.Changeset.t()}
+  def to_struct(parsed) when is_map(parsed) do
     %__MODULE__{}
     |> changeset(parsed)
     |> apply_action(:validate)
   end
 
+  @doc """
+  Utility function to encode a `Device.t()` struct into a json string.
+
+  It returns an `{:error, Ecto.Changeset.t()}` if the struct is not valid.
+  """
+  @spec to_json(Device.t()) :: {:ok, String.t()} | {:error, Ecto.Changeset} | {:error, Jason.EncodeError.t() | Exception.t()}
   def to_json(%__MODULE__{} = schema) do
-    Jason.encode(schema)
+    case changeset(schema) do
+      %{valid?: true} = device -> Jason.encode(device)
+      change -> {:error, change}
+    end
   end
 
-  def changeset(device, attrs) do
-    cast(device, attrs, @required)
+  @spec changeset(Device.t(), map()) :: Ecto.Changeset.t()
+  def changeset(%__MODULE__{} = device, attrs \\ %{}) do
+    device
+    |> cast(attrs, @required)
+    |> validate_required(@required)
   end
 
   @doc """
