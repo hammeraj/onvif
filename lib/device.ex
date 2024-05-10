@@ -40,7 +40,7 @@ defmodule Onvif.Device do
     field(:ntp, :string)
     field(:media_ver10_service_path, :string)
     field(:media_ver20_service_path, :string)
-    embeds_many(:services, Onvif.Device.Service, primary_key: false, on_replace: :update)
+    embeds_many(:services, Onvif.Device.Service)
 
     field(:auth_type, Ecto.Enum,
       default: :xml_auth,
