@@ -16,7 +16,6 @@ defmodule Onvif.Device do
     :ntp,
     :media_ver10_service_path,
     :media_ver20_service_path,
-    :services,
     :auth_type,
     :time_diff_from_system_secs,
     :port,
