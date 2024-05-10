@@ -6,6 +6,21 @@ defmodule Onvif.Device do
   alias Onvif.Discovery.Probe
 
   @required [:username, :password, :address]
+  @optional [
+    :scopes,
+    :manufacturer,
+    :model,
+    :firmware_version,
+    :serial_number,
+    :hardware_id,
+    :ntp,
+    :media_ver10_service_path,
+    :media_ver20_service_path,
+    :auth_type,
+    :time_diff_from_system_secs,
+    :port,
+    :device_service_path
+  ]
 
   @type t :: %__MODULE__{}
 
@@ -24,8 +39,13 @@ defmodule Onvif.Device do
     field(:ntp, :string)
     field(:media_ver10_service_path, :string)
     field(:media_ver20_service_path, :string)
-    field(:services, {:array, :map}, default: [])
-    field(:auth_type, Ecto.Enum, default: :xml_auth, values: [:xml_auth, :digest_auth, :basic_auth, :no_auth])
+    embeds_many(:services, Onvif.Device.Service)
+
+    field(:auth_type, Ecto.Enum,
+      default: :xml_auth,
+      values: [:xml_auth, :digest_auth, :basic_auth, :no_auth]
+    )
+
     field(:time_diff_from_system_secs, :integer, default: 0)
     field(:port, :integer, default: 80)
     field(:device_service_path, :string, default: "/onvif/device_service")
@@ -47,7 +67,10 @@ defmodule Onvif.Device do
 
   It returns an `{:error, Ecto.Changeset.t()}` if the struct is not valid.
   """
-  @spec to_json(Device.t()) :: {:ok, String.t()} | {:error, Ecto.Changeset} | {:error, Jason.EncodeError.t() | Exception.t()}
+  @spec to_json(Device.t()) ::
+          {:ok, String.t()}
+          | {:error, Ecto.Changeset}
+          | {:error, Jason.EncodeError.t() | Exception.t()}
   def to_json(%__MODULE__{} = schema) do
     case changeset(schema) do
       %{valid?: true} = device -> Jason.encode(device)
@@ -58,7 +81,8 @@ defmodule Onvif.Device do
   @spec changeset(Device.t(), map()) :: Ecto.Changeset.t()
   def changeset(%__MODULE__{} = device, attrs \\ %{}) do
     device
-    |> cast(attrs, @required)
+    |> cast(attrs, @required ++ @optional)
+    |> cast_embed(:services, with: &Onvif.Device.Service.changeset/2)
     |> validate_required(@required)
   end
 
