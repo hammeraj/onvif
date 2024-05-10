@@ -25,7 +25,7 @@ defmodule Onvif.Device do
     field(:media_ver10_service_path, :string)
     field(:media_ver20_service_path, :string)
     field(:services, {:array, :map}, default: [])
-    field(:auth_type, Ecto.Enum, values: [:xml_auth, :digest_auth, :basic_auth, :no_auth])
+    field(:auth_type, Ecto.Enum, default: :xml_auth, values: [:xml_auth, :digest_auth, :basic_auth, :no_auth])
     field(:time_diff_from_system_secs, :integer, default: 0)
     field(:port, :integer, default: 80)
     field(:device_service_path, :string, default: "/onvif/device_service")
