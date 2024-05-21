@@ -7,6 +7,7 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   import Ecto.Changeset
   import SweetXml
 
+  require Logger
   alias Onvif.Media.Ver10.Profile.Parameters
 
   @primary_key false
@@ -24,10 +25,16 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   def parse(nil), do: nil
 
   def parse(doc) do
-    xmap(
-      doc,
-      analytics_module: ~x"./tt:AnalyticsModule"el |> transform_by(&parse_analytics_module/1)
-    )
+    try do
+      xmap(
+        doc,
+        analytics_module: ~x"./tt:AnalyticsModule"el |> transform_by(&parse_analytics_module/1)
+      )
+    catch
+      :exit, reason ->
+        Logger.error("Skipping invalid AnalyticsModule. Error: #{inspect(reason)}")
+        %{analytics_module: []}
+    end
   end
 
   defp parse_analytics_module(nil), do: nil
