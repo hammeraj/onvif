@@ -23,19 +23,16 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
-    try do
-      xmap(
-        doc,
-        analytics_module: ~x"./tt:AnalyticsModule"el |> transform_by(&parse_analytics_module/1)
-      )
-    catch
-      :exit, reason ->
-        Logger.error("Skipping invalid AnalyticsModule. Error: #{inspect(reason)}")
-        %{analytics_module: []}
-    end
+    xmap(
+      doc,
+      analytics_module: ~x"./tt:AnalyticsModule"el |> transform_by(&parse_analytics_module/1)
+    )
   end
+
+  defp parse_analytics_module([]), do: []
 
   defp parse_analytics_module(nil), do: nil
 

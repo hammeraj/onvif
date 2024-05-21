@@ -54,6 +54,8 @@ defmodule Onvif.Media.Ver10.Profile do
     end
   end
 
+  def parse([]), do: nil
+
   def parse(doc) do
     xmap(
       doc,

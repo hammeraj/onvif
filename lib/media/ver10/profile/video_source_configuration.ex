@@ -62,6 +62,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(
@@ -74,6 +75,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
       bounds: ~x"./tt:Bounds"e |> transform_by(&parse_bounds/1)
     )
   end
+
+  defp parse_bounds([]), do: nil
 
   defp parse_bounds(doc) do
     xmap(

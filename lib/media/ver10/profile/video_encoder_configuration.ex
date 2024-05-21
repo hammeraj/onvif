@@ -52,6 +52,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(
@@ -72,6 +73,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     )
   end
 
+  defp parse_resolution([]), do: nil
+
   defp parse_resolution(doc) do
     xmap(
       doc,
@@ -79,6 +82,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
       height: ~x"./tt:Height/text()"i
     )
   end
+
+  defp parse_rate_control([]), do: nil
 
   defp parse_rate_control(doc) do
     xmap(
@@ -89,6 +94,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     )
   end
 
+  defp parse_mpeg4_configuration([]), do: nil
   defp parse_mpeg4_configuration(nil), do: nil
 
   defp parse_mpeg4_configuration(doc) do
@@ -99,6 +105,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     )
   end
 
+  defp parse_h264_configuration([]), do: nil
   defp parse_h264_configuration(nil), do: nil
 
   defp parse_h264_configuration(doc) do

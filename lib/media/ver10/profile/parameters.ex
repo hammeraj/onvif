@@ -22,6 +22,8 @@ defmodule Onvif.Media.Ver10.Profile.Parameters do
     end
   end
 
+  def parse([]), do: []
+
   def parse(doc) do
     xmap(
       doc,

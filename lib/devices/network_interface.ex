@@ -123,6 +123,9 @@ defmodule Onvif.Device.NetworkInterface do
     end
   end
 
+  def parse(nil), do: nil
+  def parse([]), do: nil
+
   def parse(doc) do
     xmap(
       doc,
@@ -146,6 +149,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_info(nil), do: nil
+  defp parse_info([]), do: nil
 
   defp parse_info(doc) do
     xmap(
@@ -157,6 +161,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_link(nil), do: nil
+  defp parse_link([]), do: nil
 
   defp parse_link(doc) do
     xmap(
@@ -168,6 +173,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_ipv4(nil), do: nil
+  defp parse_ipv4([]), do: nil
 
   defp parse_ipv4(doc) do
     xmap(
@@ -178,6 +184,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_ipv6(nil), do: nil
+  defp parse_ipv6([]), do: nil
 
   defp parse_ipv6(doc) do
     xmap(
@@ -188,6 +195,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_connection_settings(nil), do: nil
+  defp parse_connection_settings([]), do: nil
 
   defp parse_connection_settings(doc) do
     xmap(
@@ -199,6 +207,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_ipv4_config(nil), do: nil
+  defp parse_ipv4_config([]), do: nil
 
   defp parse_ipv4_config(doc) do
     xmap(
@@ -211,6 +220,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_ipv6_config(nil), do: nil
+  defp parse_ipv6_config([]), do: nil
 
   defp parse_ipv6_config(doc) do
     xmap(
@@ -225,6 +235,7 @@ defmodule Onvif.Device.NetworkInterface do
   end
 
   defp parse_address(nil), do: nil
+  defp parse_address([]), do: nil
 
   defp parse_address(doc) do
     xmap(

@@ -325,6 +325,10 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
     nil
   end
 
+  defp parse_jpeg([]) do
+    nil
+  end
+
   defp parse_jpeg(doc) do
     xmap(
       doc,
@@ -338,6 +342,10 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
   end
 
   defp parse_mpeg4(nil) do
+    nil
+  end
+
+  defp parse_mpeg4([]) do
     nil
   end
 
@@ -359,6 +367,10 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
     nil
   end
 
+  defp parse_h264([]) do
+    nil
+  end
+
   defp parse_h264(doc) do
     xmap(
       doc,
@@ -374,6 +386,10 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
   end
 
   defp parse_extension(nil) do
+    nil
+  end
+
+  defp parse_extension([]) do
     nil
   end
 
@@ -394,6 +410,10 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
         height: ~x"./tt:Height/text()"i
       )
     end)
+  end
+
+  defp parse_int_range([]) do
+    nil
   end
 
   defp parse_int_range(nil) do
