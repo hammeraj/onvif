@@ -40,6 +40,7 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(

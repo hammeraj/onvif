@@ -33,6 +33,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(
@@ -49,6 +50,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
   end
 
   defp parse_rule_engine_configuration(nil), do: nil
+  defp parse_rule_engine_configuration([]), do: nil
 
   defp parse_rule_engine_configuration(doc) do
     xmap(
@@ -58,6 +60,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoAnalyticsConfiguration do
   end
 
   defp parse_rule(nil), do: nil
+  defp parse_rule([]), do: nil
 
   defp parse_rule([_ | _] = rules), do: Enum.map(rules, &parse_rule/1)
 

@@ -18,6 +18,9 @@ defmodule Onvif.Device.Service do
     field(:version, :string)
   end
 
+  def parse(nil), do: nil
+  def parse([]), do: nil
+
   def parse(doc) do
     version =
       xmap(doc,

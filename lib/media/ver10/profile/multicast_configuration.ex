@@ -23,6 +23,7 @@ defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(
@@ -35,6 +36,7 @@ defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
   end
 
   defp parse_address(nil), do: nil
+  defp parse_address([]), do: nil
 
   defp parse_address(doc) do
     xmap(

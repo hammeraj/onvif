@@ -28,6 +28,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(

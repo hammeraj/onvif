@@ -32,6 +32,7 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(
@@ -54,6 +55,7 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
   end
 
   defp parse_ptz_status(nil), do: nil
+  defp parse_ptz_status([]), do: nil
 
   defp parse_ptz_status(doc) do
     xmap(

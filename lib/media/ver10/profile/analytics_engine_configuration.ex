@@ -7,6 +7,7 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   import Ecto.Changeset
   import SweetXml
 
+  require Logger
   alias Onvif.Media.Ver10.Profile.Parameters
 
   @primary_key false
@@ -22,6 +23,7 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(
@@ -29,6 +31,8 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
       analytics_module: ~x"./tt:AnalyticsModule"el |> transform_by(&parse_analytics_module/1)
     )
   end
+
+  defp parse_analytics_module([]), do: []
 
   defp parse_analytics_module(nil), do: nil
 
