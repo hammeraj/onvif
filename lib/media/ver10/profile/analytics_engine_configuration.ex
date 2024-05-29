@@ -7,7 +7,6 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   import Ecto.Changeset
   import SweetXml
 
-  require Logger
   alias Onvif.Media.Ver10.Profile.Parameters
 
   @primary_key false
