@@ -5,8 +5,10 @@ defmodule Onvif.Device do
   alias Onvif.Device
   alias Onvif.Discovery.Probe
 
-  @required [:username, :password, :address]
+  @required [:address]
   @optional [
+    :username,
+    :password,
     :scopes,
     :manufacturer,
     :model,
