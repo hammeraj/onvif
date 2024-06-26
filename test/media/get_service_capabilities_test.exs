@@ -4,7 +4,7 @@ defmodule Onvif.Media.Ver10.GetServiceCapabilitiesTest do
   @moduletag capture_log: true
 
   describe "GetServiceCapabilities/1" do
-    test "should parse with correct dvalues and defaults for non existing attributes" do
+    test "should parse with correct values and defaults for non existing attributes" do
       xml_response = File.read!("test/media/ver10/fixtures/get_service_capabilities_response.xml")
 
       device = Onvif.Factory.device()
