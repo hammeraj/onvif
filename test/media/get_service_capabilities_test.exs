@@ -18,7 +18,7 @@ defmodule Onvif.Media.Ver10.GetServiceCapabilitiesTest do
       assert service_capabilities == %Onvif.Media.Ver10.ServiceCapabilities{
                exi_compression: false,
                osd: true,
-               profile_capabilities: %Onvif.Media.Ver10.ServiceCapabilities.ProfileCapailities{
+               profile_capabilities: %Onvif.Media.Ver10.ServiceCapabilities.ProfileCapabilities{
                  maximum_number_of_profiles: 24
                },
                rotation: false,
