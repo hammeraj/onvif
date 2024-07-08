@@ -26,7 +26,22 @@ defmodule Onvif.Devices do
     |> parse_response(operation)
   end
 
+  def request(%Device{} = device, args, operation) do
+    content = generate_content(operation, args)
+    soap_action = operation.soap_action()
+
+    device
+    |> Onvif.API.client()
+    |> Tesla.request(
+      method: :post,
+      headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],
+      body: %Onvif.Request{content: content, namespaces: @namespaces}
+    )
+    |> parse_response(operation)
+  end
+
   defp generate_content(operation), do: operation.request_body()
+  defp generate_content(operation, args), do: apply(operation, :request_body, args)
 
   defp parse_response({:ok, %{status: 200, body: body}}, operation) do
     operation.response(body)
