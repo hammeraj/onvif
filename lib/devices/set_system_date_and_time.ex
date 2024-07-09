@@ -13,6 +13,13 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
   end
 
   def request_body(%SystemDateAndTime{} = system_date_time) do
+      request_body([config: system_date_time, set_time?: false])
+  end
+
+  #def request_body(%SystemDateAndTime{} = system_date_time, opts) do
+  def request_body([config: %SystemDateAndTime{} = system_date_time] = opts) do
+    IO.inspect(opts)
+    set_time? = Keyword.get(opts, :set_time?, false)
     element(:"s:Body", [
       element(:"tds:SetSystemDateAndTime", [
         element(:"tds:DateAndTime", system_date_time.date_time_type ),
@@ -23,7 +30,13 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
             element(:"tt:TZ", system_date_time.time_zone.tz )
           ]
         ),
+        List.flatten([utc_date_time_element(system_date_time, set_time?)])
+      ])
+    ])
+  end
 
+  def utc_date_time_element(system_date_time, false) do [] end
+  def utc_date_time_element(system_date_time, true) do
         element(
           :"tds:UTCDateTime",
           [
@@ -39,9 +52,6 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
             ])
           ]
         )
-
-      ])
-    ])
   end
 
   def response(xml_response_body) do
