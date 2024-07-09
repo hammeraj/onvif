@@ -12,11 +12,11 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
     Onvif.Devices.request(device, args, __MODULE__)
   end
 
-  def request_body([config: %SystemDateAndTime{} = system_date_time] = opts) do
+  def request_body(config: %SystemDateAndTime{} = system_date_time) do
     request_body(config: system_date_time, set_time?: false)
   end
 
-  def request_body([config: %SystemDateAndTime{} = system_date_time, set_time?: set_time?] = opts) do
+  def request_body(config: %SystemDateAndTime{} = system_date_time, set_time?: set_time?) do
     element(:"s:Body", [
       element(:"tds:SetSystemDateAndTime", [
         element(:"tds:DateAndTime", system_date_time.date_time_type),

@@ -14,27 +14,20 @@ defmodule Onvif.Devices do
   @spec request(Device.t(), module()) :: {:ok, any} | {:error, map()}
   def request(%Device{} = device, operation) do
     content = generate_content(operation)
-    soap_action = operation.soap_action()
-
-    device
-    |> Onvif.API.client()
-    |> Tesla.request(
-      method: :post,
-      headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],
-      body: %Onvif.Request{content: content, namespaces: @namespaces}
-    )
-    |> parse_response(operation)
+    do_request(device, operation, content)
   end
 
   def request(%Device{} = device, args, operation) do
     content = generate_content(operation, args)
-    soap_action = operation.soap_action()
+    do_request(device, operation, content)
+  end
 
+  defp do_request(device, operation, content) do
     device
     |> Onvif.API.client()
     |> Tesla.request(
       method: :post,
-      headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],
+      headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", operation.soap_action()}],
       body: %Onvif.Request{content: content, namespaces: @namespaces}
     )
     |> parse_response(operation)
