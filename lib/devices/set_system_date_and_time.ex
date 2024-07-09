@@ -12,11 +12,11 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
     Onvif.Devices.request(device, args, __MODULE__)
   end
 
-  # def request_body(%SystemDateAndTime{} = system_date_time, opts) do
-  def request_body([config: %SystemDateAndTime{} = system_date_time, set_time?: set_time?] = opts) do
-    IO.inspect(opts)
-    set_time? = Keyword.get(opts, :set_time?, false)
+  def request_body([config: %SystemDateAndTime{} = system_date_time] = opts) do
+    request_body([config: system_date_time, set_time?: false])
+  end
 
+  def request_body([config: %SystemDateAndTime{} = system_date_time, set_time?: set_time?] = opts) do
     element(:"s:Body", [
       element(:"tds:SetSystemDateAndTime", [
         element(:"tds:DateAndTime", system_date_time.date_time_type),
@@ -32,9 +32,7 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
     ])
   end
 
-  def utc_date_time_element(system_date_time, false) do
-    []
-  end
+  def utc_date_time_element(_system_date_time, false), do: []
 
   def utc_date_time_element(system_date_time, true) do
     element(
