@@ -8,7 +8,8 @@ defmodule Onvif.Devices do
   alias Onvif.Device
 
   @namespaces [
-    "xmlns:tds": "http://www.onvif.org/ver10/device/wsdl"
+    "xmlns:tds": "http://www.onvif.org/ver10/device/wsdl",
+    "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
 
   @spec request(Device.t(), module()) :: {:ok, any} | {:error, map()}

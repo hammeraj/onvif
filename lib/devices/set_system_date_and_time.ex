@@ -19,7 +19,13 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
   def request_body(config: %SystemDateAndTime{} = system_date_time, set_time?: set_time?) do
     element(:"s:Body", [
       element(:"tds:SetSystemDateAndTime", [
-        element(:"tds:DateAndTime", system_date_time.date_time_type),
+        element(
+          :"tds:DateTimeType",
+          Keyword.fetch!(
+            Ecto.Enum.mappings(system_date_time.__struct__, :date_time_type),
+            system_date_time.date_time_type
+          )
+        ),
         element(:"tds:DaylightSavings", system_date_time.daylight_savings),
         element(
           :"tds:TimeZone",
