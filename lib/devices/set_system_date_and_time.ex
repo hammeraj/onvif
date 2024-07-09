@@ -13,7 +13,7 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
   end
 
   def request_body([config: %SystemDateAndTime{} = system_date_time] = opts) do
-    request_body([config: system_date_time, set_time?: false])
+    request_body(config: system_date_time, set_time?: false)
   end
 
   def request_body([config: %SystemDateAndTime{} = system_date_time, set_time?: set_time?] = opts) do
