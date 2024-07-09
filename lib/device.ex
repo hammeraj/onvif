@@ -238,7 +238,13 @@ defmodule Onvif.Device do
 
   defp get_date_time(device) do
     with {:ok, res} <- Onvif.Devices.GetSystemDateAndTime.request(device) do
-      updated_device = %{device | time_diff_from_system_secs: res.current_diff, ntp: res.date_time_type, system_date_time: res }
+      updated_device = %{
+        device
+        | time_diff_from_system_secs: res.current_diff,
+          ntp: res.date_time_type,
+          system_date_time: res
+      }
+
       {:ok, updated_device}
     end
   end

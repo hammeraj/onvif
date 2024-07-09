@@ -9,10 +9,10 @@ defmodule Onvif.Devices.SystemDateAndTime do
   @optional []
 
   embedded_schema do
-    field :date_time_type, Ecto.Enum, values: [manual: "Manual", ntp: "NTP"]
-    field :daylight_savings, :boolean, default: true
-    field :datetime, :utc_datetime
-    field :current_diff, :integer
+    field(:date_time_type, Ecto.Enum, values: [manual: "Manual", ntp: "NTP"])
+    field(:daylight_savings, :boolean, default: true)
+    field(:datetime, :utc_datetime)
+    field(:current_diff, :integer)
 
     embeds_one :time_zone, TimeZone, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
@@ -62,16 +62,17 @@ defmodule Onvif.Devices.SystemDateAndTime do
   def parse(doc) do
     xmap(
       doc,
-        date_time_type: ~x"./tt:DateTimeType/text()"so,
-        daylight_savings: ~x"./tt:DaylightSavings/text()"so,
-        time_zone: ~x"./tt:TimeZone"eo |> transform_by(&parse_time_zone/1),
-        utc_date_time: ~x"./tt:UTCDateTime"eo |> transform_by(&parse_date_time/1),
-        local_date_time: ~x"./tt:LocalDateTime"eo |> transform_by(&parse_date_time/1)
+      date_time_type: ~x"./tt:DateTimeType/text()"so,
+      daylight_savings: ~x"./tt:DaylightSavings/text()"so,
+      time_zone: ~x"./tt:TimeZone"eo |> transform_by(&parse_time_zone/1),
+      utc_date_time: ~x"./tt:UTCDateTime"eo |> transform_by(&parse_date_time/1),
+      local_date_time: ~x"./tt:LocalDateTime"eo |> transform_by(&parse_date_time/1)
     )
   end
 
   defp parse_time_zone([]), do: nil
   defp parse_time_zone(nil), do: nil
+
   defp parse_time_zone(doc) do
     xmap(
       doc,
@@ -81,16 +82,18 @@ defmodule Onvif.Devices.SystemDateAndTime do
 
   defp parse_date_time([]), do: nil
   defp parse_date_time(nil), do: nil
+
   defp parse_date_time(doc) do
     xmap(
       doc,
       time: ~x"./tt:Time"eo |> transform_by(&parse_time/1),
-      date: ~x"./tt:Date"eo |> transform_by(&parse_date/1),
+      date: ~x"./tt:Date"eo |> transform_by(&parse_date/1)
     )
   end
 
   defp parse_time([]), do: nil
   defp parse_time(nil), do: nil
+
   defp parse_time(doc) do
     xmap(
       doc,
@@ -99,8 +102,10 @@ defmodule Onvif.Devices.SystemDateAndTime do
       second: ~x"./tt:Second/text()"i
     )
   end
+
   defp parse_date([]), do: nil
   defp parse_date(nil), do: nil
+
   defp parse_date(doc) do
     xmap(
       doc,
@@ -117,7 +122,7 @@ defmodule Onvif.Devices.SystemDateAndTime do
   end
 
   @spec to_json(%__MODULE__{}) ::
-   {:error,
+          {:error,
            %{
              :__exception__ => any,
              :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
@@ -127,7 +132,6 @@ defmodule Onvif.Devices.SystemDateAndTime do
   def to_json(%__MODULE__{} = schema) do
     Jason.encode(schema)
   end
-
 
   def changeset(module, attrs) do
     module
@@ -142,10 +146,16 @@ defmodule Onvif.Devices.SystemDateAndTime do
 
   defp put_datetime(changeset) do
     case get_field(changeset, :utc_date_time) do
-      nil -> changeset
+      nil ->
+        changeset
+
       utc_date_time ->
-        {:ok, date} = Date.new(utc_date_time.date.year, utc_date_time.date.month, utc_date_time.date.day)
-        {:ok, time} = Time.new(utc_date_time.time.hour, utc_date_time.time.minute, utc_date_time.time.second)
+        {:ok, date} =
+          Date.new(utc_date_time.date.year, utc_date_time.date.month, utc_date_time.date.day)
+
+        {:ok, time} =
+          Time.new(utc_date_time.time.hour, utc_date_time.time.minute, utc_date_time.time.second)
+
         {:ok, datetime} = DateTime.new(date, time)
         put_change(changeset, :datetime, datetime)
     end
@@ -153,7 +163,9 @@ defmodule Onvif.Devices.SystemDateAndTime do
 
   defp put_current_diff(changeset) do
     case get_field(changeset, :datetime) do
-      nil -> changeset
+      nil ->
+        changeset
+
       datetime ->
         current = DateTime.utc_now()
         diff = DateTime.diff(datetime, current)
@@ -164,16 +176,18 @@ defmodule Onvif.Devices.SystemDateAndTime do
   defp time_zone_changeset(module, attrs) do
     cast(module, attrs, [:tz])
   end
+
   defp date_time_changeset(module, attrs) do
     cast(module, attrs, [])
     |> cast_embed(:date, with: &date_changeset/2)
     |> cast_embed(:time, with: &time_changeset/2)
   end
+
   defp date_changeset(module, attrs) do
     cast(module, attrs, [:year, :month, :day])
   end
+
   defp time_changeset(module, attrs) do
     cast(module, attrs, [:hour, :minute, :second])
   end
-
 end

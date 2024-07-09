@@ -41,7 +41,7 @@ defmodule Onvif.Devices do
   end
 
   defp generate_content(operation), do: operation.request_body()
-  defp generate_content(operation, args), do: apply(operation, :request_body, args)
+  defp generate_content(operation, args), do: operation.request_body(args)
 
   defp parse_response({:ok, %{status: 200, body: body}}, operation) do
     operation.response(body)

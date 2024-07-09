@@ -24,7 +24,7 @@ defmodule Onvif.Media.Ver10.ServiceCapabilities do
     field(:temporary_osd_text, :boolean, default: false)
     field(:exi_compression, :boolean, default: false)
 
-    embeds_one :profile_capabilities, ProfileCapabilities, primary_key: false, on_replace: :update do
+    embeds_one :profile_capabilities, ProfileCapailities, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
       field(:maximum_number_of_profiles, :integer)
     end
