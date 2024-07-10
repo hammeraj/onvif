@@ -37,7 +37,7 @@ defmodule Onvif.Devices.SystemDateAndTime do
       end
     end
 
-    embeds_one :local_date_time, UTCDateTime, primary_key: false, on_replace: :update do
+    embeds_one :local_date_time, LocalDateTime, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
 
       embeds_one :time, Time, primary_key: false, on_replace: :update do
