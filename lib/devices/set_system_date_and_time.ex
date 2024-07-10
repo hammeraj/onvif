@@ -1,4 +1,13 @@
 defmodule Onvif.Devices.SetSystemDateAndTime do
+  @moduledoc """
+    Module used to set the device system date and time as well as their configuration such as daylight saving and NTP or Manual update type on an ONVIF device.
+    If system time and date are set manually, the request shall include UTCDateTime.
+    A TimeZone token which is not formed according to the rules of IEEE 1003.1 section 8.3 is considered as invalid timezone.
+    The DayLightSavings flag should be set to true to activate any DST settings of the TimeZone string. Clear the DayLightSavings flag if the DST portion of the TimeZone settings should be ignored.
+    The configuration requires a %Onvif.Devices.SystemDateAndTime{} config and a bolean set_time? to manually change the time. It will be ignored if using NTP.
+
+    Ref: https://www.onvif.org/ver10/device/wsdl/devicemgmt.wsdl#op.SetSystemDateAndTime
+  """
   import SweetXml
   import XmlBuilder
 
