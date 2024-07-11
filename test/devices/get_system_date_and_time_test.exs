@@ -16,9 +16,9 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
       {:ok, service_capabilities} = Onvif.Devices.GetSystemDateAndTime.request(device)
 
       assert service_capabilities == %Onvif.Devices.SystemDateAndTime{
-               current_diff: -572,
+               current_diff: -151215,
                date_time_type: :manual,
-               datetime: ~U[2024-07-09 16:49:06Z],
+               datetime: ~U[2024-07-09 19:49:06Z],
                daylight_savings: true,
                local_date_time: %Onvif.Devices.SystemDateAndTime.UTCDateTime{
                  date: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Date{
@@ -29,11 +29,11 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
                  time: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Time{
                    hour: 19,
                    minute: 49,
-                   second: 06
+                   second: 6
                  }
                },
                time_zone: %Onvif.Devices.SystemDateAndTime.TimeZone{
-                 tz: "BRT3BRST,M3.2.0/2,M11.1.0/2"
+                 tz: "BRT3"
                },
                utc_date_time: %Onvif.Devices.SystemDateAndTime.UTCDateTime{
                  date: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Date{
@@ -44,7 +44,7 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
                  time: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Time{
                    hour: 16,
                    minute: 49,
-                   second: 06
+                   second: 6
                  }
                }
              }
