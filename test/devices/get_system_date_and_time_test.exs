@@ -13,21 +13,25 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
+      Mimic.expect(DateTime, :utc_now, fn ->
+        ~U[2024-07-09 20:00:00.227234Z]
+      end)
+
       {:ok, service_capabilities} = Onvif.Devices.GetSystemDateAndTime.request(device)
 
       assert service_capabilities == %Onvif.Devices.SystemDateAndTime{
-               current_diff: -151435,
+               current_diff: -654,
                date_time_type: :manual,
                datetime: ~U[2024-07-09 19:49:06Z],
                daylight_savings: true,
-               local_date_time: %Onvif.Devices.SystemDateAndTime.UTCDateTime{
-                 date: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Date{
+               local_date_time: %Onvif.Devices.SystemDateAndTime.LocalDateTime{
+                 date: %Onvif.Devices.SystemDateAndTime.LocalDateTime.Date{
                    day: 9,
                    month: 7,
                    year: 2024
                  },
-                 time: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Time{
-                   hour: 19,
+                 time: %Onvif.Devices.SystemDateAndTime.LocalDateTime.Time{
+                   hour: 16,
                    minute: 49,
                    second: 6
                  }
@@ -42,7 +46,7 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
                    year: 2024
                  },
                  time: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Time{
-                   hour: 16,
+                   hour: 19,
                    minute: 49,
                    second: 6
                  }
