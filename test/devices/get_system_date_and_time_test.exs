@@ -15,7 +15,7 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
 
       {:ok, service_capabilities} = Onvif.Devices.GetSystemDateAndTime.request(device)
 
-      assert service_capabilities == Onvif.Devices.SystemDateAndTime{
+      assert service_capabilities == %Onvif.Devices.SystemDateAndTime{
         current_diff: -572,
         date_time_type: :manual,
         datetime: ~U[2024-07-09 16:49:06Z],
