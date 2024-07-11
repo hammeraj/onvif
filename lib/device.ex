@@ -21,7 +21,8 @@ defmodule Onvif.Device do
     :auth_type,
     :time_diff_from_system_secs,
     :port,
-    :device_service_path
+    :device_service_path,
+    :system_date_time
   ]
 
   @type t :: %__MODULE__{}
@@ -41,6 +42,7 @@ defmodule Onvif.Device do
     field(:ntp, :string)
     field(:media_ver10_service_path, :string)
     field(:media_ver20_service_path, :string)
+    embeds_one(:system_date_time, Onvif.Devices.SystemDateAndTime)
     embeds_many(:services, Onvif.Device.Service)
 
     field(:auth_type, Ecto.Enum,
@@ -84,6 +86,7 @@ defmodule Onvif.Device do
   def changeset(%__MODULE__{} = device, attrs \\ %{}) do
     device
     |> cast(attrs, @required ++ @optional)
+    |> cast_embed(:system_date_time, with: &Onvif.Devices.SystemDateAndTime.changeset/2)
     |> cast_embed(:services, with: &Onvif.Device.Service.changeset/2)
     |> validate_required(@required)
   end
@@ -235,7 +238,13 @@ defmodule Onvif.Device do
 
   defp get_date_time(device) do
     with {:ok, res} <- Onvif.Devices.GetSystemDateAndTime.request(device) do
-      updated_device = %{device | time_diff_from_system_secs: res.current_diff, ntp: res.ntp}
+      updated_device = %{
+        device
+        | time_diff_from_system_secs: res.current_diff,
+          ntp: res.date_time_type,
+          system_date_time: res
+      }
+
       {:ok, updated_device}
     end
   end
