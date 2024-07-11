@@ -53,5 +53,21 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
                }
              }
     end
+
+    test "should return error when response is invalid" do
+      xml_response = File.read!("test/devices/fixtures/invalid_system_date_and_time_response.xml")
+      device = Onvif.Factory.device()
+
+      Mimic.expect(Tesla, :request, fn _client, _opts ->
+        {:ok, %{status: 400, body: xml_response}}
+      end)
+
+      {:error, %{status: status, reason: reason, response: response}} =
+        Onvif.Devices.GetSystemDateAndTime.request(device)
+
+      assert status == 400
+      assert reason == "Received 400 from Elixir.Onvif.Devices.GetSystemDateAndTime"
+      assert response == xml_response
+    end
   end
 end
