@@ -13,17 +13,15 @@ defmodule Onvif.Devices.SetNTPTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, service_capabilities} = Onvif.Devices.SetNTP.request(device)
+      {:ok, service_capabilities} = Onvif.Devices.SetNTP.request(device, %Onvif.Devices.NTP{from_dhcp: true, ntp_manual: []})
 
       assert service_capabilities == %Onvif.Devices.NTP{
-        ntp_from_dhcp: false,
-        ntp_manual: [
-          %Onvif.Devices.NTPManual{
-            type: "IPv4",
-            ipv4_address: "6.6.6.0"
-          }
-        ]
-      }
+               from_dhcp: false,
+               ntp_manual: [
+                 type: "IPv4",
+                 ipv4_address: "6.6.6.0"
+               ]
+             }
     end
   end
 end

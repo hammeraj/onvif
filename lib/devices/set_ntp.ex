@@ -1,5 +1,4 @@
 defmodule Onvif.Devices.SetNTP do
-
   import SweetXml
   import XmlBuilder
 
@@ -13,7 +12,7 @@ defmodule Onvif.Devices.SetNTP do
     Onvif.Devices.request(device, args, __MODULE__)
   end
 
-  def request_body(config: %NTP{} = ntp) do
+  def request_body(%NTP{} = ntp) do
     element(:"s:Body", [
       element(:"tds:SetNTP", [
         element(:"tds:FromDHCP", ntp.from_dhcp),
@@ -25,32 +24,28 @@ defmodule Onvif.Devices.SetNTP do
   end
 
   def ntp_manual_element(%NTP{} = ntp_config) do
-    case ntp_config.ntp_manual do
+    case ntp_config.from_dhcp do
       false -> []
-      true -> ntp_add_manual_element(ntp_manual)
+      true -> ntp_add_manual_element(ntp_config)
     end
   end
 
-  def ntp_add_manual_element(%NTP.Manual{}=ntp_manual) do
-    element(:"tds:Type", ntp_manual.type),
+  def ntp_add_manual_element(%NTP{} = ntp_config) do
+    [
+      element(:"tds:Type", ntp_config.ntp_manual.type),
+      ntp_manual_element_data(ntp_config.ntp_manual)
+    ]
+  end
+
+  def ntp_manual_element_data(ntp_manual) do
     case ntp_manual.type do
-      "IPv4" -> ntp_ipv4_element(ntp_manual.address)
-      "IPv6" -> ntp_ipv6_element(ntp_manual.address)
-      "DNS"  -> ntp_dns_element(ntp_manual.address)
+      "IPv4" -> element(:"tt:IPv4Address", ntp_manual.ipv4_address)
+      "IPv6" -> element(:"tt:IPv6Address", ntp_manual.ipv6_address)
+      "DNS" -> element(:"tt:DNSname", ntp_manual.dns_name)
     end
   end
 
-  def ntp_ipv4_element(%NTP.IPv4{}=ntp_ipv4) do
-    element(:"tt:IPv4Address", ntp_ipv4.address)
-  end
-  def ntp_ipv6_element(%NTP.IPv6{}=ntp_ipv6) do
-    element(:"tt:IPv6Address", ntp_ipv6.address)
-  end
-  def ntp_dns_element(%NTP.DNS{}=ntp_dns) do
-    element(:"tt:DNSname", ntp_dns.name)
-  end
-
-    def response(xml_response_body) do
+  def response(xml_response_body) do
     res =
       xml_response_body
       |> parse(namespace_conformant: true, quiet: true)
@@ -60,6 +55,7 @@ defmodule Onvif.Devices.SetNTP do
         |> add_namespace("tds", "http://www.onvif.org/ver10/device/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
+
     {:ok, res}
-    end
+  end
 end

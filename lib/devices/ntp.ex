@@ -7,7 +7,7 @@ defmodule Onvif.Devices.NTP do
   import Ecto.Changeset
   import SweetXml
 
- @primary_key false
+  @primary_key false
   @derive Jason.Encoder
   @required [:from_dhcp]
   @optional []
@@ -26,16 +26,18 @@ defmodule Onvif.Devices.NTP do
 
   def parse(nil), do: nil
   def parse([]), do: nil
+
   def parse(doc) do
     xmap(
       doc,
-        from_dhcp: ~x"./tds:FromDHCP/text()"so,
-        ntp_manual: ~x"./tds:NTPManual"eo |> transform_by(&parse_ntp_manual/1)
+      from_dhcp: ~x"./tds:FromDHCP/text()"so,
+      ntp_manual: ~x"./tds:NTPManual"eo |> transform_by(&parse_ntp_manual/1)
     )
   end
 
   def parse_ntp_manual([]), do: nil
   def parse_ntp_manual(nil), do: nil
+
   def parse_ntp_manual(doc) do
     xmap(
       doc,
