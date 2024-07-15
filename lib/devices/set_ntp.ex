@@ -23,17 +23,17 @@ defmodule Onvif.Devices.SetNTP do
     ])
   end
 
-  def ntp_manual_element(%NTP{} = ntp_config) do
-    case ntp_config.from_dhcp do
-      false -> []
-      true -> ntp_add_manual_element(ntp_config)
+  def ntp_manual_element(%NTP{} = ntp) do
+    case ntp.from_dhcp do
+      true -> []
+      false -> ntp_add_manual_element(ntp)
     end
   end
 
-  def ntp_add_manual_element(%NTP{} = ntp_config) do
+  def ntp_add_manual_element(%NTP{} = ntp) do
     [
-      element(:"tds:Type", ntp_config.ntp_manual.type),
-      ntp_manual_element_data(ntp_config.ntp_manual)
+      element(:"tds:Type", ntp.ntp_manual.type),
+      ntp_manual_element_data(ntp.ntp_manual)
     ]
   end
 
