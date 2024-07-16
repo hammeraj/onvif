@@ -16,9 +16,7 @@ defmodule Onvif.Devices.SetNTP do
     element(:"s:Body", [
       element(:"tds:SetNTP", [
         element(:"tds:FromDHCP", ntp.from_dhcp),
-        element(:"tds:NTPManual", [
-          List.flatten([ntp_manual_element(ntp)])
-        ])
+        ntp_manual_element(ntp) |> List.flatten
       ])
     ])
   end
@@ -26,7 +24,7 @@ defmodule Onvif.Devices.SetNTP do
   def ntp_manual_element(%NTP{} = ntp) do
     case ntp.from_dhcp do
       true -> []
-      false -> ntp_add_manual_element(ntp)
+      false -> [element(:"tds:NTPManual", ntp_add_manual_element(ntp))]
     end
   end
 
