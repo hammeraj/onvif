@@ -16,26 +16,24 @@ defmodule Onvif.Devices.SetNTP do
     element(:"s:Body", [
       element(:"tds:SetNTP", [
         element(:"tds:FromDHCP", ntp.from_dhcp),
-        ntp_manual_element(ntp) |> List.flatten()
+        ntp_manual_element(ntp, ntp.from_dhcp) |> List.flatten()
       ])
     ])
   end
 
-  def ntp_manual_element(%NTP{} = ntp) do
-    case ntp.from_dhcp do
-      true -> []
-      false -> [element(:"tds:NTPManual", ntp_add_manual_element(ntp))]
-    end
+  defp ntp_manual_element(%NTP{} = _ntp, true), do: []
+  defp ntp_manual_element(%NTP{} = ntp, false) do
+    [element(:"tds:NTPManual", ntp_add_manual_element(ntp.ntp_manual))]
   end
 
-  def ntp_add_manual_element(%NTP{} = ntp) do
+  defp ntp_add_manual_element(ntp_manual) do
     [
-      element(:"tds:Type", ntp.ntp_manual.type),
-      ntp_manual_element_data(ntp.ntp_manual)
+      element(:"tds:Type", ntp_manual.type),
+      ntp_manual_element_data(ntp_manual)
     ]
   end
 
-  def ntp_manual_element_data(ntp_manual) do
+  defp ntp_manual_element_data(ntp_manual) do
     case ntp_manual.type do
       "IPv4" -> element(:"tt:IPv4Address", ntp_manual.ipv4_address)
       "IPv6" -> element(:"tt:IPv6Address", ntp_manual.ipv6_address)
