@@ -16,7 +16,7 @@ defmodule Onvif.Devices.SetNTP do
     element(:"s:Body", [
       element(:"tds:SetNTP", [
         element(:"tds:FromDHCP", ntp.from_dhcp),
-        ntp_manual_element(ntp) |> List.flatten
+        ntp_manual_element(ntp) |> List.flatten()
       ])
     ])
   end
