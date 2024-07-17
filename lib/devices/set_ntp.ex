@@ -12,7 +12,7 @@ defmodule Onvif.Devices.SetNTP do
     Onvif.Devices.request(device, args, __MODULE__)
   end
 
-  def request_body(%NTP{} = ntp) do
+  def request_body(config: %NTP{} = ntp) do
     element(:"s:Body", [
       element(:"tds:SetNTP", [
         element(:"tds:FromDHCP", ntp.from_dhcp),

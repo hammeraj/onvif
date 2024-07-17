@@ -14,7 +14,7 @@ defmodule Onvif.Devices.SetNTPTest do
       end)
 
       {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device, %Onvif.Devices.NTP{from_dhcp: true})
+        Onvif.Devices.SetNTP.request(device, config: %Onvif.Devices.NTP{from_dhcp: true})
 
       assert service_capabilities == ""
     end
@@ -29,7 +29,7 @@ defmodule Onvif.Devices.SetNTPTest do
       end)
 
       {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device, %Onvif.Devices.NTP{
+        Onvif.Devices.SetNTP.request(device, config: %Onvif.Devices.NTP{
           from_dhcp: false,
           ntp_manual: %Onvif.Devices.NTP.NTPManual{type: "IPv4", ipv4_address: "6.6.6.0"}
         })
@@ -47,7 +47,7 @@ defmodule Onvif.Devices.SetNTPTest do
       end)
 
       {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device, %Onvif.Devices.NTP{
+        Onvif.Devices.SetNTP.request(device, config: %Onvif.Devices.NTP{
           from_dhcp: false,
           ntp_manual: %Onvif.Devices.NTP.NTPManual{
             type: "IPv6",
@@ -68,7 +68,7 @@ defmodule Onvif.Devices.SetNTPTest do
       end)
 
       {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device, %Onvif.Devices.NTP{
+        Onvif.Devices.SetNTP.request(device, config: %Onvif.Devices.NTP{
           from_dhcp: false,
           ntp_manual: %Onvif.Devices.NTP.NTPManual{type: "DNS", dns_name: "ntp.example.com"}
         })
