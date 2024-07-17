@@ -28,12 +28,12 @@ defmodule Onvif.Devices.GetNTP do
     |> Onvif.Devices.NTP.parse()
     |> Onvif.Devices.NTP.to_struct()
     |> case do
-      {:ok, ntp} -> {:ok, ntp}
+      {:ok, ntp} ->
+        {:ok, ntp}
+
       {:error, changeset} ->
         Logger.error("Discarding invalid NTPResponse: #{inspect(changeset)}")
         {:ok, nil}
     end
-
   end
-
 end

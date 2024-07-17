@@ -30,7 +30,6 @@ defmodule Onvif.Devices.NTP do
       field(:ipv6_address, :string)
       field(:dns_name, :string)
     end
-
   end
 
   def parse(nil), do: %{}
