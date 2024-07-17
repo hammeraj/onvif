@@ -28,7 +28,7 @@ defmodule Onvif.Devices.SetNTP do
 
   defp ntp_add_manual_element(ntp_manual) do
     [
-      element(:"tds:Type", ntp_manual.type),
+      element(:"tt:Type", ntp_manual.type),
       ntp_manual_element_data(ntp_manual)
     ]
   end

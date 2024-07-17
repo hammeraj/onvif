@@ -13,7 +13,7 @@ defmodule Onvif.Devices.NTP do
   @optional []
 
   embedded_schema do
-    field(:from_dhcp, :boolean, default: true)
+    field(:from_dhcp, :boolean)
 
     embeds_one :ntp_manual, NTPManual, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
@@ -33,15 +33,15 @@ defmodule Onvif.Devices.NTP do
 
   end
 
-  def parse(nil), do: nil
-  def parse([]), do: nil
+  def parse(nil), do: %{}
+  def parse([]), do: %{}
 
   def parse(doc) do
     xmap(
       doc,
-      from_dhcp: ~x"./tds:FromDHCP/text()"so,
-      ntp_from_dhcp: ~x"./tds:NTPFromDHCP"eo |> transform_by(&parse_ntp_data/1),
-      ntp_manual: ~x"./tds:NTPManual"eo |> transform_by(&parse_ntp_data/1)
+      from_dhcp: ~x"./tt:FromDHCP/text()"so,
+      ntp_from_dhcp: ~x"./tt:NTPFromDHCP"eo |> transform_by(&parse_ntp_data/1),
+      ntp_manual: ~x"./tt:NTPManual"eo |> transform_by(&parse_ntp_data/1)
     )
   end
 
@@ -54,7 +54,7 @@ defmodule Onvif.Devices.NTP do
       type: ~x"./tt:Type/text()"so,
       ipv4_address: ~x"./tt:IPv4Address/text()"so,
       ipv6_address: ~x"./tt:IPv6Address/text()"so,
-      dns_name: ~x"./tt:DNSName/text()"so
+      dns_name: ~x"./tt:DNSname/text()"so
     )
   end
 
