@@ -15,16 +15,16 @@ defmodule Onvif.Devices.GetNTPTest do
 
       {:ok, service_capabilities} = Onvif.Devices.GetNTP.request(device)
 
-      assert service_capabilities ==  %Onvif.Devices.NTP{
-        from_dhcp: false,
-        ntp_from_dhcp: nil,
-        ntp_manual: %Onvif.Devices.NTP.NTPManual{
-          dns_name: "time.windows.com",
-          ipv4_address: nil,
-          ipv6_address: nil,
-          type: :dns
-        }
-      }
+      assert service_capabilities == %Onvif.Devices.NTP{
+               from_dhcp: false,
+               ntp_from_dhcp: nil,
+               ntp_manual: %Onvif.Devices.NTP.NTPManual{
+                 dns_name: "time.windows.com",
+                 ipv4_address: nil,
+                 ipv6_address: nil,
+                 type: :dns
+               }
+             }
     end
   end
 end

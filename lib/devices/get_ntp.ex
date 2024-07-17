@@ -1,7 +1,7 @@
 defmodule Onvif.Devices.GetNTP do
   import SweetXml
   import XmlBuilder
-  import Logger
+  require Logger
 
   alias Onvif.Device
 
