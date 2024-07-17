@@ -22,6 +22,15 @@ defmodule Onvif.Devices.NTP do
       field(:ipv6_address, :string)
       field(:dns_name, :string)
     end
+
+    embeds_one :ntp_from_dhcp, NTPFromDHCP, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
+      field(:type, Ecto.Enum, values: [ipv4: "IPv4", ipv6: "IPv6", dns: "DNS"])
+      field(:ipv4_address, :string)
+      field(:ipv6_address, :string)
+      field(:dns_name, :string)
+    end
+
   end
 
   def parse(nil), do: nil
@@ -31,14 +40,15 @@ defmodule Onvif.Devices.NTP do
     xmap(
       doc,
       from_dhcp: ~x"./tds:FromDHCP/text()"so,
-      ntp_manual: ~x"./tds:NTPManual"eo |> transform_by(&parse_ntp_manual/1)
+      ntp_from_dhcp: ~x"./tds:NTPFromDHCP"eo |> transform_by(&parse_ntp_data/1),
+      ntp_manual: ~x"./tds:NTPManual"eo |> transform_by(&parse_ntp_data/1)
     )
   end
 
-  def parse_ntp_manual([]), do: nil
-  def parse_ntp_manual(nil), do: nil
+  def parse_ntp_data([]), do: nil
+  def parse_ntp_data(nil), do: nil
 
-  def parse_ntp_manual(doc) do
+  def parse_ntp_data(doc) do
     xmap(
       doc,
       type: ~x"./tt:Type/text()"so,
@@ -70,10 +80,11 @@ defmodule Onvif.Devices.NTP do
     module
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
-    |> cast_embed(:ntp_manual, with: &ntp_manual_changeset/2)
+    |> cast_embed(:ntp_from_dhcp, with: &ntp_data_changeset/2)
+    |> cast_embed(:ntp_manual, with: &ntp_data_changeset/2)
   end
 
-  def ntp_manual_changeset(module, attrs) do
+  def ntp_data_changeset(module, attrs) do
     module
     |> cast(attrs, [:type, :ipv4_address, :ipv6_address, :dns_name])
   end
