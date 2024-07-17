@@ -39,10 +39,10 @@ defmodule Onvif.Device do
     field(:firmware_version, :string)
     field(:serial_number, :string)
     field(:hardware_id, :string)
+    field(:ntp, :string)
     field(:media_ver10_service_path, :string)
     field(:media_ver20_service_path, :string)
     embeds_one(:system_date_time, Onvif.Devices.SystemDateAndTime)
-    embeds_one(:ntp, Onvif.Devices.NTP)
     embeds_many(:services, Onvif.Device.Service)
 
     field(:auth_type, Ecto.Enum,
@@ -87,7 +87,6 @@ defmodule Onvif.Device do
     device
     |> cast(attrs, @required ++ @optional)
     |> cast_embed(:system_date_time, with: &Onvif.Devices.SystemDateAndTime.changeset/2)
-    |> cast_embed(:ntp, with: &Onvif.Devices.NTP.changeset/2)
     |> cast_embed(:services, with: &Onvif.Device.Service.changeset/2)
     |> validate_required(@required)
   end
