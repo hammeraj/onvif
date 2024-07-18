@@ -84,7 +84,6 @@ defmodule Onvif.Devices.NTP do
   end
 
   def ntp_data_changeset(module, attrs) do
-    module
-    |> cast(attrs, [:type, :ipv4_address, :ipv6_address, :dns_name])
+    cast(module, attrs, [:type, :ipv4_address, :ipv6_address, :dns_name])
   end
 end
