@@ -26,5 +26,17 @@ defmodule Onvif.Devices.GetNTPTest do
                }
              }
     end
+
+    test "check a non-implemented GetNTP (dahua)" do
+      xml_response = File.read!("test/devices/fixtures/invalid_get_ntp_response.xml")
+      device = Onvif.Factory.device()
+
+      Mimic.expect(Tesla, :request, fn _client, _opts ->
+        {:ok, %{status: 200, body: xml_response}}
+      end)
+
+      {:ok, service_capabilities} = Onvif.Devices.GetNTP.request(device)
+      assert service_capabilities == nil
+    end
   end
 end
