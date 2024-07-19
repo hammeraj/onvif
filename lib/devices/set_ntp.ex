@@ -34,13 +34,9 @@ defmodule Onvif.Devices.SetNTP do
     ]
   end
 
-  defp ntp_manual_element_data(ntp_manual) do
-    case ntp_manual.type do
-      "IPv4" -> element(:"tt:IPv4Address", ntp_manual.ipv4_address)
-      "IPv6" -> element(:"tt:IPv6Address", ntp_manual.ipv6_address)
-      "DNS" -> element(:"tt:DNSname", ntp_manual.dns_name)
-    end
-  end
+  defp ntp_manual_element_data(%NTP.NTPManual{type: "IPv4"} = ntp_manual), do: element(:"tt:IPv4Address", ntp_manual.ipv4_address)
+  defp ntp_manual_element_data(%NTP.NTPManual{type: "IPv6"} = ntp_manual), do: element(:"tt:IPv6Address", ntp_manual.ipv6_address)
+  defp ntp_manual_element_data(%NTP.NTPManual{type: "DNS"} = ntp_manual), do: element(:"tt:DNSname", ntp_manual.dns_name)
 
   def response(xml_response_body) do
     res =
