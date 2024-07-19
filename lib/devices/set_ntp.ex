@@ -16,14 +16,14 @@ defmodule Onvif.Devices.SetNTP do
     element(:"s:Body", [
       element(:"tds:SetNTP", [
         element(:"tds:FromDHCP", ntp.from_dhcp),
-        ntp_manual_element(ntp, ntp.from_dhcp) |> List.flatten()
+        ntp_manual_element(ntp) |> List.flatten()
       ])
     ])
   end
 
-  defp ntp_manual_element(%NTP{} = _ntp, true), do: []
+  defp ntp_manual_element(%NTP{from_dhcp: true} = _ntp), do: []
 
-  defp ntp_manual_element(%NTP{} = ntp, false) do
+  defp ntp_manual_element(%NTP{from_dhcp: false} = ntp) do
     [element(:"tds:NTPManual", ntp_add_manual_element(ntp.ntp_manual))]
   end
 
