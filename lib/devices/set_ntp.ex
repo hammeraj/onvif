@@ -29,14 +29,22 @@ defmodule Onvif.Devices.SetNTP do
 
   defp ntp_add_manual_element(ntp_manual) do
     [
-      element(:"tt:Type", ntp_manual.type),
+      element(
+        :"tt:Type",
+        Keyword.fetch!(Ecto.Enum.mappings(ntp_manual.__struct__, :type), ntp_manual.type)
+      ),
       ntp_manual_element_data(ntp_manual)
     ]
   end
 
-  defp ntp_manual_element_data(%NTP.NTPManual{type: "IPv4"} = ntp_manual), do: element(:"tt:IPv4Address", ntp_manual.ipv4_address)
-  defp ntp_manual_element_data(%NTP.NTPManual{type: "IPv6"} = ntp_manual), do: element(:"tt:IPv6Address", ntp_manual.ipv6_address)
-  defp ntp_manual_element_data(%NTP.NTPManual{type: "DNS"} = ntp_manual), do: element(:"tt:DNSname", ntp_manual.dns_name)
+  defp ntp_manual_element_data(%NTP.NTPManual{type: :ipv4} = ntp_manual),
+    do: element(:"tt:IPv4Address", ntp_manual.ipv4_address)
+
+  defp ntp_manual_element_data(%NTP.NTPManual{type: :ipv6} = ntp_manual),
+    do: element(:"tt:IPv6Address", ntp_manual.ipv6_address)
+
+  defp ntp_manual_element_data(%NTP.NTPManual{type: :dns} = ntp_manual),
+    do: element(:"tt:DNSname", ntp_manual.dns_name)
 
   def response(xml_response_body) do
     res =
