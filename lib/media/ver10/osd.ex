@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.Profile.OSD do
+defmodule Onvif.Media.Ver10.OSD do
   @moduledoc """
   OSD (On-Screen Display) specification.
   """
