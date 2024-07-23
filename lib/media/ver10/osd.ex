@@ -27,8 +27,18 @@ defmodule Onvif.Media.Ver10.OSD do
       @derive Jason.Encoder
       field(:is_persistent_text, :boolean)
       field(:type, Ecto.Enum, values: [plain: "Plain", date: "Date", time: "Time", date_and_time: "DateAndTime"])
-      field(:date_format, Ecto.Enum, values: ["M/d/yyyy": "M/d/yyyy", "MM/dd/yyyy": "MM/dd/yyyy", "yyyy-MM-dd": "yyyy-MM-dd", "dd/MM/yyyy": "dd/MM/yyyy", "yyyy/MM/dd": "yyyy/MM/dd", "dd-MM-yyyy": "dd-MM-yyyy", "yyyy-MM-dd": "yyyy-MM-dd", "dd.MM.yyyy": "dd.MM.yyyy", "yyyy.MM.dd": "yyyy.MM.dd", "dd.MM.yyyy": "dd.MM.yyyy", "yyyy.MM.dd": "yyyy.MM.dd", "dd-MM-yyyy": "dd-MM-yyyy", "yyyy-MM-dd": "yyyy-MM-dd", "dd/MM/yyyy": "dd/MM/yyyy", "yyyy/MM/dd": "yyyy/MM/dd", "MM/dd/yyyy": "MM/dd/yyyy", "M/d/yyyy": "M/d/yyyy"])
-      field(:time_format, Ecto.Enum, values: ["h:mm:ss tt": "h:mm:ss tt", "hh:mm:ss tt": "hh:mm:ss tt", "H:mm:ss": "H:mm:ss", "HH:mm:ss": "HH:mm:ss", "h:mm tt": "h:mm tt", "hh:mm tt": "hh:mm tt", "H:mm": "H:mm", "HH:mm": "HH:mm"])
+      field(:date_format, Ecto.Enum, values: ["M/d/yyyy": "M/d/yyyy",
+                                              "MM/dd/yyyy": "MM/dd/yyyy",
+                                              "dd/MM/yyyy": "dd/MM/yyyy",
+                                              "yyyy/MM/dd": "yyyy/MM/dd",
+                                              "yyyy-MM-dd": "yyyy-MM-dd",
+                                              "dddd, MMMM dd, yyyy ": "dddd, MMMM dd, yyyy ",
+                                              "MMMM dd, yyyy ": "MMMM dd, yyyy ",
+                                              "dd MMMM, yyyy": "dd MMMM, yyyy"])
+      field(:time_format, Ecto.Enum, values: ["h:mm:ss tt": "h:mm:ss tt",
+                                              "hh:mm:ss tt": "hh:mm:ss tt",
+                                              "H:mm:ss": "H:mm:ss",
+                                              "HH:mm:ss": "HH:mm:ss"])
       field(:font_size, :integer)
       embeds_one :font_color, FontColor, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
@@ -54,7 +64,7 @@ defmodule Onvif.Media.Ver10.OSD do
   def parse(doc) do
     xmap(
       doc,
-      token: ~x"./tt:Token/text()"so,
+      token: ~x"//@token"so,
       video_source_configuration_token: ~x"./tt:VideoSourceConfigurationToken/text()"so,
       type: ~x"./tt:Type/text()"so,
       position: ~x"./tt:Position"eo |> transform_by(&parse_position/1),
@@ -114,7 +124,7 @@ defmodule Onvif.Media.Ver10.OSD do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.OSD{}) ::
+  @spec to_json(%Onvif.Media.Ver10.OSD{}) ::
           {:error,
            %{
              :__exception__ => any,

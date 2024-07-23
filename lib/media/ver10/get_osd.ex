@@ -25,7 +25,7 @@ defmodule Onvif.Media.Ver10.GetOSD do
     xml_response_body
     |> parse(namespace_conformant: true, quiet: true)
     |> xpath(
-      ~x"//s:Envelope/s:Body/trt:GetVideoEncoderConfigurationResponse/trt:Configuration"e
+      ~x"//s:Envelope/s:Body/trt:GetOSDResponse/trt:OSD"e
       |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
       |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
       |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
