@@ -20,7 +20,7 @@ defmodule Onvif.Media.Ver10.OSD do
     embeds_one :position, Position, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
       field(:type, Ecto.Enum, values: [upper_left: "UpperLeft", upper_right: "UpperRight", lower_left: "LowerLeft", lower_right: "LowerRight", custom: "Custom"])
-      field(:pos, :integer)
+      field(:pos, :map)
     end
 
     embeds_one :text_string, TextString, primary_key: false, on_replace: :update do
@@ -43,7 +43,7 @@ defmodule Onvif.Media.Ver10.OSD do
       embeds_one :font_color, FontColor, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
         field(:transparent, :boolean)
-        field(:color, :string)
+        field(:color, :map)
       end
       embeds_one :background_color, BackgroundColor, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
@@ -79,8 +79,17 @@ defmodule Onvif.Media.Ver10.OSD do
     xmap(
       doc,
       type: ~x"./tt:Type/text()"so,
-      pos: ~x"./tt:Pos/text()"io
+      pos: ~x"./tt:Pos"eo |> transform_by(&parse_pos/1)
     )
+  end
+
+  def parse_pos([]), do: nil
+  def parse_pos(nil), do: nil
+  def parse_pos(doc) do
+    %{
+      x: doc |> xpath(~x"./@x"s) |> String.to_float(),
+      y: doc |> xpath(~x"./@y"s) |> String.to_float()
+    }
   end
 
   def parse_text_string([]), do: nil
@@ -105,8 +114,19 @@ defmodule Onvif.Media.Ver10.OSD do
     xmap(
       doc,
       transparent: ~x"./tt:Transparent/text()"so,
-      color: ~x"./tt:Color/text()"so
+      color: ~x"./tt:Color"eo |> transform_by(&parse_inner_color/1)
     )
+  end
+
+  def parse_inner_color([]), do: nil
+  def parse_inner_color(nil), do: nil
+  def parse_inner_color(doc) do
+    %{
+      x: doc |> xpath(~x"./@X"s) |> String.to_float(),
+      y: doc |> xpath(~x"./@Y"s) |> String.to_float(),
+      z: doc |> xpath(~x"./@Z"s) |> String.to_float(),
+      colorspace: doc |> xpath(~x"./@Colorspace"s)
+    }
   end
 
   def parse_image([]), do: nil
