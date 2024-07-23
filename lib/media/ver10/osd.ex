@@ -19,7 +19,11 @@ defmodule Onvif.Media.Ver10.OSD do
 
     embeds_one :position, Position, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
-      field(:type, Ecto.Enum, values: [upper_left: "UpperLeft", upper_right: "UpperRight", lower_left: "LowerLeft", lower_right: "LowerRight", custom: "Custom"])
+      field(:type, Ecto.Enum, values: [upper_left: "UpperLeft",
+                                       upper_right: "UpperRight",
+                                       lower_left: "LowerLeft",
+                                       lower_right: "LowerRight",
+                                       custom: "Custom"])
       field(:pos, :map)
     end
 
