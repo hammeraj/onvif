@@ -13,7 +13,7 @@ defmodule Onvif.Media.Ver10.GetOSDsTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      osds = Onvif.Media.Ver10.GetOSDs.request(device)
+      {:ok, osds} = Onvif.Media.Ver10.GetOSDs.request(device)
 
       assert length(osds) == 2
 
@@ -56,7 +56,7 @@ defmodule Onvif.Media.Ver10.GetOSDsTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      osds = Onvif.Media.Ver10.GetOSDs.request(device)
+      {:ok, osds} = Onvif.Media.Ver10.GetOSDs.request(device)
 
       assert length(osds) == 0
     end
