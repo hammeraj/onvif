@@ -27,15 +27,15 @@ defmodule Onvif.Media.Ver10.GetOSDs do
       |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
     )
     |> Enum.map(&OSD.parse/1)
-      |> Enum.reduce([], fn raw_service, acc ->
-        case OSD.to_struct(raw_service) do
-          {:ok, service} ->
-            [service | acc]
+    |> Enum.reduce([], fn raw_service, acc ->
+      case OSD.to_struct(raw_service) do
+        {:ok, service} ->
+          [service | acc]
 
-          {:error, changeset} ->
-            Logger.error("Discarding invalid service: #{inspect(changeset)}")
-            acc
-        end
-      end)
+        {:error, changeset} ->
+          Logger.error("Discarding invalid service: #{inspect(changeset)}")
+          acc
+      end
+    end)
   end
 end

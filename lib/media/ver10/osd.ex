@@ -19,41 +19,63 @@ defmodule Onvif.Media.Ver10.OSD do
 
     embeds_one :position, Position, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
-      field(:type, Ecto.Enum, values: [upper_left: "UpperLeft",
-                                       upper_right: "UpperRight",
-                                       lower_left: "LowerLeft",
-                                       lower_right: "LowerRight",
-                                       custom: "Custom"])
+      field(:type, Ecto.Enum,
+        values: [
+          upper_left: "UpperLeft",
+          upper_right: "UpperRight",
+          lower_left: "LowerLeft",
+          lower_right: "LowerRight",
+          custom: "Custom"
+        ]
+      )
+
       field(:pos, :map)
     end
 
     embeds_one :text_string, TextString, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
       field(:is_persistent_text, :boolean)
-      field(:type, Ecto.Enum, values: [plain: "Plain", date: "Date", time: "Time", date_and_time: "DateAndTime"])
-      field(:date_format, Ecto.Enum, values: ["M/d/yyyy": "M/d/yyyy",
-                                              "MM/dd/yyyy": "MM/dd/yyyy",
-                                              "dd/MM/yyyy": "dd/MM/yyyy",
-                                              "yyyy/MM/dd": "yyyy/MM/dd",
-                                              "yyyy-MM-dd": "yyyy-MM-dd",
-                                              "dddd, MMMM dd, yyyy ": "dddd, MMMM dd, yyyy ",
-                                              "MMMM dd, yyyy ": "MMMM dd, yyyy ",
-                                              "dd MMMM, yyyy": "dd MMMM, yyyy"])
-      field(:time_format, Ecto.Enum, values: ["h:mm:ss tt": "h:mm:ss tt",
-                                              "hh:mm:ss tt": "hh:mm:ss tt",
-                                              "H:mm:ss": "H:mm:ss",
-                                              "HH:mm:ss": "HH:mm:ss"])
+
+      field(:type, Ecto.Enum,
+        values: [plain: "Plain", date: "Date", time: "Time", date_and_time: "DateAndTime"]
+      )
+
+      field(:date_format, Ecto.Enum,
+        values: [
+          "M/d/yyyy": "M/d/yyyy",
+          "MM/dd/yyyy": "MM/dd/yyyy",
+          "dd/MM/yyyy": "dd/MM/yyyy",
+          "yyyy/MM/dd": "yyyy/MM/dd",
+          "yyyy-MM-dd": "yyyy-MM-dd",
+          "dddd, MMMM dd, yyyy ": "dddd, MMMM dd, yyyy ",
+          "MMMM dd, yyyy ": "MMMM dd, yyyy ",
+          "dd MMMM, yyyy": "dd MMMM, yyyy"
+        ]
+      )
+
+      field(:time_format, Ecto.Enum,
+        values: [
+          "h:mm:ss tt": "h:mm:ss tt",
+          "hh:mm:ss tt": "hh:mm:ss tt",
+          "H:mm:ss": "H:mm:ss",
+          "HH:mm:ss": "HH:mm:ss"
+        ]
+      )
+
       field(:font_size, :integer)
+
       embeds_one :font_color, FontColor, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
         field(:transparent, :boolean)
         field(:color, :map)
       end
+
       embeds_one :background_color, BackgroundColor, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
         field(:transparent, :boolean)
         field(:color, :string)
       end
+
       field(:plain_text, :string)
     end
 
@@ -65,6 +87,7 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse(nil), do: nil
   def parse([]), do: nil
+
   def parse(doc) do
     xmap(
       doc,
@@ -79,6 +102,7 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_position([]), do: nil
   def parse_position(nil), do: nil
+
   def parse_position(doc) do
     xmap(
       doc,
@@ -89,6 +113,7 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_pos([]), do: nil
   def parse_pos(nil), do: nil
+
   def parse_pos(doc) do
     %{
       x: doc |> xpath(~x"./@x"s) |> String.to_float(),
@@ -98,6 +123,7 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_text_string([]), do: nil
   def parse_text_string(nil), do: nil
+
   def parse_text_string(doc) do
     xmap(
       doc,
@@ -114,6 +140,7 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_color([]), do: nil
   def parse_color(nil), do: nil
+
   def parse_color(doc) do
     xmap(
       doc,
@@ -124,6 +151,7 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_inner_color([]), do: nil
   def parse_inner_color(nil), do: nil
+
   def parse_inner_color(doc) do
     %{
       x: doc |> xpath(~x"./@X"s) |> String.to_float(),
@@ -135,6 +163,7 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_image([]), do: nil
   def parse_image(nil), do: nil
+
   def parse_image(doc) do
     xmap(
       doc,
@@ -174,7 +203,14 @@ defmodule Onvif.Media.Ver10.OSD do
   end
 
   def text_string_changeset(module, attrs) do
-    cast(module, attrs, [:is_persistent_text, :type, :date_format, :time_format, :font_size, :plain_text])
+    cast(module, attrs, [
+      :is_persistent_text,
+      :type,
+      :date_format,
+      :time_format,
+      :font_size,
+      :plain_text
+    ])
     |> cast_embed(:font_color, with: &color_changeset/2)
     |> cast_embed(:background_color, with: &color_changeset/2)
   end
@@ -186,5 +222,4 @@ defmodule Onvif.Media.Ver10.OSD do
   def image_changeset(module, attrs) do
     cast(module, attrs, [:image_path])
   end
-
 end
