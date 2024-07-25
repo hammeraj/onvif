@@ -40,28 +40,8 @@ defmodule Onvif.Media.Ver10.OSD do
         values: [plain: "Plain", date: "Date", time: "Time", date_and_time: "DateAndTime"]
       )
 
-      field(:date_format, Ecto.Enum,
-        values: [
-          "M/d/yyyy": "M/d/yyyy",
-          "MM/dd/yyyy": "MM/dd/yyyy",
-          "dd/MM/yyyy": "dd/MM/yyyy",
-          "yyyy/MM/dd": "yyyy/MM/dd",
-          "yyyy-MM-dd": "yyyy-MM-dd",
-          "dddd, MMMM dd, yyyy ": "dddd, MMMM dd, yyyy ",
-          "MMMM dd, yyyy ": "MMMM dd, yyyy ",
-          "dd MMMM, yyyy": "dd MMMM, yyyy"
-        ]
-      )
-
-      field(:time_format, Ecto.Enum,
-        values: [
-          "h:mm:ss tt": "h:mm:ss tt",
-          "hh:mm:ss tt": "hh:mm:ss tt",
-          "H:mm:ss": "H:mm:ss",
-          "HH:mm:ss": "HH:mm:ss"
-        ]
-      )
-
+      field(:date_format, :string)
+      field(:time_format, :string)
       field(:font_size, :integer)
 
       embeds_one :font_color, FontColor, primary_key: false, on_replace: :update do
@@ -213,6 +193,8 @@ defmodule Onvif.Media.Ver10.OSD do
     ])
     |> cast_embed(:font_color, with: &color_changeset/2)
     |> cast_embed(:background_color, with: &color_changeset/2)
+    |> validate_inclusion(:date_format, ["M/d/yyyy", "MM/dd/yyyy", "dd/MM/yyyy", "yyyy/MM/dd", "yyyy-MM-dd", "dddd, MMMM dd, yyyy", "MMMM dd, yyyy", "dd MMMM, yyyy"])
+    |> validate_inclusion(:time_format, ["h:mm:ss tt", "hh:mm:ss tt", "H:mm:ss", "HH:mm:ss"])
   end
 
   def color_changeset(module, attrs) do
