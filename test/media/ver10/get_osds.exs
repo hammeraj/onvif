@@ -20,7 +20,7 @@ defmodule Onvif.Media.Ver10.GetOSDsTest do
       assert hd(osds) == %Onvif.Media.Ver10.OSD{
                image: nil,
                position: %Onvif.Media.Ver10.OSD.Position{
-                 pos: %{x: 0.454545, y: -0.733333},
+                 pos: %{x: "0.454545", y: "-0.733333"},
                  type: :custom
                },
                text_string: %Onvif.Media.Ver10.OSD.TextString{
@@ -29,9 +29,9 @@ defmodule Onvif.Media.Ver10.GetOSDsTest do
                  font_color: %Onvif.Media.Ver10.OSD.TextString.FontColor{
                    color: %{
                      colorspace: "http://www.onvif.org/ver10/colorspace/YCbCr",
-                     x: 0.0,
-                     y: 0.0,
-                     z: 0.0
+                     x: "0.000000",
+                     y: "0.000000",
+                     z: "0.000000"
                    },
                    transparent: nil
                  },

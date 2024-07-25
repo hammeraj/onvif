@@ -116,8 +116,8 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_pos(doc) do
     %{
-      x: doc |> xpath(~x"./@x"s) |> String.to_float(),
-      y: doc |> xpath(~x"./@y"s) |> String.to_float()
+      x: doc |> xpath(~x"./@x"s),
+      y: doc |> xpath(~x"./@y"s)
     }
   end
 
@@ -154,9 +154,9 @@ defmodule Onvif.Media.Ver10.OSD do
 
   def parse_inner_color(doc) do
     %{
-      x: doc |> xpath(~x"./@X"s) |> String.to_float(),
-      y: doc |> xpath(~x"./@Y"s) |> String.to_float(),
-      z: doc |> xpath(~x"./@Z"s) |> String.to_float(),
+      x: doc |> xpath(~x"./@X"s),
+      y: doc |> xpath(~x"./@Y"s),
+      z: doc |> xpath(~x"./@Z"s),
       colorspace: doc |> xpath(~x"./@Colorspace"s)
     }
   end
