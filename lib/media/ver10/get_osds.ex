@@ -8,7 +8,7 @@ defmodule Onvif.Media.Ver10.GetOSDs do
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetOSDs"
 
   def request(device),
-  do: Onvif.Media.Ver10.Media.request(device, __MODULE__)
+    do: Onvif.Media.Ver10.Media.request(device, __MODULE__)
 
   def request(device, args),
     do: Onvif.Media.Ver10.Media.request(device, args, __MODULE__)
@@ -49,6 +49,7 @@ defmodule Onvif.Media.Ver10.GetOSDs do
             acc
         end
       end)
+
     {:ok, response}
   end
 end
