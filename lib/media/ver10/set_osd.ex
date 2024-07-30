@@ -20,14 +20,29 @@ defmodule Onvif.Media.Ver10.SetOSD do
       element(:"trt:SetOSD", [
         element(:"tt:OSD", %{token: osd.token}, [
           element(:"tt:VideoSourceConfigurationToken", osd.video_source_configuration_token),
-          element(:"tt:Type", osd.type),
+          element(
+            :"tt:Type",
+            Keyword.fetch!(Ecto.Enum.mappings(osd.__struct__, :type), osd.type)
+          ),
           element(:"tt:Position", [
-            element(:"tt:Type", osd.position.type),
+            element(
+              :"tt:Type",
+              Keyword.fetch!(
+                Ecto.Enum.mappings(osd.position.__struct__, :type),
+                osd.position.type
+              )
+            ),
             element(:"tt:Pos", %{x: osd.position.pos.x, y: osd.position.pos.y})
           ]),
           element(:"tt:TextString", [
             element(:"tt:IsPersistentText", osd.text_string.is_persistent_text),
-            element(:"tt:Type", osd.text_string.type),
+            element(
+              :"tt:Type",
+              Keyword.fetch!(
+                Ecto.Enum.mappings(osd.text_string.__struct__, :type),
+                osd.text_string.type
+              )
+            ),
             element(:"tt:DateFormat", osd.text_string.date_format),
             element(:"tt:TimeFormat", osd.text_string.time_format),
             element(:"tt:FontSize", osd.text_string.font_size),
@@ -80,7 +95,7 @@ defmodule Onvif.Media.Ver10.SetOSD do
       xml_response_body
       |> parse(namespace_conformant: true, quiet: true)
       |> xpath(
-        ~x"//s:Envelope/s:Body/trt:GetOSDResponse/trt:OSD"e
+        ~x"//s:Envelope/s:Body/trt:SetOSDResponse/text()"s
         |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
         |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
