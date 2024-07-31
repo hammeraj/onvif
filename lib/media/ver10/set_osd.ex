@@ -18,7 +18,7 @@ defmodule Onvif.Media.Ver10.SetOSD do
   def request_body(%OSD{} = osd) do
     element(:"s:Body", [
       element(:"trt:SetOSD", [
-        element(:"tt:OSD", %{token: osd.token}, [
+        element(:"trt:OSD", %{token: osd.token}, [
           element(:"tt:VideoSourceConfigurationToken", osd.video_source_configuration_token),
           element(
             :"tt:Type",
