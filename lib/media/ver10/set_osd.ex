@@ -34,26 +34,64 @@ defmodule Onvif.Media.Ver10.SetOSD do
             ),
             element(:"tt:Pos", %{x: osd.position.pos.x, y: osd.position.pos.y})
           ]),
-          element(:"tt:TextString", [
-            element(:"tt:IsPersistentText", osd.text_string.is_persistent_text),
-            element(
-              :"tt:Type",
-              Keyword.fetch!(
-                Ecto.Enum.mappings(osd.text_string.__struct__, :type),
-                osd.text_string.type
-              )
-            ),
-            element(:"tt:DateFormat", osd.text_string.date_format),
-            element(:"tt:TimeFormat", osd.text_string.time_format),
-            element(:"tt:FontSize", osd.text_string.font_size),
-            font_color_element(osd.text_string.font_color),
-            background_color_element(osd.text_string.background_color),
-            element(:"tt:PlainText", osd.text_string.plain_text)
-          ]),
-          image_element(osd.image)
+          gen_element_type(osd.type, osd)
         ])
       ])
     ])
+    |> IO.inspect()
+  end
+
+  defp gen_element_type(:text, osd) do
+    element(:"tt:TextString", [
+      element_is_persistent_text(osd.text_string.is_persistent_text),
+      element(
+        :"tt:Type",
+        Keyword.fetch!(
+          Ecto.Enum.mappings(osd.text_string.__struct__, :type),
+          osd.text_string.type
+        )
+      ),
+      element_date_format(osd.text_string.date_format),
+      element_time_format(osd.text_string.time_format),
+      element_font_size(osd.text_string.font_size),
+      font_color_element(osd.text_string.font_color),
+      background_color_element(osd.text_string.background_color),
+      element_plain_text(osd.text_string.plain_text)
+    ])
+  end
+
+  defp gen_element_type(:image, osd) do
+    image_element(osd.image)
+  end
+
+  defp element_is_persistent_text(nil), do: []
+
+  defp element_is_persistent_text(is_persistent_text) do
+    element(:"tt:IsPersistentText", is_persistent_text)
+  end
+
+  defp element_date_format(nil), do: []
+
+  defp element_date_format(date_format) do
+    element(:"tt:DateFormat", date_format)
+  end
+
+  defp element_time_format(nil), do: []
+
+  defp element_time_format(time_format) do
+    element(:"tt:TimeFormat", time_format)
+  end
+
+  defp element_font_size(nil), do: []
+
+  defp element_font_size(font_size) do
+    element(:"tt:FontSize", font_size)
+  end
+
+  defp element_plain_text(nil), do: []
+
+  defp element_plain_text(plain_text) do
+    element(:"tt:PlainText", plain_text)
   end
 
   defp font_color_element(nil), do: []
