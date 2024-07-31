@@ -38,7 +38,6 @@ defmodule Onvif.Media.Ver10.SetOSD do
         ])
       ])
     ])
-    |> IO.inspect()
   end
 
   defp gen_element_type(:text, osd) do
