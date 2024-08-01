@@ -193,7 +193,16 @@ defmodule Onvif.Media.Ver10.OSD do
     ])
     |> cast_embed(:font_color, with: &color_changeset/2)
     |> cast_embed(:background_color, with: &color_changeset/2)
-    |> validate_inclusion(:date_format, ["M/d/yyyy", "MM/dd/yyyy", "dd/MM/yyyy", "yyyy/MM/dd", "yyyy-MM-dd", "dddd, MMMM dd, yyyy", "MMMM dd, yyyy", "dd MMMM, yyyy"])
+    |> validate_inclusion(:date_format, [
+      "M/d/yyyy",
+      "MM/dd/yyyy",
+      "dd/MM/yyyy",
+      "yyyy/MM/dd",
+      "yyyy-MM-dd",
+      "dddd, MMMM dd, yyyy",
+      "MMMM dd, yyyy",
+      "dd MMMM, yyyy"
+    ])
     |> validate_inclusion(:time_format, ["h:mm:ss tt", "hh:mm:ss tt", "H:mm:ss", "HH:mm:ss"])
   end
 

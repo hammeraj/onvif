@@ -21,8 +21,7 @@ defmodule Onvif.Device do
     :auth_type,
     :time_diff_from_system_secs,
     :port,
-    :device_service_path,
-    :system_date_time
+    :device_service_path
   ]
 
   @type t :: %__MODULE__{}
