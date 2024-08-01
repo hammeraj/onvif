@@ -41,26 +41,45 @@ defmodule Onvif.Media.Ver10.SetOSD do
   end
 
   defp gen_element_type(:text, osd) do
-    element(:"tt:TextString", [
-      element_is_persistent_text(osd.text_string.is_persistent_text),
-      element(
-        :"tt:Type",
-        Keyword.fetch!(
-          Ecto.Enum.mappings(osd.text_string.__struct__, :type),
-          osd.text_string.type
-        )
-      ),
-      element_date_format(osd.text_string.date_format),
-      element_time_format(osd.text_string.time_format),
-      element_font_size(osd.text_string.font_size),
-      font_color_element(osd.text_string.font_color),
-      background_color_element(osd.text_string.background_color),
-      element_plain_text(osd.text_string.plain_text)
-    ])
+    element(
+      :"tt:TextString",
+      [
+        element_is_persistent_text(osd.text_string.is_persistent_text),
+        element(
+          :"tt:Type",
+          Keyword.fetch!(
+            Ecto.Enum.mappings(osd.text_string.__struct__, :type),
+            osd.text_string.type
+          )
+        ),
+        element_font_size(osd.text_string.font_size),
+        font_color_element(osd.text_string.font_color),
+        background_color_element(osd.text_string.background_color)
+      ] ++ gen_text_type(osd.text_string.type, osd)
+    )
   end
 
   defp gen_element_type(:image, osd) do
     image_element(osd.image)
+  end
+
+  defp gen_text_type(:plain, osd) do
+    [element_plain_text(osd.text_string.plain_text)]
+  end
+
+  defp gen_text_type(:date, osd) do
+    [element_date_format(osd.text_string.date_format)]
+  end
+
+  defp gen_text_type(:time, osd) do
+    [element_time_format(osd.text_string.time_format)]
+  end
+
+  defp gen_text_type(:date_and_time, osd) do
+    [
+      element_date_format(osd.text_string.date_format),
+      element_time_format(osd.text_string.time_format)
+    ]
   end
 
   defp element_is_persistent_text(nil), do: []
