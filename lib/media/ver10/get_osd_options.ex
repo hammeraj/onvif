@@ -15,7 +15,7 @@ defmodule Onvif.Media.Ver10.GetOSDOptions do
   def request_body(token) do
     element(:"s:Body", [
       element(:"trt:GetOSDOptions", [
-        element(:"tt:ConfigurationToken", token)
+        element(:"trt:ConfigurationToken", token)
       ])
     ])
   end
