@@ -111,8 +111,8 @@ defmodule Onvif.Media.Ver10.OSDOptions do
   def parse(doc) do
     xmap(
       doc,
-      type: ~x"./tt:Type/text()"so,
-      position_option: ~x"./tt:PositionOption/text()"so,
+      type: ~x"./tt:Type/text()"slo,
+      position_option: ~x"./tt:PositionOption/text()"slo,
       maximum_number_of_osds: ~x"./tt:MaximumNumberOfOSDs"eo |> transform_by(&parse_maximum_number_of_osds/1),
       text_option: ~x"./tt:TextOption"eo |> transform_by(&parse_text_option/1),
       image_option: ~x"./tt:ImageOption"eo |> transform_by(&parse_image_option/1)
@@ -138,10 +138,10 @@ defmodule Onvif.Media.Ver10.OSDOptions do
   def parse_text_option(doc) do
     xmap(
       doc,
-      type: ~x"./tt:Type/text()"so,
+      type: ~x"./tt:Type/text()"slo,
       font_size_range: ~x"./tt:FontSizeRange"eo |> transform_by(&parse_int_range/1),
-      date_format: ~x"./tt:DateFormat/text()"so,
-      time_format: ~x"./tt:TimeFormat/text()"so,
+      date_format: ~x"./tt:DateFormat/text()"slo,
+      time_format: ~x"./tt:TimeFormat/text()"slo,
       font_color: ~x"./tt:FontColor"eo |> transform_by(&parse_text_color/1),
       background_color: ~x"./tt:BackgroundColor"eo |> transform_by(&parse_text_color/1)
     )
@@ -152,8 +152,8 @@ defmodule Onvif.Media.Ver10.OSDOptions do
   def parse_int_range(doc) do
     xmap(
       doc,
-      min: ~x"//@Min"so,
-      max: ~x"//@Max"so
+      min: ~x"./tt:Min/text()"so,
+      max: ~x"./tt:Max/text()"so
     )
   end
 
@@ -227,8 +227,8 @@ defmodule Onvif.Media.Ver10.OSDOptions do
     |> cast_embed(:maximum_number_of_osds, with: &maximum_number_of_osds_changeset/2)
     |> cast_embed(:text_option, with: &text_option_changeset/2)
     |> cast_embed(:image_option, with: &image_option_changeset/2)
-    |> validate_inclusion(:type, ["Image", "Text", "Extended"])
-    |> validate_inclusion(:position_option, ["UpperLeft", "UpperRight", "LowerLeft", "LowerRight", "Custom"])
+    |> validate_subset(:type, ["Image", "Text", "Extended"])
+    |> validate_subset(:position_option, ["UpperLeft", "UpperRight", "LowerLeft", "LowerRight", "Custom"])
   end
 
   def maximum_number_of_osds_changeset(module, attrs) do
@@ -247,7 +247,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
   end
 
   def text_color_changeset(module, attrs) do
-    cast(module, attrs, [:type])
+    cast(module, attrs, [])
     |> cast_embed(:color, with: &color_changeset/2)
     |> cast_embed(:transparent, with: &int_range_changeset/2)
   end
