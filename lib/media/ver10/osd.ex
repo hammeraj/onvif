@@ -203,7 +203,12 @@ defmodule Onvif.Media.Ver10.OSD do
       "MMMM dd, yyyy",
       "dd MMMM, yyyy"
     ])
-    |> validate_inclusion(:time_format, ["h:mm:ss tt", "hh:mm:ss tt", "H:mm:ss", "HH:mm:ss"])
+    |> validate_inclusion(:time_format, [
+      "h:mm:ss tt",
+      "hh:mm:ss tt",
+      "H:mm:ss",
+      "HH:mm:ss"
+    ])
   end
 
   def color_changeset(module, attrs) do
