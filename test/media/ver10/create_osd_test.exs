@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.SetOSDTest do
+defmodule Onvif.Media.Ver10.CreateOSDTest do
   alias Onvif.Media.Ver10.OSD
   use ExUnit.Case, async: true
 
