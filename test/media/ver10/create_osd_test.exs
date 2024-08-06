@@ -58,7 +58,7 @@ defmodule Onvif.Media.Ver10.CreateOSDTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, osd} =
+      {:error, reason} =
         Onvif.Media.Ver10.CreateOSD.request(device, [
           %OSD{
             image: nil,
@@ -90,7 +90,7 @@ defmodule Onvif.Media.Ver10.CreateOSDTest do
           }
         ])
 
-      assert osd == ""
+      assert reason.reason == "Received a SOAP Fault from Elixir.Onvif.Media.Ver10.CreateOSD"
     end
   end
 end
