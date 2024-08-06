@@ -15,7 +15,7 @@ defmodule Onvif.Media.Ver10.GetOSD do
   def request_body(token) do
     element(:"s:Body", [
       element(:"trt:GetOSD", [
-        element(:"tt:OSDToken", token)
+        element(:"trt:OSDToken", token)
       ])
     ])
   end
