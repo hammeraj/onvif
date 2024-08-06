@@ -33,16 +33,20 @@ defmodule Onvif.Media.Ver10.Media do
 
   defp parse_response({:ok, %{status: 200, body: body}}, operation) do
     body
-      |> parse(namespace_conformant: true, quiet: true)
-      |> xpath(~x"//s:Envelope/s:Body/s:Fault"eo)
-      |> case do
-        nil -> operation.response(body)
-        _ -> {:error, %{
-          status: 200,
-          reason: "Received a SOAP Fault from #{operation}",
-          response: body
-        }}
-      end
+    |> parse(namespace_conformant: true, quiet: true)
+    |> xpath(~x"//s:Envelope/s:Body/s:Fault"eo)
+    |> case do
+      nil ->
+        operation.response(body)
+
+      _ ->
+        {:error,
+         %{
+           status: 200,
+           reason: "Received a SOAP Fault from #{operation}",
+           response: body
+         }}
+    end
   end
 
   defp parse_response({:ok, %{status: status_code, body: body}}, operation)

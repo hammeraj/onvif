@@ -15,7 +15,10 @@ defmodule Onvif.Media.Ver10.OSDOptions do
   embedded_schema do
     field(:type, {:array, :string})
     field(:position_option, {:array, :string})
-    embeds_one :maximum_number_of_osds, MaximumNumberOfOSDs, primary_key: false, on_replace: :update do
+
+    embeds_one :maximum_number_of_osds, MaximumNumberOfOSDs,
+      primary_key: false,
+      on_replace: :update do
       @derive Jason.Encoder
       field(:total, :integer)
       field(:image, :integer)
@@ -24,72 +27,87 @@ defmodule Onvif.Media.Ver10.OSDOptions do
       field(:time, :integer)
       field(:date_and_time, :integer)
     end
+
     embeds_one :text_option, TextOption, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
-      field(:type , {:array, :string})
+      field(:type, {:array, :string})
+
       embeds_one :font_size_range, FontSizeRange, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
         field(:min, :integer)
         field(:max, :integer)
       end
+
       field(:date_format, {:array, :string})
       field(:time_format, {:array, :string})
+
       embeds_one :font_color, FontColor, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
         embeds_one :color, Color, primary_key: false, on_replace: :update do
           @derive Jason.Encoder
           field(:color_list, {:array, :string})
+
           embeds_one :color_space_range, ColorSpaceRange, primary_key: false, on_replace: :update do
             @derive Jason.Encoder
-            embeds_one :x , X, primary_key: false, on_replace: :update do
+            embeds_one :x, X, primary_key: false, on_replace: :update do
               @derive Jason.Encoder
               field(:min, :integer)
               field(:max, :integer)
             end
-            embeds_one :y , Y, primary_key: false, on_replace: :update do
+
+            embeds_one :y, Y, primary_key: false, on_replace: :update do
               @derive Jason.Encoder
               field(:min, :integer)
               field(:max, :integer)
             end
-            embeds_one :z , Z, primary_key: false, on_replace: :update do
+
+            embeds_one :z, Z, primary_key: false, on_replace: :update do
               @derive Jason.Encoder
               field(:min, :integer)
               field(:max, :integer)
             end
+
             field(:color_space, {:array, :string})
           end
         end
+
         embeds_one :transparent, Transparent, primary_key: false, on_replace: :update do
           @derive Jason.Encoder
           field(:min, :integer)
           field(:max, :integer)
         end
       end
+
       embeds_one :background_color, BackgroundColor, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
         embeds_one :color, Color, primary_key: false, on_replace: :update do
           @derive Jason.Encoder
           field(:color_list, {:array, :string})
+
           embeds_one :color_space_range, ColorSpaceRange, primary_key: false, on_replace: :update do
             @derive Jason.Encoder
-            embeds_one :x , X, primary_key: false, on_replace: :update do
+            embeds_one :x, X, primary_key: false, on_replace: :update do
               @derive Jason.Encoder
               field(:min, :integer)
               field(:max, :integer)
             end
-            embeds_one :y , Y, primary_key: false, on_replace: :update do
+
+            embeds_one :y, Y, primary_key: false, on_replace: :update do
               @derive Jason.Encoder
               field(:min, :integer)
               field(:max, :integer)
             end
-            embeds_one :z , Z, primary_key: false, on_replace: :update do
+
+            embeds_one :z, Z, primary_key: false, on_replace: :update do
               @derive Jason.Encoder
               field(:min, :integer)
               field(:max, :integer)
             end
+
             field(:color_space, {:array, :string})
           end
         end
+
         embeds_one :transparent, Transparent, primary_key: false, on_replace: :update do
           @derive Jason.Encoder
           field(:min, :integer)
@@ -97,6 +115,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
         end
       end
     end
+
     embeds_one :image_option, ImageOption, primary_key: false, on_replace: :update do
       field(:formats_supported, {:array, :string})
       field(:max_size, :integer)
@@ -108,12 +127,14 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse(nil), do: nil
   def parse([]), do: nil
+
   def parse(doc) do
     xmap(
       doc,
       type: ~x"./tt:Type/text()"slo,
       position_option: ~x"./tt:PositionOption/text()"slo,
-      maximum_number_of_osds: ~x"./tt:MaximumNumberOfOSDs"eo |> transform_by(&parse_maximum_number_of_osds/1),
+      maximum_number_of_osds:
+        ~x"./tt:MaximumNumberOfOSDs"eo |> transform_by(&parse_maximum_number_of_osds/1),
       text_option: ~x"./tt:TextOption"eo |> transform_by(&parse_text_option/1),
       image_option: ~x"./tt:ImageOption"eo |> transform_by(&parse_image_option/1)
     )
@@ -121,6 +142,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse_maximum_number_of_osds([]), do: nil
   def parse_maximum_number_of_osds(nil), do: nil
+
   def parse_maximum_number_of_osds(doc) do
     xmap(
       doc,
@@ -135,6 +157,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse_text_option([]), do: nil
   def parse_text_option(nil), do: nil
+
   def parse_text_option(doc) do
     xmap(
       doc,
@@ -149,6 +172,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse_int_range([]), do: nil
   def parse_int_range(nil), do: nil
+
   def parse_int_range(doc) do
     xmap(
       doc,
@@ -159,6 +183,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse_text_color([]), do: nil
   def parse_text_color(nil), do: nil
+
   def parse_text_color(doc) do
     xmap(
       doc,
@@ -169,6 +194,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse_color([]), do: nil
   def parse_color(nil), do: nil
+
   def parse_color(doc) do
     xmap(
       doc,
@@ -179,6 +205,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse_color_space_range([]), do: nil
   def parse_color_space_range(nil), do: nil
+
   def parse_color_space_range(doc) do
     xmap(
       doc,
@@ -191,6 +218,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
 
   def parse_image_option([]), do: nil
   def parse_image_option(nil), do: nil
+
   def parse_image_option(doc) do
     xmap(
       doc,
@@ -228,7 +256,13 @@ defmodule Onvif.Media.Ver10.OSDOptions do
     |> cast_embed(:text_option, with: &text_option_changeset/2)
     |> cast_embed(:image_option, with: &image_option_changeset/2)
     |> validate_subset(:type, ["Image", "Text", "Extended"])
-    |> validate_subset(:position_option, ["UpperLeft", "UpperRight", "LowerLeft", "LowerRight", "Custom"])
+    |> validate_subset(:position_option, [
+      "UpperLeft",
+      "UpperRight",
+      "LowerLeft",
+      "LowerRight",
+      "Custom"
+    ])
   end
 
   def maximum_number_of_osds_changeset(module, attrs) do
@@ -267,5 +301,4 @@ defmodule Onvif.Media.Ver10.OSDOptions do
   def image_option_changeset(module, attrs) do
     cast(module, attrs, [:formats_supported, :max_size, :max_width, :max_height, :image_path])
   end
-
 end
