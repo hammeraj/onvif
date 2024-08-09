@@ -19,12 +19,12 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption do
 
       embeds_one :bitrate_list, BitrateList, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
-        field(:items, {:array, :string})
+        field(:items, {:array, :integer})
       end
 
       embeds_one :sample_rate_list, SampleRateList, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
-        field(:items, {:array, :string})
+        field(:items, {:array, :integer})
       end
     end
   end
@@ -59,7 +59,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption do
   def parse_unbound_int_list(doc) do
     xmap(
       doc,
-      items: ~x"./tt:Items/text()"slo
+      items: ~x"./tt:Items/text()"ilo
     )
   end
 

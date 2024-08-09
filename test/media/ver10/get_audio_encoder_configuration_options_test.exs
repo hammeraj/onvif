@@ -25,34 +25,34 @@ defmodule Onvif.Media.Ver10.GetAudioEncoderConfigurationOptionsTest do
                    %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options{
                      bitrate_list:
                        %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
-                         items: ["32"]
+                         items: [32]
                        },
                      encoding: :G711,
                      sample_rate_list:
                        %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
-                         items: ["8"]
+                         items: [8]
                        }
                    },
                    %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options{
                      bitrate_list:
                        %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
-                         items: ["32"]
+                         items: [32]
                        },
                      encoding: :G726,
                      sample_rate_list:
                        %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
-                         items: ["8"]
+                         items: [8]
                        }
                    },
                    %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options{
                      bitrate_list:
                        %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
-                         items: ["32", "64"]
+                         items: [32, 64]
                        },
                      encoding: :AAC,
                      sample_rate_list:
                        %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
-                         items: ["8", "16"]
+                         items: [8, 16]
                        }
                    }
                  ]
