@@ -24,7 +24,7 @@ defmodule Onvif.Media.Ver10.DeleteOSDTest do
       device = Onvif.Factory.device()
 
       Mimic.expect(Tesla, :request, fn _client, _opts ->
-        {:error, %{status: 400, body: xml_response }}
+        {:error, %{status: 400, body: xml_response}}
       end)
 
       {:error, reason} = Onvif.Media.Ver10.DeleteOSD.request(device, ["token"])
