@@ -10,7 +10,7 @@ defmodule Onvif.Media.Ver10.GetAudioEncoderConfigurationOptions do
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetAudioEncoderConfigurationOptions"
 
   @spec request(Device.t(), list) :: {:ok, any} | {:error, map()}
-  def request(device, args),
+  def request(device, args \\ []),
     do: Onvif.Media.Ver10.Media.request(device, args, __MODULE__)
 
   def request_body() do
