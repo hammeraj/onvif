@@ -110,6 +110,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
     end
 
     embeds_one :extension, Extension, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       embeds_one :jpeg, JpegOptions, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
         embeds_many :resolutions_available, ResolutionsAvailable,
