@@ -16,8 +16,7 @@ defmodule Onvif.Media.Ver10.GetAudioEncoderConfigurationOptionsTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, response} =
-        Onvif.Media.Ver10.GetAudioEncoderConfigurationOptions.request(device)
+      {:ok, response} = Onvif.Media.Ver10.GetAudioEncoderConfigurationOptions.request(device)
 
       assert response == [
                %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption{
