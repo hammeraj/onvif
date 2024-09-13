@@ -1,8 +1,8 @@
-defmodule Onvif.Media.Ver10.Media do
+defmodule Onvif.Analytics do
   @moduledoc """
-  Interface for making requests to the 1.0 version of Onvif Media Service
+  Interface for making requests to the 1.0 version of Onvif Analytics Service
 
-  https://www.onvif.org/ver10/media/wsdl/media.wsdl
+  https://www.onvif.org/ver20/analytics/wsdl/analytics.wsdl
   """
   import SweetXml
   require Logger
@@ -10,7 +10,7 @@ defmodule Onvif.Media.Ver10.Media do
   alias Onvif.Device
 
   @namespaces [
-    "xmlns:trt": "http://www.onvif.org/ver10/media/wsdl",
+    "xmlns:tan": "http://www.onvif.org/ver20/analytics/wsdl",
     "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
 
@@ -20,22 +20,13 @@ defmodule Onvif.Media.Ver10.Media do
     soap_action = operation.soap_action()
 
     device
-    |> Onvif.API.client(service_path: :media_ver10_service_path)
+    |> Onvif.API.client(service_path: :analytics_service_path)
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", soap_action}],
       body: %Onvif.Request{content: content, namespaces: @namespaces}
     )
     |> parse_response(operation)
-  end
-
-  def snapshot_request(device, uri) do
-    device
-    |> Onvif.API.snapshot_client(uri)
-    |> Tesla.request(
-      method: :get,
-      body: %Onvif.Request{content: "", namespaces: []}
-    )
   end
 
   defp generate_content(operation, args), do: apply(operation, :request_body, args)

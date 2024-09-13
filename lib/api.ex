@@ -17,6 +17,17 @@ defmodule Onvif.API do
     Tesla.client(middleware, adapter)
   end
 
+  def snapshot_client(device, url) do
+    adapter = {Tesla.Adapter.Finch, name: Onvif.Finch}
+    middleware = [
+      {Tesla.Middleware.BaseUrl, url},
+      auth_function(device),
+      {Tesla.Middleware.Logger, log_level: :info}
+    ]
+
+    Tesla.client(middleware, adapter)
+  end
+
   defp auth_function(%{auth_type: :no_auth}), do: Onvif.Middleware.NoAuth
 
   defp auth_function(%{auth_type: :basic_auth} = device),
