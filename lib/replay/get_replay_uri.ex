@@ -1,4 +1,4 @@
-defmodule Onvif.Recording.GetReplayUri do
+defmodule Onvif.Replay.GetReplayUri do
   import SweetXml
   import XmlBuilder
   require Logger
