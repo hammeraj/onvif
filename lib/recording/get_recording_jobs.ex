@@ -4,15 +4,13 @@ defmodule Onvif.Recording.GetRecordingJobs do
   import XmlBuilder
   require Logger
 
-  alias Onvif.Device
-
   def soap_action, do: "http://www.onvif.org/ver10/recording/wsdl/GetRecordingJobs"
 
   def request(device) do
-    Onvif.Recordings.request(device, __MODULE__)
+    Onvif.Recording.request(device, __MODULE__)
   end
 
-  def request_body(token) do
+  def request_body() do
     element(:"s:Body", [
       element(:"trc:GetRecordingJobs")
     ])

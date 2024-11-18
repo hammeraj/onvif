@@ -1,10 +1,9 @@
-
-defmodule Onvif.Recording.GetServiceCapabilities do
+defmodule Onvif.Recording.CreateRecordingJob do
   import SweetXml
   import XmlBuilder
   require Logger
 
-  def soap_action, do: "http://www.onvif.org/ver10/replay/wsdl/GetServiceCapabilities"
+  def soap_action, do: "http://www.onvif.org/ver10/recording/wsdl/CreateRecordingJob"
 
   def request(device) do
     Onvif.Recording.request(device, __MODULE__)
@@ -12,7 +11,7 @@ defmodule Onvif.Recording.GetServiceCapabilities do
 
   def request_body() do
     element(:"s:Body", [
-      element(:"trp:GetServiceCapabilities")
+      element(:"trc:CreateRecordingJob")
     ])
   end
 
