@@ -81,20 +81,22 @@ defmodule Onvif.Recording.Recordings do
   def parse_tracks([]), do: nil
   def parse_tracks(nil), do: nil
   def parse_tracks(doc) do
-    xmap(
+      xmap(
       doc,
       track: ~x"./tt:Track"elo |> transform_by(&parse_track/1)
-    )
+      )
   end
 
   def parse_track([]), do: nil
   def parse_track(nil), do: nil
-  def parse_track(doc) do
+  def parse_track(docs) do
+    Enum.map(docs, fn doc ->
     xmap(
       doc,
       track_token: ~x"./tt:TrackToken/text()"so,
       configuration: ~x"./tt:Configuration"eo |> transform_by(&parse_track_configuration/1)
     )
+    end)
   end
 
   def parse_track_configuration([]), do: nil
