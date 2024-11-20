@@ -11,7 +11,7 @@ defmodule Onvif.Replay.GetReplayUri do
     Onvif.Replay.request(device, args, __MODULE__)
   end
 
-  def request_body(token, ss_stream \\ "RTP-Unicast", ss_protocol \\ "UDP") do
+  def request_body(token, ss_stream \\ "RTP-Unicast", ss_protocol \\ "TCP") do
     element(:"s:Body", [
       element(:"trp:GetReplayUri", [
         element(:"trp:StreamSetup", [
