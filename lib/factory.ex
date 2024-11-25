@@ -9,6 +9,8 @@ defmodule Onvif.Factory do
       manufacturer: "General",
       media_ver10_service_path: "/onvif/media_service",
       media_ver20_service_path: "/onvif/media2_service",
+      replay_service_path: "/onvif/replay_service",
+      recording_service_path: "/onvif/recording_service",
       model: "N864A6",
       ntp: "NTP",
       password: "admin",
