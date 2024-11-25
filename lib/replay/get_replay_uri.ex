@@ -3,8 +3,6 @@ defmodule Onvif.Replay.GetReplayUri do
   import XmlBuilder
   require Logger
 
-  alias Onvif.Device
-
   def soap_action, do: "http://www.onvif.org/ver10/replay/wsdl/GetReplayUri"
 
   def request(device, args) do
