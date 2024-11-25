@@ -9,34 +9,31 @@ defmodule Onvif.Recording.RecordingJobs do
 
   @primary_key false
   @derive Jason.Encoder
-  @required []
+  @required [:job_token]
   @optional []
 
   embedded_schema do
-    embeds_many :job_item, JobItem, primary_key: false, on_replace: :delete do
+    field(:job_token, :string)
+
+    embeds_one :job_configuration, JobConfiguration, primary_key: false, on_replace: :update do
       @derive Jason.Encoder
-      field(:job_token, :string)
+      field(:recording_token, :string)
+      field(:mode, :string)
+      field(:priority, :string)
 
-      embeds_one :job_configuration, JobConfiguration, primary_key: false, on_replace: :update do
+      embeds_one :source, Source, primary_key: false, on_replace: :update do
         @derive Jason.Encoder
-        field(:recording_token, :string)
-        field(:mode, :string)
-        field(:priority, :string)
+        field(:auto_create_receiver, :boolean)
 
-        embeds_one :source, Source, primary_key: false, on_replace: :update do
+        embeds_one :source_token, SourceToken, primary_key: false, on_replace: :update do
           @derive Jason.Encoder
-          field(:auto_create_receiver, :boolean)
+          field(:token, :string)
+        end
 
-          embeds_one :source_token, SourceToken, primary_key: false, on_replace: :update do
-            @derive Jason.Encoder
-            field(:token, :string)
-          end
-
-          embeds_many :track, Track, primary_key: false, on_replace: :delete do
-            @derive Jason.Encoder
-            field(:source_tag, :string)
-            field(:destination, :string)
-          end
+        embeds_many :tracks, Tracks, primary_key: false, on_replace: :delete do
+          @derive Jason.Encoder
+          field(:source_tag, :string)
+          field(:destination, :string)
         end
       end
     end
@@ -46,16 +43,6 @@ defmodule Onvif.Recording.RecordingJobs do
   def parse([]), do: nil
 
   def parse(doc) do
-    xmap(
-      doc,
-      job_item: ~x"./tt:JobItem"elo |> transform_by(&parse_job_item/1)
-    )
-  end
-
-  def parse_job_item([]), do: nil
-  def parse_job_item(nil), do: nil
-
-  def parse_job_item(doc) do
     xmap(
       doc,
       job_token: ~x"./tt:JobToken/text()"so,
@@ -84,7 +71,7 @@ defmodule Onvif.Recording.RecordingJobs do
       doc,
       source_token: ~x"./tt:SourceToken"eo |> transform_by(&parse_source_token/1),
       auto_create_receiver: ~x"./tt:AutoCreateReceiver/text()"so,
-      track: ~x"./tt:Track"elo |> transform_by(&parse_track/1)
+      tracks: ~x"./tt:Tracks"elo |> transform_by(&parse_track/1)
     )
   end
 
@@ -101,12 +88,14 @@ defmodule Onvif.Recording.RecordingJobs do
   def parse_track([]), do: nil
   def parse_track(nil), do: nil
 
-  def parse_track(doc) do
-    xmap(
-      doc,
-      source_tag: ~x"./tt:SourceTag/text()"so,
-      destination: ~x"./tt:Destination/text()"so
-    )
+  def parse_track(docs) do
+    Enum.map(docs, fn doc ->
+      xmap(
+        doc,
+        source_tag: ~x"./tt:SourceTag/text()"so,
+        destination: ~x"./tt:Destination/text()"so
+      )
+    end)
   end
 
   def to_struct(parsed) do
@@ -127,17 +116,10 @@ defmodule Onvif.Recording.RecordingJobs do
     Jason.encode(schema)
   end
 
-  def changeset(schema, params \\ %{}) do
-    schema
-    |> cast(params, [])
-    |> validate_required([])
-    |> cast_embed(:job_item, with: &job_item_changeset/2)
-  end
-
-  def job_item_changeset(schema, params) do
-    schema
-    |> cast(params, [:job_token])
-    |> validate_required([:job_token])
+  def changeset(module, attrs) do
+    module
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@required)
     |> cast_embed(:job_configuration, with: &job_configuration_changeset/2)
   end
 
@@ -152,7 +134,7 @@ defmodule Onvif.Recording.RecordingJobs do
     schema
     |> cast(params, [:auto_create_receiver])
     |> cast_embed(:source_token, with: &source_token_changeset/2)
-    |> cast_embed(:track, with: &track_changeset/2)
+    |> cast_embed(:tracks, with: &track_changeset/2)
   end
 
   def source_token_changeset(schema, params) do
