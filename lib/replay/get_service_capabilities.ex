@@ -31,6 +31,7 @@ defmodule Onvif.Replay.GetServiceCapabilities do
         session_timeout_range: ~x"//@SessionTimeoutRange"so,
         rtsp_web_socket_uri: ~x"//@RTSPWebSocketUri"so
       )
-      {:ok, Map.merge(%Onvif.Replay.ServiceCapabilities{}, parsed_result)}
+
+    {:ok, Map.merge(%Onvif.Replay.ServiceCapabilities{}, parsed_result)}
   end
 end

@@ -21,7 +21,6 @@ defmodule Onvif.Recording.CreateRecordingJob do
     ])
   end
 
-
   def response(xml_response_body) do
     parsed_result =
       xml_response_body
@@ -35,7 +34,7 @@ defmodule Onvif.Recording.CreateRecordingJob do
         mode: ~x"//trc:JobConfiguration/tt:Mode/text()"so,
         priority: ~x"//trc:JobConfiguration/tt:Priority/text()"so
       )
+
     {:ok, parsed_result}
   end
-
 end

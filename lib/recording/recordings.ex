@@ -19,6 +19,7 @@ defmodule Onvif.Recording.Recordings do
       @derive Jason.Encoder
       field(:content, :string)
       field(:maximum_retention_time, :string)
+
       embeds_one(:source, Source, primary_key: false, on_replace: :update) do
         @derive Jason.Encoder
         field(:source_id, :string)
@@ -34,6 +35,7 @@ defmodule Onvif.Recording.Recordings do
       embeds_many(:track, Track, primary_key: false, on_replace: :delete) do
         @derive Jason.Encoder
         field(:track_token, :string)
+
         embeds_one(:configuration, Configuration, primary_key: false, on_replace: :update) do
           @derive Jason.Encoder
           field(:track_type, :string)
@@ -45,17 +47,19 @@ defmodule Onvif.Recording.Recordings do
 
   def parse(nil), do: nil
   def parse([]), do: nil
+
   def parse(doc) do
     xmap(
       doc,
       recording_token: ~x"./tt:RecordingToken/text()"so,
       configuration: ~x"./tt:Configuration"eo |> transform_by(&parse_configuration/1),
-      tracks: ~x"./tt:Tracks"eo |> transform_by(&parse_tracks/1),
+      tracks: ~x"./tt:Tracks"eo |> transform_by(&parse_tracks/1)
     )
   end
 
   def parse_configuration([]), do: nil
   def parse_configuration(nil), do: nil
+
   def parse_configuration(doc) do
     xmap(
       doc,
@@ -67,6 +71,7 @@ defmodule Onvif.Recording.Recordings do
 
   def parse_source([]), do: nil
   def parse_source(nil), do: nil
+
   def parse_source(doc) do
     xmap(
       doc,
@@ -80,27 +85,30 @@ defmodule Onvif.Recording.Recordings do
 
   def parse_tracks([]), do: nil
   def parse_tracks(nil), do: nil
+
   def parse_tracks(doc) do
-      xmap(
+    xmap(
       doc,
       track: ~x"./tt:Track"elo |> transform_by(&parse_track/1)
-      )
+    )
   end
 
   def parse_track([]), do: nil
   def parse_track(nil), do: nil
+
   def parse_track(docs) do
     Enum.map(docs, fn doc ->
-    xmap(
-      doc,
-      track_token: ~x"./tt:TrackToken/text()"so,
-      configuration: ~x"./tt:Configuration"eo |> transform_by(&parse_track_configuration/1)
-    )
+      xmap(
+        doc,
+        track_token: ~x"./tt:TrackToken/text()"so,
+        configuration: ~x"./tt:Configuration"eo |> transform_by(&parse_track_configuration/1)
+      )
     end)
   end
 
   def parse_track_configuration([]), do: nil
   def parse_track_configuration(nil), do: nil
+
   def parse_track_configuration(doc) do
     xmap(
       doc,
@@ -157,5 +165,4 @@ defmodule Onvif.Recording.Recordings do
   def track_configuration_changeset(module, attrs) do
     cast(module, attrs, [:track_type, :description])
   end
-
 end

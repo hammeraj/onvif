@@ -1,4 +1,3 @@
-
 defmodule Onvif.Recording.GetRecordingJobs do
   import SweetXml
   import XmlBuilder
@@ -17,6 +16,6 @@ defmodule Onvif.Recording.GetRecordingJobs do
   end
 
   def response(xml_response_body) do
-    IO.puts xml_response_body
+    IO.puts(xml_response_body)
   end
 end

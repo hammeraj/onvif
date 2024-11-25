@@ -37,5 +37,4 @@ defmodule Onvif.Replay.GetReplayUri do
 
     {:ok, parsed_result}
   end
-
 end

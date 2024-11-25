@@ -36,6 +36,7 @@ defmodule Onvif.Recording.CreateRecording do
         |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
         |> add_namespace("trc", "http://www.onvif.org/ver10/recording/wsdl")
       )
+
     {:ok, response_uri}
   end
 end

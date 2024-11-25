@@ -1,4 +1,3 @@
-
 defmodule Onvif.Recording.GetRecordings do
   import SweetXml
   import XmlBuilder
@@ -19,7 +18,6 @@ defmodule Onvif.Recording.GetRecordings do
   end
 
   def response(xml_response_body) do
-
     response =
       xml_response_body
       |> parse(namespace_conformant: true, quiet: true)
@@ -29,18 +27,18 @@ defmodule Onvif.Recording.GetRecordings do
         |> add_namespace("trc", "http://www.onvif.org/ver10/recording/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
-    |> Enum.map(&Recordings.parse/1)
-    |> Enum.reduce([], fn raw_recording, acc ->
-      case Recordings.to_struct(raw_recording) do
-        {:ok, recording} ->
-          [recording | acc]
+      |> Enum.map(&Recordings.parse/1)
+      |> Enum.reduce([], fn raw_recording, acc ->
+        case Recordings.to_struct(raw_recording) do
+          {:ok, recording} ->
+            [recording | acc]
 
-        {:error, changeset} ->
-          Logger.error("Discarding invalid recording: #{inspect(changeset)}")
-          acc
-      end
-    end)
-  {:ok, response}
+          {:error, changeset} ->
+            Logger.error("Discarding invalid recording: #{inspect(changeset)}")
+            acc
+        end
+      end)
 
+    {:ok, response}
   end
 end
