@@ -1,7 +1,7 @@
 defmodule Onvif.Replay do
   @moduledoc """
-    Interface for making requests to the Onvif recording service
-    http://www.onvif.org/onvif/ver10/recording.wsdl
+    Interface for making requests to the Onvif replay service
+    https://www.onvif.org/ver10/replay.wsdl
   """
   require Logger
   alias Onvif.Device
