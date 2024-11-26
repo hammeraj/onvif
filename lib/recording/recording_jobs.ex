@@ -1,4 +1,4 @@
-defmodule Onvif.Recording.RecordingJobs do
+defmodule Onvif.Recording.RecordingJob do
   @moduledoc """
   Recordings.
   """
