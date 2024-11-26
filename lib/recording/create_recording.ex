@@ -28,7 +28,7 @@ defmodule Onvif.Recording.CreateRecording do
   end
 
   def response(xml_response_body) do
-    response_uri =
+    recording_token =
       xml_response_body
       |> parse(namespace_conformant: true, quiet: true)
       |> xpath(
@@ -37,6 +37,6 @@ defmodule Onvif.Recording.CreateRecording do
         |> add_namespace("trc", "http://www.onvif.org/ver10/recording/wsdl")
       )
 
-    {:ok, response_uri}
+    {:ok, recording_token}
   end
 end
