@@ -104,7 +104,7 @@ defmodule Onvif.Recording.RecordingJob do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Recording.RecordingJobs{}) ::
+  @spec to_json(%Onvif.Recording.RecordingJob{}) ::
           {:error,
            %{
              :__exception__ => any,
