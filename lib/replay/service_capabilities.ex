@@ -22,7 +22,7 @@ defmodule Onvif.Replay.ServiceCapabilities do
           media_profile_source: boolean(),
           dynamic_recordings: boolean(),
           dynamic_tracks: boolean(),
-          max_string_length: integer()
+          max_string_length: String.t()
         }
 
   @doc """
