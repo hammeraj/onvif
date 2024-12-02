@@ -18,6 +18,8 @@ defmodule Onvif.Device do
     :ntp,
     :media_ver10_service_path,
     :media_ver20_service_path,
+    :recording_ver10_service_path,
+    :replay_ver10_service_path,
     :auth_type,
     :time_diff_from_system_secs,
     :port,
@@ -41,6 +43,8 @@ defmodule Onvif.Device do
     field(:ntp, :string)
     field(:media_ver10_service_path, :string)
     field(:media_ver20_service_path, :string)
+    field(:recording_ver10_service_path, :string)
+    field(:replay_ver10_service_path, :string)
     embeds_one(:system_date_time, Onvif.Devices.SystemDateAndTime)
     embeds_many(:services, Onvif.Device.Service)
 
@@ -288,6 +292,8 @@ defmodule Onvif.Device do
     device
     |> Map.put(:media_ver10_service_path, get_media_ver10_service_path(device.services))
     |> Map.put(:media_ver20_service_path, get_media_ver20_service_path(device.services))
+    |> Map.put(:recording_ver10_service_path, get_recoding_ver10_service_path(device.services))
+    |> Map.put(:replay_ver10_service_path, get_replay_ver10_service_path(device.services))
   end
 
   defp get_media_ver20_service_path(services) do
@@ -299,6 +305,20 @@ defmodule Onvif.Device do
 
   defp get_media_ver10_service_path(services) do
     case Enum.find(services, &String.contains?(&1.namespace, "ver10/media")) do
+      nil -> nil
+      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+    end
+  end
+
+  defp get_recoding_ver10_service_path(services) do
+    case Enum.find(services, &String.contains?(&1.namespace, "/recording")) do
+      nil -> nil
+      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+    end
+  end
+
+  defp get_replay_ver10_service_path(services) do
+    case Enum.find(services, &String.contains?(&1.namespace, "/replay")) do
       nil -> nil
       %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end
