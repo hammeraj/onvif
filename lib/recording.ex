@@ -24,7 +24,7 @@ defmodule Onvif.Recording do
 
   defp do_request(device, operation, content) do
     device
-    |> Onvif.API.client(service_path: :recording_service_path)
+    |> Onvif.API.client(service_path: :recording_ver10_service_path)
     |> Tesla.request(
       method: :post,
       headers: [{"Content-Type", "application/soap+xml"}, {"SOAPAction", operation.soap_action()}],
