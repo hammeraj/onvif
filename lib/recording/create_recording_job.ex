@@ -26,15 +26,11 @@ defmodule Onvif.Recording.CreateRecordingJob do
       xml_response_body
       |> parse(namespace_conformant: true, quiet: true)
       |> xpath(
-        ~x"//s:Envelope/s:Body/trc:CreateRecordingJobResponse"
+        ~x"//s:Envelope/s:Body/trc:CreateRecordingJobResponse/trc:JobToken/text()"s0
         |> add_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
-        |> add_namespace("trc", "http://www.onvif.org/ver10/recording/wsdl"),
-        job_token: ~x"//trc:JobToken/text()"so,
-        recording_token: ~x"//trc:JobConfiguration/tt:RecordingToken/text()"so,
-        mode: ~x"//trc:JobConfiguration/tt:Mode/text()"so,
-        priority: ~x"//trc:JobConfiguration/tt:Priority/text()"so
+        |> add_namespace("trc", "http://www.onvif.org/ver10/recording/wsdl")
+        |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
-
     {:ok, parsed_result}
   end
 end

@@ -15,7 +15,7 @@ defmodule Onvif.Recording.CreateRecordingJobTest do
 
       {:ok, response} = Onvif.Recording.CreateRecordingJob.request(device, ["SD_DISK_20241120_211729_9C896594", "9", "Active"])
 
-      assert response.job_token == "SD_DISK_20241120_211729_9C896594"
+      assert response == "SD_DISK_20241120_211729_9C896594"
     end
   end
 end

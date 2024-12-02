@@ -1,6 +1,6 @@
 defmodule Onvif.Recording.Recordings do
   @moduledoc """
-  Recordings.
+  Onvif.Recording.Recordings schema.
   """
 
   use Ecto.Schema
