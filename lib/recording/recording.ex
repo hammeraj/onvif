@@ -1,4 +1,4 @@
-defmodule Onvif.Recording.Recordings do
+defmodule Onvif.Recording.Recording do
   @moduledoc """
   Onvif.Recording.Recordings schema.
   """
@@ -123,7 +123,7 @@ defmodule Onvif.Recording.Recordings do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Recording.Recordings{}) ::
+  @spec to_json(%Onvif.Recording.Recording{}) ::
           {:error,
            %{
              :__exception__ => any,
