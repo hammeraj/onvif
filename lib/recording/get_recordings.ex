@@ -3,7 +3,7 @@ defmodule Onvif.Recording.GetRecordings do
   import XmlBuilder
   require Logger
 
-  alias Onvif.Recording.Recordings
+  alias Onvif.Recording.Recording
 
   def soap_action, do: "http://www.onvif.org/ver10/recording/wsdl/GetRecordings"
 
@@ -27,9 +27,9 @@ defmodule Onvif.Recording.GetRecordings do
         |> add_namespace("trc", "http://www.onvif.org/ver10/recording/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
-      |> Enum.map(&Recordings.parse/1)
+      |> Enum.map(&Recording.parse/1)
       |> Enum.reduce([], fn raw_recording, acc ->
-        case Recordings.to_struct(raw_recording) do
+        case Recording.to_struct(raw_recording) do
           {:ok, recording} ->
             [recording | acc]
 
