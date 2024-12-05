@@ -1,7 +1,7 @@
 defmodule Onvif.Search do
   @moduledoc """
     Interface for making requests to the Onvif search service
-    https://www.onvif.org/ver10/replay.wsdl
+    https://www.onvif.org/ver10/search.wsdl
   """
   require Logger
   alias Onvif.Device
