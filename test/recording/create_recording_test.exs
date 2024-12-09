@@ -13,15 +13,17 @@ defmodule Onvif.Recording.CreateRecordingTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, response_uri} = Onvif.Recording.CreateRecording.request(
-        device,
-        config: %Onvif.Recording.Recording.Configuration{
+      {:ok, response_uri} =
+        Onvif.Recording.CreateRecording.request(
+          device,
+          config: %Onvif.Recording.Recording.Configuration{
             content: "test",
             maximum_retention_time: "PT1H",
             source: %Onvif.Recording.Recording.Configuration.Source{
-              name: "test",
+              name: "test"
             }
-          })
+          }
+        )
 
       assert response_uri == "SD_DISK_20200422_123501_A2388AB3"
     end
