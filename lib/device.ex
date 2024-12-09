@@ -333,6 +333,4 @@ defmodule Onvif.Device do
       %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end
   end
-
-
 end

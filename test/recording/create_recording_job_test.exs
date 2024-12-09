@@ -13,7 +13,12 @@ defmodule Onvif.Recording.CreateRecordingJobTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, response} = Onvif.Recording.CreateRecordingJob.request(device, ["SD_DISK_20241120_211729_9C896594", "9", "Active"])
+      {:ok, response} =
+        Onvif.Recording.CreateRecordingJob.request(device, [
+          "SD_DISK_20241120_211729_9C896594",
+          "9",
+          "Active"
+        ])
 
       assert response == "SD_DISK_20241120_211729_9C896594"
     end

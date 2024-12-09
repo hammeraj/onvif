@@ -31,6 +31,7 @@ defmodule Onvif.Recording.CreateRecordingJob do
         |> add_namespace("trc", "http://www.onvif.org/ver10/recording/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
+
     {:ok, parsed_result}
   end
 end

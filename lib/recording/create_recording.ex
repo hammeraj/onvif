@@ -53,8 +53,9 @@ defmodule Onvif.Recording.CreateRecording do
 
   def gen_maximum_retention_time(nil), do: []
   def gen_maximum_retention_time(""), do: []
-  def gen_maximum_retention_time(maximum_retention_time), do: element(:"tt:MaximumRetentionTime", maximum_retention_time)
 
+  def gen_maximum_retention_time(maximum_retention_time),
+    do: element(:"tt:MaximumRetentionTime", maximum_retention_time)
 
   def response(xml_response_body) do
     recording_token =
