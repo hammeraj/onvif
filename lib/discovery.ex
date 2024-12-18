@@ -41,14 +41,19 @@ defmodule Onvif.Discovery do
   generates probe messages this has the possibility to hang.
   - `:multicast_loop` defaults to false. Enabling it will allow host to echoing the multicast packets back to itself.
   This is useful when this library runs in same device where you simulate a ONVIF device (https://www.happytimesoft.com/products/onvif-server/index.html)
+  - `:ip_address` If the local host has many IP addresses, this option specifies which one to use.
   """
   @spec probe(Keyword.t()) :: list(Probe.t())
   def probe(opts \\ [probe_timeout: @probe_timeout_msec, multicast_loop: false]) do
     payload = probe_payload()
     multicast_loop = Keyword.get(opts, :multicast_loop, false)
-    {:ok, socket} = :gen_udp.open(0, mode: :binary, active: true, multicast_loop: multicast_loop)
-    :gen_udp.send(socket, @onvif_discovery_ip, @onvif_discovery_port, payload)
 
+    socket_options =
+      [mode: :binary, active: true, multicast_loop: multicast_loop]
+      |> set_ip_address(Keyword.get(opts, :ip_address))
+
+    {:ok, socket} = :gen_udp.open(0, socket_options)
+    :gen_udp.send(socket, @onvif_discovery_ip, @onvif_discovery_port, payload)
     receive_message(socket, opts, [])
   end
 
@@ -270,4 +275,15 @@ defmodule Onvif.Discovery do
     |> Map.merge(discovery_attrs)
     |> Map.put(:request_guid, request_guid)
   end
+
+  defp set_ip_address(opts, nil), do: opts
+
+  defp set_ip_address(opts, addr) when is_binary(addr) do
+    case :inet.parse_address(to_charlist(addr)) do
+      {:ok, addr} -> Keyword.put(opts, :ip, addr)
+      _error -> opts
+    end
+  end
+
+  defp set_ip_address(opts, addr), do: Keyword.put(opts, :ip, addr)
 end
