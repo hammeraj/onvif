@@ -278,7 +278,8 @@ defmodule Onvif.Device do
          | manufacturer: res.manufacturer,
            model: res.model,
            serial_number: res.serial_number,
-           hardware_id: res.hardware_id
+           hardware_id: res.hardware_id,
+           firmware_version: res.firmware_version
        }}
     end
   end
