@@ -60,11 +60,11 @@ defmodule Onvif.Middleware.XmlAuth do
           %{"s:mustUnderstand" => "1"},
           [
             element(
-              :UsernameToken,
+              :"wsse:UsernameToken",
               [
-                element(:Username, device.username),
+                element(:"wsse:Username", device.username),
                 element(
-                  :Password,
+                  :"wsse:Password",
                   %{
                     "Type" =>
                       "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest"
@@ -72,7 +72,7 @@ defmodule Onvif.Middleware.XmlAuth do
                   digest
                 ),
                 element(
-                  :Nonce,
+                  :"wsse:Nonce",
                   %{
                     "EncodingType" =>
                       "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary"
