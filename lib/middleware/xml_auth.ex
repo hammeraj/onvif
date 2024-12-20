@@ -43,10 +43,10 @@ defmodule Onvif.Middleware.XmlAuth do
   end
 
   defp generate_xml_auth_header(device: device) do
-    {:ok, system_date} = Onvif.Devices.GetSystemDateAndTime.request(device)
-
     created_at =
-      DateTime.utc_now() |> DateTime.add(system_date.current_diff) |> DateTime.to_iso8601()
+      DateTime.utc_now()
+      |> DateTime.add(device.time_diff_from_system_secs)
+      |> DateTime.to_iso8601()
 
     nonce_bytes = :rand.bytes(@nonce_bytesize)
     nonce = Base.encode64(nonce_bytes)

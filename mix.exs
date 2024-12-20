@@ -4,7 +4,7 @@ defmodule Onvif.MixProject do
   def project do
     [
       app: :onvif,
-      version: "0.3.1",
+      version: "0.4.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -42,7 +42,8 @@ defmodule Onvif.MixProject do
       {:sweet_xml, "~> 0.7"},
       {:tesla, "~> 1.7"},
       {:xml_builder, "~> 2.1"},
-      {:jason, "~> 1.4"}
+      {:jason, "~> 1.4"},
+      {:mimic, "~> 1.7", only: :test}
     ]
   end
 end

@@ -17,6 +17,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioSourceConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(

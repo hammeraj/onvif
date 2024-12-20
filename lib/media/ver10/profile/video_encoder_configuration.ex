@@ -11,6 +11,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
 
   @primary_key false
   @derive Jason.Encoder
+  @required [:reference_token, :name, :encoding]
+  @optional [:use_count, :guaranteed_frame_rate, :quality, :session_timeout]
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -52,25 +54,29 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
   end
 
   def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     xmap(
       doc,
-      reference_token: ~x"./@token"s,
-      name: ~x"./tt:Name/text()"s,
-      use_count: ~x"./tt:UseCount/text()"i,
-      guaranteed_frame_rate: ~x"./tt:GuaranteedFrameRate/text()"s,
-      encoding: ~x"./tt:Encoding/text()"s,
-      session_timeout: ~x"./tt:SessionTimeout/text()"s,
-      quality: ~x"./tt:Quality/text()"f,
-      resolution: ~x"./tt:Resolution"e |> transform_by(&parse_resolution/1),
-      rate_control: ~x"./tt:RateControl"e |> transform_by(&parse_rate_control/1),
-      mpeg4_configuration: ~x"./tt:Mpeg4"e |> transform_by(&parse_mpeg4_configuration/1),
-      h264_configuration: ~x"./tt:H264"e |> transform_by(&parse_h264_configuration/1),
+      reference_token: ~x"./@token"so,
+      name: ~x"./tt:Name/text()"so,
+      use_count: ~x"./tt:UseCount/text()"io,
+      guaranteed_frame_rate: ~x"./tt:GuaranteedFrameRate/text()"so,
+      encoding: ~x"./tt:Encoding/text()"so,
+      session_timeout: ~x"./tt:SessionTimeout/text()"so,
+      quality: ~x"./tt:Quality/text()"fo,
+      resolution: ~x"./tt:Resolution"eo |> transform_by(&parse_resolution/1),
+      rate_control: ~x"./tt:RateControl"eo |> transform_by(&parse_rate_control/1),
+      mpeg4_configuration: ~x"./tt:Mpeg4"eo |> transform_by(&parse_mpeg4_configuration/1),
+      h264_configuration: ~x"./tt:H264"eo |> transform_by(&parse_h264_configuration/1),
       multicast_configuration:
-        ~x"./tt:Multicast"e |> transform_by(&MulticastConfiguration.parse/1)
+        ~x"./tt:Multicast"eo |> transform_by(&MulticastConfiguration.parse/1)
     )
   end
+
+  defp parse_resolution([]), do: nil
+  defp parse_resolution(nil), do: nil
 
   defp parse_resolution(doc) do
     xmap(
@@ -79,6 +85,9 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
       height: ~x"./tt:Height/text()"i
     )
   end
+
+  defp parse_rate_control([]), do: nil
+  defp parse_rate_control(nil), do: nil
 
   defp parse_rate_control(doc) do
     xmap(
@@ -89,6 +98,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     )
   end
 
+  defp parse_mpeg4_configuration([]), do: nil
   defp parse_mpeg4_configuration(nil), do: nil
 
   defp parse_mpeg4_configuration(doc) do
@@ -99,6 +109,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     )
   end
 
+  defp parse_h264_configuration([]), do: nil
   defp parse_h264_configuration(nil), do: nil
 
   defp parse_h264_configuration(doc) do
@@ -129,15 +140,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
 
   def changeset(module, attrs) do
     module
-    |> cast(attrs, [
-      :reference_token,
-      :name,
-      :use_count,
-      :guaranteed_frame_rate,
-      :encoding,
-      :quality,
-      :session_timeout
-    ])
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@required)
     |> cast_embed(:resolution, with: &resolution_changeset/2)
     |> cast_embed(:rate_control, with: &rate_control_changeset/2)
     |> cast_embed(:mpeg4_configuration, with: &mpeg4_configuration_changeset/2)

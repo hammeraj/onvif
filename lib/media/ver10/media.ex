@@ -4,6 +4,7 @@ defmodule Onvif.Media.Ver10.Media do
 
   https://www.onvif.org/ver10/media/wsdl/media.wsdl
   """
+  import SweetXml
   require Logger
 
   alias Onvif.Device
@@ -31,7 +32,21 @@ defmodule Onvif.Media.Ver10.Media do
   defp generate_content(operation, args), do: apply(operation, :request_body, args)
 
   defp parse_response({:ok, %{status: 200, body: body}}, operation) do
-    operation.response(body)
+    body
+    |> parse(namespace_conformant: true, quiet: true)
+    |> xpath(~x"//s:Envelope/s:Body/s:Fault"eo)
+    |> case do
+      nil ->
+        operation.response(body)
+
+      _ ->
+        {:error,
+         %{
+           status: 200,
+           reason: "Received a SOAP Fault from #{operation}",
+           response: body
+         }}
+    end
   end
 
   defp parse_response({:ok, %{status: status_code, body: body}}, operation)

@@ -8,7 +8,7 @@ defmodule Onvif.Device.Service do
   import Ecto.Changeset
   import SweetXml
 
-  @profile_permitted [:namespace, :xaddr, :version]
+  @required [:namespace, :xaddr, :version]
 
   @primary_key false
   @derive Jason.Encoder
@@ -17,6 +17,9 @@ defmodule Onvif.Device.Service do
     field(:xaddr, :string)
     field(:version, :string)
   end
+
+  def parse(nil), do: nil
+  def parse([]), do: nil
 
   def parse(doc) do
     version =
@@ -36,6 +39,7 @@ defmodule Onvif.Device.Service do
   def to_struct(parsed) do
     %__MODULE__{}
     |> changeset(parsed)
+    |> validate_required(@required)
     |> apply_action(:validate)
   end
 
@@ -52,6 +56,6 @@ defmodule Onvif.Device.Service do
   end
 
   def changeset(module, attrs) do
-    cast(module, attrs, @profile_permitted)
+    cast(module, attrs, @required)
   end
 end

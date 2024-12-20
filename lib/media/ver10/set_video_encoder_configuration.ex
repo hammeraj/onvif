@@ -14,32 +14,40 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
   def request_body(%VideoEncoderConfiguration{} = video_encoder_config) do
     element(:"s:Body", [
       element(:"trt:SetVideoEncoderConfiguration", [
-        element(:"trt:Configuration", %{"token" => video_encoder_config.reference_token}, [
-          element(:"tt:Name", video_encoder_config.name),
-          element(:"tt:UseCount", video_encoder_config.use_count),
-          element(
-            :"tt:Encoding",
-            Keyword.fetch!(
-              Ecto.Enum.mappings(video_encoder_config.__struct__, :encoding),
-              video_encoder_config.encoding
-            )
-          ),
-          element(:"tt:Quality", video_encoder_config.quality),
-          element(
-            :"tt:Resolution",
-            [
-              element(:"tt:Width", video_encoder_config.resolution.width),
-              element(:"tt:Height", video_encoder_config.resolution.height)
-            ]
-          ),
-          element(:"tt:RateControl", [
-            element(:"tt:FrameRateLimit", video_encoder_config.rate_control.frame_rate_limit),
-            element(:"tt:EncodingInterval", video_encoder_config.rate_control.encoding_interval),
-            element(:"tt:BitrateLimit", video_encoder_config.rate_control.bitrate_limit)
-          ]),
-          multicast_element(video_encoder_config.multicast_configuration),
-          element(:"tt:SessionTimeout", video_encoder_config.session_timeout)
-        ]),
+        element(
+          :"trt:Configuration",
+          %{"token" => video_encoder_config.reference_token},
+          List.flatten([
+            element(:"tt:Name", video_encoder_config.name),
+            element(:"tt:UseCount", video_encoder_config.use_count),
+            element(
+              :"tt:Encoding",
+              Keyword.fetch!(
+                Ecto.Enum.mappings(video_encoder_config.__struct__, :encoding),
+                video_encoder_config.encoding
+              )
+            ),
+            element(:"tt:Quality", video_encoder_config.quality),
+            element(
+              :"tt:Resolution",
+              [
+                element(:"tt:Width", video_encoder_config.resolution.width),
+                element(:"tt:Height", video_encoder_config.resolution.height)
+              ]
+            ),
+            element(:"tt:RateControl", [
+              element(:"tt:FrameRateLimit", video_encoder_config.rate_control.frame_rate_limit),
+              element(
+                :"tt:EncodingInterval",
+                video_encoder_config.rate_control.encoding_interval
+              ),
+              element(:"tt:BitrateLimit", video_encoder_config.rate_control.bitrate_limit)
+            ]),
+            encoder_config_element(video_encoder_config),
+            multicast_element(video_encoder_config.multicast_configuration),
+            element(:"tt:SessionTimeout", video_encoder_config.session_timeout)
+          ])
+        ),
         element(:"trt:ForcePersistence", true)
       ])
     ])
@@ -93,5 +101,48 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
       )
 
     {:ok, res}
+  end
+
+  defp encoder_config_element(%VideoEncoderConfiguration{
+         h264_configuration: nil,
+         mpeg4_configuration: nil
+       }) do
+    []
+  end
+
+  defp encoder_config_element(%VideoEncoderConfiguration{
+         h264_configuration: h264_configuration,
+         mpeg4_configuration: nil
+       }) do
+    [
+      element(:"tt:H264", [
+        element(:"tt:GovLength", h264_configuration.gov_length),
+        element(
+          :"tt:H264Profile",
+          Keyword.fetch!(
+            Ecto.Enum.mappings(h264_configuration.__struct__, :h264_profile),
+            h264_configuration.h264_profile
+          )
+        )
+      ])
+    ]
+  end
+
+  defp encoder_config_element(%VideoEncoderConfiguration{
+         h264_configuration: nil,
+         mpeg4_configuration: mpeg4_configuration
+       }) do
+    [
+      element(:"tt:MPEG4", [
+        element(:"tt:GovLength", mpeg4_configuration.gov_length),
+        element(
+          :"tt:Mpeg4Profile",
+          Keyword.fetch!(
+            Ecto.Enum.mappings(mpeg4_configuration.__struct__, :mpeg4_profile),
+            mpeg4_configuration.mpeg4_profile
+          )
+        )
+      ])
+    ]
   end
 end

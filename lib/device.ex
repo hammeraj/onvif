@@ -1,30 +1,102 @@
 defmodule Onvif.Device do
+  use Ecto.Schema
+  import Ecto.Changeset
+
   alias Onvif.Device
   alias Onvif.Discovery.Probe
 
-  @enforce_keys [:username, :password, :address]
+  @required [:address]
+  @optional [
+    :username,
+    :password,
+    :scopes,
+    :manufacturer,
+    :model,
+    :firmware_version,
+    :serial_number,
+    :hardware_id,
+    :ntp,
+    :media_ver10_service_path,
+    :media_ver20_service_path,
+    :recording_ver10_service_path,
+    :replay_ver10_service_path,
+    :search_ver10_service_path,
+    :auth_type,
+    :time_diff_from_system_secs,
+    :port,
+    :device_service_path
+  ]
 
   @type t :: %__MODULE__{}
 
+  @primary_key false
   @derive Jason.Encoder
-  defstruct @enforce_keys ++
-              [
-                :scopes,
-                :manufacturer,
-                :model,
-                :firmware_version,
-                :serial_number,
-                :hardware_id,
-                :ntp,
-                :media_ver10_service_path,
-                :media_ver20_service_path,
-                :services,
-                auth_type: :xml_auth,
-                time_diff_from_system_secs: 0,
-                port: 80,
-                device_service_path: "/onvif/device_service",
-                events_service_path: "/onvif/events"
-              ]
+
+  embedded_schema do
+    field(:username, :string)
+    field(:password, :string)
+    field(:address, :string)
+    field(:scopes, {:array, :string}, default: [])
+    field(:manufacturer, :string)
+    field(:model, :string)
+    field(:firmware_version, :string)
+    field(:serial_number, :string)
+    field(:hardware_id, :string)
+    field(:ntp, :string)
+    field(:media_ver10_service_path, :string)
+    field(:media_ver20_service_path, :string)
+    field(:recording_ver10_service_path, :string)
+    field(:replay_ver10_service_path, :string)
+    field(:search_ver10_service_path, :string)
+    embeds_one(:system_date_time, Onvif.Devices.SystemDateAndTime)
+    embeds_many(:services, Onvif.Device.Service)
+
+    field(:auth_type, Ecto.Enum,
+      default: :xml_auth,
+      values: [:xml_auth, :digest_auth, :basic_auth, :no_auth]
+    )
+
+    field(:time_diff_from_system_secs, :integer, default: 0)
+    field(:port, :integer, default: 80)
+    field(:device_service_path, :string, default: "/onvif/device_service")
+    field(:events_service_paht, :string, default: "/onvif/events")
+  end
+
+  @doc """
+  Returns a `{:ok, Device.t()}` if the map can be properly parsed into a struct
+  or `{:error, Ecto.Changeset.t()}` if not.
+  """
+  @spec to_struct(map()) :: {:ok, Device.t()} | {:error, Ecto.Changeset.t()}
+  def to_struct(parsed) when is_map(parsed) do
+    %__MODULE__{}
+    |> changeset(parsed)
+    |> apply_action(:validate)
+  end
+
+  @doc """
+  Utility function to encode a `Device.t()` struct into a json string.
+
+  It returns an `{:error, Ecto.Changeset.t()}` if the struct is not valid.
+  """
+  @spec to_json(Device.t()) ::
+          {:ok, String.t()}
+          | {:error, Ecto.Changeset}
+          | {:error, Jason.EncodeError.t() | Exception.t()}
+  def to_json(%__MODULE__{} = schema) do
+    case changeset(schema) do
+      %{valid?: true} = device -> Jason.encode(device)
+      change -> {:error, change}
+    end
+  end
+
+  @spec changeset(Device.t(), map()) :: Ecto.Changeset.t()
+  def changeset(%__MODULE__{} = device, attrs \\ %{}) do
+    device
+    |> cast(attrs, @required ++ @optional)
+    |> cast_embed(:system_date_time, with: &Onvif.Devices.SystemDateAndTime.changeset/2)
+    |> cast_embed(:services, with: &Onvif.Device.Service.changeset/2)
+    |> validate_required(@required)
+  end
 
   @doc """
   Returns a `Device.t()` struct populated with the bare requirements for making a request to an Onvif
@@ -104,7 +176,6 @@ defmodule Onvif.Device do
       |> get_address(prefer_ipv6?, prefer_https?)
       |> URI.parse()
       |> Map.put(:path, "")
-      |> Map.put(:userinfo, "#{username}:#{password}")
 
     device = %Device{
       username: username,
@@ -174,7 +245,13 @@ defmodule Onvif.Device do
 
   defp get_date_time(device) do
     with {:ok, res} <- Onvif.Devices.GetSystemDateAndTime.request(device) do
-      updated_device = %{device | time_diff_from_system_secs: res.current_diff, ntp: res.ntp}
+      updated_device = %{
+        device
+        | time_diff_from_system_secs: res.current_diff,
+          ntp: res.date_time_type,
+          system_date_time: res
+      }
+
       {:ok, updated_device}
     end
   end
@@ -219,6 +296,9 @@ defmodule Onvif.Device do
     device
     |> Map.put(:media_ver10_service_path, get_media_ver10_service_path(device.services))
     |> Map.put(:media_ver20_service_path, get_media_ver20_service_path(device.services))
+    |> Map.put(:recording_ver10_service_path, get_recoding_ver10_service_path(device.services))
+    |> Map.put(:replay_ver10_service_path, get_replay_ver10_service_path(device.services))
+    |> Map.put(:search_ver10_service_path, get_search_ver10_service_path(device.services))
   end
 
   defp get_media_ver20_service_path(services) do
@@ -230,6 +310,27 @@ defmodule Onvif.Device do
 
   defp get_media_ver10_service_path(services) do
     case Enum.find(services, &String.contains?(&1.namespace, "ver10/media")) do
+      nil -> nil
+      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+    end
+  end
+
+  defp get_recoding_ver10_service_path(services) do
+    case Enum.find(services, &String.contains?(&1.namespace, "/recording")) do
+      nil -> nil
+      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+    end
+  end
+
+  defp get_replay_ver10_service_path(services) do
+    case Enum.find(services, &String.contains?(&1.namespace, "/replay")) do
+      nil -> nil
+      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+    end
+  end
+
+  defp get_search_ver10_service_path(services) do
+    case Enum.find(services, &String.contains?(&1.namespace, "/search")) do
       nil -> nil
       %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end

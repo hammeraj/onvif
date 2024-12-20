@@ -26,18 +26,12 @@ defmodule Onvif.API do
     adapter = {Tesla.Adapter.Finch, name: Onvif.Finch}
     service_path = get_service_path!(device, opts)
 
-    uri = device.address <> service_path
-    parsed_uri = URI.parse(uri)
-    no_userinfo_uri = %URI{parsed_uri | userinfo: nil} |> URI.to_string()
+    url = device.address <> service_path
 
     middleware = [
-      {Tesla.Middleware.BaseUrl, no_userinfo_uri},
+      {Tesla.Middleware.BaseUrl, url},
       auth_function(device),
-      {Tesla.Middleware.Logger, log_level: :info},
-      {Tesla.Middleware.Headers,
-       [
-         {"connection", "keep-alive"}
-       ]}
+      {Tesla.Middleware.Logger, log_level: :info}
     ]
 
     Tesla.client(middleware, adapter)
