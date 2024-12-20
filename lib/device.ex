@@ -31,7 +31,6 @@ defmodule Onvif.Device do
 
   @primary_key false
   @derive Jason.Encoder
-
   embedded_schema do
     field(:username, :string)
     field(:password, :string)
@@ -59,7 +58,7 @@ defmodule Onvif.Device do
     field(:time_diff_from_system_secs, :integer, default: 0)
     field(:port, :integer, default: 80)
     field(:device_service_path, :string, default: "/onvif/device_service")
-    field(:events_service_paht, :string, default: "/onvif/events")
+    field(:events_service_path, :string, default: "/onvif/events")
   end
 
   @doc """
