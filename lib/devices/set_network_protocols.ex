@@ -11,7 +11,7 @@ defmodule Onvif.Devices.SetNetworkProtocols do
   @spec request(Device.t(), list()) :: {:ok, any} | {:error, map()}
   def request(device, args), do: Onvif.Devices.request(device, args, __MODULE__)
 
-  def request_body([network_protocols]) do
+  def request_body(network_protocols) do
     network_protocols =
       List.wrap(network_protocols)
       |> Enum.map(fn network_protocol ->

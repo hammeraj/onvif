@@ -36,10 +36,20 @@ defmodule Onvif.Devices.NetworkProtocol do
   end
 
   def parse(doc) do
+    # Some Axis cameras return something like
+    # ...
+    # <tds:NetworkProtocols>
+    #     <tt:Name>HTTP</tt:Name>
+    #     <tt:Enabled>true</tt:Enabled>
+    #     <tt:Port>80</tt:Port>
+    #     <tt:Port>0</tt:Port>
+    # </tds:NetworkProtocols>
+    # ...
+    # If parsed with: ~x"./tt:Port/text()"s this will return 800
     xmap(doc,
       name: ~x"./tt:Name/text()"s,
       enabled: ~x"./tt:Enabled/text()"s,
-      port: ~x"./tt:Port/text()"s
+      port: ~x"./tt:Port/text()" |> transform_by(&List.to_string/1)
     )
   end
 end
