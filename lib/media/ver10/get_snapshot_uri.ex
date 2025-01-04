@@ -10,7 +10,7 @@ defmodule Onvif.Media.Ver10.GetSnapshotUri do
 
   def request_body(profile_token) do
     element(:"s:Body", [
-      element(:"tds:GetSnapshotUri", [element(:"tds:ProfileToken", profile_token)])
+      element(:"trt:GetSnapshotUri", [element(:"trt:ProfileToken", profile_token)])
     ])
   end
 
