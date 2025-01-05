@@ -202,8 +202,10 @@ defmodule Onvif.Device do
           |> :inet.parse_ipv6strict_address()
 
         case result do
-          {:ok, _} ->
+          {:ok, addr} ->
             cond do
+              # ignore link-local addresses
+              match?({0xFE80, _, _, _, _, _, _, _}, addr) -> false
               prefer_https? -> String.contains?(address, "https://")
               true -> true
             end
@@ -223,8 +225,10 @@ defmodule Onvif.Device do
           |> :inet.parse_ipv4strict_address()
 
         case result do
-          {:ok, _} ->
+          {:ok, addr} ->
             cond do
+              # ignore link-local addresses
+              match?({169, 254, _, _}, addr) -> false
               prefer_https? -> String.contains?(address, "https://")
               true -> true
             end
