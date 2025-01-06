@@ -25,7 +25,7 @@ defmodule Onvif.Devices.GetNetworkProtocolsTest do
     end
 
     test "should return error when response is invalid" do
-      xml_response = File.read!("test/devices/fixtures/get_network_protocols.xml")
+      xml_response = File.read!("test/devices/fixtures/invalid_get_network_protocols_response.xml")
       device = Onvif.Factory.device()
 
       Mimic.expect(Tesla, :request, fn _client, _opts ->
