@@ -13,7 +13,8 @@ defmodule Onvif.Devices.SetNetworkProtocols do
 
   def request_body(network_protocols) do
     network_protocols =
-      List.wrap(network_protocols)
+      network_protocols
+      |> List.wrap()
       |> Enum.map(fn network_protocol ->
         element(:"tds:NetworkProtocols", [
           element(
