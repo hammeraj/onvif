@@ -46,7 +46,7 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurationOptions do
         end
       end)
 
-    {:ok, response}
+    {:ok, Enum.reverse(response)}
   end
 
   defp with_configuration_token(config, nil), do: config
