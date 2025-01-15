@@ -88,6 +88,12 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
     )
   end
 
+  def to_struct(parsed) do
+    %__MODULE__{}
+    |> changeset(parsed)
+    |> apply_action(:validate)
+  end
+
   def changeset(module, attrs) do
     module
     |> cast(attrs, [:reference_token, :name, :use_count, :view_mode, :source_token])
