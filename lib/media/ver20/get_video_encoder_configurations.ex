@@ -14,26 +14,12 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurations do
   def request(device, args \\ []),
     do: Onvif.Media.Ver20.Media.request(device, args, __MODULE__)
 
-  def request_body() do
-    element(:"s:Body", [
-      element(:"tr2:GetVideoEncoderConfigurations")
-    ])
-  end
+  def request_body(configuration_token \\ nil, profile_token \\ nil) do
+    config =
+      with_configuration_token([], configuration_token) |> with_profile_token(profile_token)
 
-  def request_body(configuration_token) do
     element(:"s:Body", [
-      element(:"tr2:GetVideoEncoderConfigurations", [
-        element(:"tr2:ConfigurationToken", configuration_token)
-      ])
-    ])
-  end
-
-  def request_body(configuration_token, profile_token) do
-    element(:"s:Body", [
-      element(:"tr2:GetVideoEncoderConfigurations", [
-        element(:"tr2:ConfigurationToken", configuration_token),
-        element(:"tr2:ProfileToken", profile_token)
-      ])
+      element(:"tr2:GetVideoEncoderConfigurations", config)
     ])
   end
 
@@ -61,5 +47,17 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurations do
       end)
 
     {:ok, response}
+  end
+
+  defp with_configuration_token(config, nil), do: config
+
+  defp with_configuration_token(config, configuration_token) do
+    [element(:"tr2:ConfigurationToken", configuration_token) | config]
+  end
+
+  defp with_profile_token(config, nil), do: config
+
+  defp with_profile_token(config, profile_token) do
+    [element(:"tr2:ProfileToken", profile_token) | config]
   end
 end

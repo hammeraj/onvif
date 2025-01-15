@@ -13,13 +13,13 @@ defmodule Onvif.Search.GetRecordingSummaryTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, response} =
-        Onvif.Search.GetRecordingSummary.request(device)
+      {:ok, response} = Onvif.Search.GetRecordingSummary.request(device)
 
       assert response == %{
-        data_from: "1970-01-01T00:00:00Z",
-        data_until: "2024-12-13T08:08:49Z",
-        number_recordings: "8"}
+               data_from: "1970-01-01T00:00:00Z",
+               data_until: "2024-12-13T08:08:49Z",
+               number_recordings: "8"
+             }
     end
   end
 end
