@@ -25,6 +25,46 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurationOptionsTest do
                    min: 32
                  },
                  constant_bit_rate_supported: true,
+                 encoding: :h264,
+                 frame_rates_supported: [
+                   12.5,
+                   12.0,
+                   10.0,
+                   8.0,
+                   6.0,
+                   4.0,
+                   2.0,
+                   1.0,
+                   0.5,
+                   0.25,
+                   0.125,
+                   0.0625
+                 ],
+                 gov_length_range: [1, 250],
+                 guaranteed_frame_rate_supported: nil,
+                 max_anchor_frame_distance: 0,
+                 profiles_supported: ["Main", "High"],
+                 quality_range: %VideoEncoderConfigurationOption.QualityRange{
+                   max: 5,
+                   min: 0
+                 },
+                 resolutions_available: [
+                   %VideoEncoderConfigurationOption.ResolutionsAvailable{
+                     height: 720,
+                     width: 1280
+                   },
+                   %VideoEncoderConfigurationOption.ResolutionsAvailable{
+                     height: 2160,
+                     width: 3840
+                   }
+                 ]
+               },
+               %VideoEncoderConfigurationOption{
+                 bitrate_range: %VideoEncoderConfigurationOption.BitrateRange{
+                   max: 16384,
+                   min: 32
+                 },
+                 constant_bit_rate_supported: true,
                  encoding: :h265,
                  frame_rates_supported: [
                    12.5,
@@ -60,46 +100,6 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurationOptionsTest do
                    %VideoEncoderConfigurationOption.ResolutionsAvailable{
                      height: 1728,
                      width: 3072
-                   }
-                 ]
-               },
-               %VideoEncoderConfigurationOption{
-                 bitrate_range: %VideoEncoderConfigurationOption.BitrateRange{
-                   max: 16384,
-                   min: 32
-                 },
-                 constant_bit_rate_supported: true,
-                 encoding: :h264,
-                 frame_rates_supported: [
-                   12.5,
-                   12.0,
-                   10.0,
-                   8.0,
-                   6.0,
-                   4.0,
-                   2.0,
-                   1.0,
-                   0.5,
-                   0.25,
-                   0.125,
-                   0.0625
-                 ],
-                 gov_length_range: [1, 250],
-                 guaranteed_frame_rate_supported: nil,
-                 max_anchor_frame_distance: 0,
-                 profiles_supported: ["Main", "High"],
-                 quality_range: %VideoEncoderConfigurationOption.QualityRange{
-                   max: 5,
-                   min: 0
-                 },
-                 resolutions_available: [
-                   %VideoEncoderConfigurationOption.ResolutionsAvailable{
-                     height: 720,
-                     width: 1280
-                   },
-                   %VideoEncoderConfigurationOption.ResolutionsAvailable{
-                     height: 2160,
-                     width: 3840
                    }
                  ]
                }
