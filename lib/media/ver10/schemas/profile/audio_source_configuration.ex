@@ -1,49 +1,43 @@
-defmodule Onvif.Device.Service do
+defmodule Onvif.Media.Ver10.Schemas.Profile.AudioSourceConfiguration do
   @moduledoc """
-  A media profile
+  AudioSourceConfiguration schema for Media Ver10
   """
 
-  require Logger
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
 
-  @required [:namespace, :xaddr, :version]
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
   embedded_schema do
-    field(:namespace, :string)
-    field(:xaddr, :string)
-    field(:version, :string)
+    field(:reference_token, :string)
+    field(:name, :string)
+    field(:use_count, :integer)
+    field(:source_token, :string)
   end
 
   def parse(nil), do: nil
   def parse([]), do: nil
 
   def parse(doc) do
-    version =
-      xmap(doc,
-        major: ~x"./tds:Version/tt:Major/text()"s,
-        minor: ~x"./tds:Version/tt:Minor/text()"s
-      )
-
-    doc
-    |> xmap(
-      namespace: ~x"./tds:Namespace/text()"s,
-      xaddr: ~x"./tds:XAddr/text()"s
+    xmap(
+      doc,
+      reference_token: ~x"./@token"s,
+      name: ~x"./tt:Name/text()"s,
+      use_count: ~x"./tt:UseCount/text()"i,
+      source_token: ~x"./tt:SourceToken/text()"s
     )
-    |> Map.put(:version, "#{version.major}.#{version.minor}")
   end
 
   def to_struct(parsed) do
     %__MODULE__{}
     |> changeset(parsed)
-    |> validate_required(@required)
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Device.Service{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,
@@ -56,6 +50,6 @@ defmodule Onvif.Device.Service do
   end
 
   def changeset(module, attrs) do
-    cast(module, attrs, @required)
+    cast(module, attrs, [:reference_token, :name, :use_count, :source_token])
   end
 end

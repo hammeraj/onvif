@@ -1,6 +1,8 @@
 defmodule Onvif.Devices.GetSystemDateAndTimeTest do
   use ExUnit.Case, async: true
 
+  alias Onvif.Devices.Schemas.SystemDateAndTime
+
   @moduletag capture_log: true
 
   describe "GetSystemDateAndTime/1" do
@@ -19,33 +21,33 @@ defmodule Onvif.Devices.GetSystemDateAndTimeTest do
 
       {:ok, service_capabilities} = Onvif.Devices.GetSystemDateAndTime.request(device)
 
-      assert service_capabilities == %Onvif.Devices.SystemDateAndTime{
+      assert service_capabilities == %SystemDateAndTime{
                current_diff: -654,
                date_time_type: :manual,
                datetime: ~U[2024-07-09 19:49:06Z],
                daylight_savings: true,
-               local_date_time: %Onvif.Devices.SystemDateAndTime.LocalDateTime{
-                 date: %Onvif.Devices.SystemDateAndTime.LocalDateTime.Date{
+               local_date_time: %SystemDateAndTime.LocalDateTime{
+                 date: %SystemDateAndTime.LocalDateTime.Date{
                    day: 9,
                    month: 7,
                    year: 2024
                  },
-                 time: %Onvif.Devices.SystemDateAndTime.LocalDateTime.Time{
+                 time: %SystemDateAndTime.LocalDateTime.Time{
                    hour: 16,
                    minute: 49,
                    second: 6
                  }
                },
-               time_zone: %Onvif.Devices.SystemDateAndTime.TimeZone{
+               time_zone: %SystemDateAndTime.TimeZone{
                  tz: "BRT3"
                },
-               utc_date_time: %Onvif.Devices.SystemDateAndTime.UTCDateTime{
-                 date: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Date{
+               utc_date_time: %SystemDateAndTime.UTCDateTime{
+                 date: %SystemDateAndTime.UTCDateTime.Date{
                    day: 9,
                    month: 7,
                    year: 2024
                  },
-                 time: %Onvif.Devices.SystemDateAndTime.UTCDateTime.Time{
+                 time: %SystemDateAndTime.UTCDateTime.Time{
                    hour: 19,
                    minute: 49,
                    second: 6

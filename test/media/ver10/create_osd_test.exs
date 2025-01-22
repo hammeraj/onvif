@@ -1,5 +1,5 @@
 defmodule Onvif.Media.Ver10.CreateOSDTest do
-  alias Onvif.Media.Ver10.OSD
+  alias Onvif.Media.Ver10.Schemas.OSD
   use ExUnit.Case, async: true
 
   @moduletag capture_log: true

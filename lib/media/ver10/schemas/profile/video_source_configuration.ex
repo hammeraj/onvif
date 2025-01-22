@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
+defmodule Onvif.Media.Ver10.Schemas.Profile.VideoSourceConfiguration do
   @moduledoc """
   Optional configuration of the Video input.
   """
@@ -6,6 +6,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoSourceConfiguration do
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder

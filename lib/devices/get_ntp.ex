@@ -4,6 +4,7 @@ defmodule Onvif.Devices.GetNTP do
   require Logger
 
   alias Onvif.Device
+  alias Onvif.Devices.Schemas.NTP
 
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/GetNTP"
 
@@ -25,8 +26,8 @@ defmodule Onvif.Devices.GetNTP do
       |> add_namespace("tds", "http://www.onvif.org/ver10/device/wsdl")
       |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
     )
-    |> Onvif.Devices.NTP.parse()
-    |> Onvif.Devices.NTP.to_struct()
+    |> NTP.parse()
+    |> NTP.to_struct()
     |> case do
       {:ok, ntp} ->
         {:ok, ntp}

@@ -1,11 +1,13 @@
-defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
+defmodule Onvif.Media.Ver10.Schemas.Profile.MulticastConfiguration do
   @moduledoc """
-
+  MulticastConfiguration for Media Ver10
   """
 
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -53,7 +55,7 @@ defmodule Onvif.Media.Ver10.Profile.MulticastConfiguration do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.MulticastConfiguration{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

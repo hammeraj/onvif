@@ -13,12 +13,8 @@ defmodule Onvif.Devices do
   ]
 
   @spec request(Device.t(), module()) :: {:ok, any} | {:error, map()}
-  def request(%Device{} = device, operation) do
-    content = generate_content(operation)
-    do_request(device, operation, content)
-  end
-
-  def request(%Device{} = device, args, operation) do
+  @spec request(Device.t(), list(), atom()) :: {:ok, any} | {:error, map()}
+  def request(%Device{} = device, args \\ [], operation) do
     content = generate_content(operation, args)
     do_request(device, operation, content)
   end
@@ -34,7 +30,7 @@ defmodule Onvif.Devices do
     |> parse_response(operation)
   end
 
-  defp generate_content(operation), do: operation.request_body()
+  defp generate_content(operation, []), do: operation.request_body()
   defp generate_content(operation, args), do: operation.request_body(args)
 
   defp parse_response({:ok, %{status: 200, body: body}}, operation) do

@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver20.VideoEncoderConfigurationOption do
+defmodule Onvif.Media.Ver20.Schemas.Profile.VideoEncoderConfigurationOption do
   @moduledoc """
   Available options for video encoder configuration
   """
@@ -7,6 +7,8 @@ defmodule Onvif.Media.Ver20.VideoEncoderConfigurationOption do
 
   import Ecto.Changeset
   import SweetXml
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder

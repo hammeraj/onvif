@@ -3,7 +3,7 @@ defmodule Onvif.Recording.GetRecordings do
   import XmlBuilder
   require Logger
 
-  alias Onvif.Recording.Recording
+  alias Onvif.Recording.Schemas.Recording
 
   def soap_action, do: "http://www.onvif.org/ver10/recording/wsdl/GetRecordings"
 

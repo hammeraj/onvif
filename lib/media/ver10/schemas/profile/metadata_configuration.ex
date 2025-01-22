@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
+defmodule Onvif.Media.Ver10.Schemas.Profile.MetadataConfiguration do
   @moduledoc """
   Optional configuration of the metadata stream.
   """
@@ -7,7 +7,10 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
   import Ecto.Changeset
   import SweetXml
 
-  alias Onvif.Media.Ver10.Profile.{AnalyticsEngineConfiguration, MulticastConfiguration}
+  alias Onvif.Media.Ver10.Schemas.Profile.AnalyticsEngineConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.MulticastConfiguration
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -71,7 +74,7 @@ defmodule Onvif.Media.Ver10.Profile.MetadataConfiguration do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.MetadataConfiguration{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

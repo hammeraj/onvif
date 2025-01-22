@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.OSDOptions do
+defmodule Onvif.Media.Ver10.Schemas.OSDOptions do
   @moduledoc """
   OSD (On-Screen Display) Options specification.
   """
@@ -7,11 +7,13 @@ defmodule Onvif.Media.Ver10.OSDOptions do
   import Ecto.Changeset
   import SweetXml
 
-  @primary_key false
-  @derive Jason.Encoder
   @required [:type, :position_option]
   @optional []
 
+  @type t :: %__MODULE__{}
+
+  @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:type, {:array, :string})
     field(:position_option, {:array, :string})
@@ -236,7 +238,7 @@ defmodule Onvif.Media.Ver10.OSDOptions do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.OSDOptions{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

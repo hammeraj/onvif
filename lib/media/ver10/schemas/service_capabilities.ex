@@ -1,12 +1,10 @@
-defmodule Onvif.Media.Ver10.ServiceCapabilities do
+defmodule Onvif.Media.Ver10.Schemas.ServiceCapabilities do
   @moduledoc false
 
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
 
-  @primary_key false
-  @derive Jason.Encoder
   @required []
   @optional [
     :snapshot_uri,
@@ -16,6 +14,11 @@ defmodule Onvif.Media.Ver10.ServiceCapabilities do
     :temporary_osd_text,
     :exi_compression
   ]
+
+  @type t :: %__MODULE__{}
+
+  @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:snapshot_uri, :boolean, default: false)
     field(:rotation, :boolean, default: false)
@@ -47,7 +50,7 @@ defmodule Onvif.Media.Ver10.ServiceCapabilities do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.VideoEncoderConfiguration{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

@@ -1,7 +1,7 @@
 defmodule Onvif.Devices.SetNetworkProtocolsTest do
   use ExUnit.Case, async: true
 
-  alias Onvif.Devices.NetworkProtocol
+  alias Onvif.Devices.Schemas.NetworkProtocol
 
   @moduletag capture_log: true
 

@@ -4,7 +4,7 @@ defmodule Onvif.Devices.SetNetworkProtocols do
   import XmlBuilder
 
   alias Onvif.Device
-  alias Onvif.Devices.NetworkProtocol
+  alias Onvif.Devices.Schemas.NetworkProtocol
 
   def soap_action(), do: "http://www.onvif.org/ver10/device/wsdl/SetNetworkProtocols"
 

@@ -1,4 +1,4 @@
-defmodule Onvif.Devices.NTP do
+defmodule Onvif.Devices.Schemas.NTP do
   @moduledoc """
   Schema for the NTP configuration to be used with SetNTP and GetNTP operations.
   """
@@ -11,6 +11,8 @@ defmodule Onvif.Devices.NTP do
   @derive Jason.Encoder
   @required [:from_dhcp]
   @optional []
+
+  @type t :: %__MODULE__{}
 
   embedded_schema do
     field(:from_dhcp, :boolean)

@@ -1,6 +1,9 @@
 defmodule Onvif.Devices.GetNTPTest do
   use ExUnit.Case, async: true
 
+  alias Onvif.Devices.GetNTP
+  alias Onvif.Devices.Schemas.NTP
+
   @moduletag capture_log: true
 
   describe "GetNTP/1" do
@@ -13,12 +16,12 @@ defmodule Onvif.Devices.GetNTPTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, service_capabilities} = Onvif.Devices.GetNTP.request(device)
+      {:ok, service_capabilities} = GetNTP.request(device)
 
-      assert service_capabilities == %Onvif.Devices.NTP{
+      assert service_capabilities == %NTP{
                from_dhcp: false,
                ntp_from_dhcp: nil,
-               ntp_manual: %Onvif.Devices.NTP.NTPManual{
+               ntp_manual: %NTP.NTPManual{
                  dns_name: "time.windows.com",
                  ipv4_address: nil,
                  ipv6_address: nil,
@@ -35,7 +38,7 @@ defmodule Onvif.Devices.GetNTPTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, service_capabilities} = Onvif.Devices.GetNTP.request(device)
+      {:ok, service_capabilities} = GetNTP.request(device)
       assert service_capabilities == nil
     end
   end

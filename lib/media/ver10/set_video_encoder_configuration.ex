@@ -3,7 +3,7 @@ defmodule Onvif.Media.Ver10.SetVideoEncoderConfiguration do
   import XmlBuilder
 
   alias Onvif.Device
-  alias Onvif.Media.Ver10.Profile.VideoEncoderConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.VideoEncoderConfiguration
 
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/SetVideoEncoderConfiguration"
 

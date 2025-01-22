@@ -1,8 +1,18 @@
 defmodule Onvif.Device do
+  @moduledoc """
+  A Device is an abstraction of a physical piece of hardware.
+
+  Setting up a device is done most easily by passing in the results
+  of an Onvif.Discovery.Probe and credentials that can be used to
+  perform ONVIF operations on the physical device.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
   alias Onvif.Device
+  alias Onvif.Devices.Schemas.Service
+  alias Onvif.Devices.Schemas.SystemDateAndTime
   alias Onvif.Discovery.Probe
 
   @required [:address]
@@ -47,8 +57,8 @@ defmodule Onvif.Device do
     field(:recording_ver10_service_path, :string)
     field(:replay_ver10_service_path, :string)
     field(:search_ver10_service_path, :string)
-    embeds_one(:system_date_time, Onvif.Devices.SystemDateAndTime)
-    embeds_many(:services, Onvif.Device.Service)
+    embeds_one(:system_date_time, SystemDateAndTime)
+    embeds_many(:services, Service)
 
     field(:auth_type, Ecto.Enum,
       default: :xml_auth,
@@ -91,8 +101,8 @@ defmodule Onvif.Device do
   def changeset(%__MODULE__{} = device, attrs \\ %{}) do
     device
     |> cast(attrs, @required ++ @optional)
-    |> cast_embed(:system_date_time, with: &Onvif.Devices.SystemDateAndTime.changeset/2)
-    |> cast_embed(:services, with: &Onvif.Device.Service.changeset/2)
+    |> cast_embed(:system_date_time, with: &SystemDateAndTime.changeset/2)
+    |> cast_embed(:services, with: &Service.changeset/2)
     |> validate_required(@required)
   end
 
@@ -110,9 +120,16 @@ defmodule Onvif.Device do
   updates may be required for the onvif requests to succeed. It is recommended to check calls on an
   authentication required endpoint and swap out auth_type for the one that works.
   """
-  @spec new(String.t(), String.t(), String.t()) :: __MODULE__.t()
+  @spec new(String.t(), String.t(), String.t()) :: {:ok, __MODULE__.t()}
   def new(address, username, password) do
-    %__MODULE__{address: address, username: username, password: password}
+    with device <- %__MODULE__{address: address, username: username, password: password},
+         {:ok, device_with_datetime} <- get_date_time(device),
+         {:ok, updated_device} <- guess_auth(device_with_datetime) do
+      {:ok,
+       updated_device
+       |> get_services()
+       |> set_media_service_path()}
+    end
   end
 
   @doc """
@@ -303,35 +320,35 @@ defmodule Onvif.Device do
   defp get_media_ver20_service_path(services) do
     case Enum.find(services, &String.contains?(&1.namespace, "ver20/media")) do
       nil -> nil
-      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+      %Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end
   end
 
   defp get_media_ver10_service_path(services) do
     case Enum.find(services, &String.contains?(&1.namespace, "ver10/media")) do
       nil -> nil
-      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+      %Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end
   end
 
   defp get_recoding_ver10_service_path(services) do
     case Enum.find(services, &String.contains?(&1.namespace, "/recording")) do
       nil -> nil
-      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+      %Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end
   end
 
   defp get_replay_ver10_service_path(services) do
     case Enum.find(services, &String.contains?(&1.namespace, "/replay")) do
       nil -> nil
-      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+      %Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end
   end
 
   defp get_search_ver10_service_path(services) do
     case Enum.find(services, &String.contains?(&1.namespace, "/search")) do
       nil -> nil
-      %Onvif.Device.Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
+      %Service{} = service -> service.xaddr |> URI.parse() |> Map.get(:path)
     end
   end
 end

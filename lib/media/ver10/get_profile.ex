@@ -23,7 +23,7 @@ defmodule Onvif.Media.Ver10.GetProfile do
       |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
       |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
     )
-    |> Onvif.Media.Ver10.Profile.parse()
-    |> Onvif.Media.Ver10.Profile.to_struct()
+    |> Onvif.Media.Ver10.Schemas.Profile.parse()
+    |> Onvif.Media.Ver10.Schemas.Profile.to_struct()
   end
 end

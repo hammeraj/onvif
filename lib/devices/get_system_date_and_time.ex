@@ -3,6 +3,7 @@ defmodule Onvif.Devices.GetSystemDateAndTime do
   import XmlBuilder
 
   alias Onvif.Device
+  alias Onvif.Devices.Schemas.SystemDateAndTime
 
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/GetSystemDateAndTime"
 
@@ -26,7 +27,7 @@ defmodule Onvif.Devices.GetSystemDateAndTime do
       |> add_namespace("tds", "http://www.onvif.org/ver10/device/wsdl")
       |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
     )
-    |> Onvif.Devices.SystemDateAndTime.parse()
-    |> Onvif.Devices.SystemDateAndTime.to_struct()
+    |> SystemDateAndTime.parse()
+    |> SystemDateAndTime.to_struct()
   end
 end

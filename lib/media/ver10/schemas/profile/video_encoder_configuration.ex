@@ -1,18 +1,21 @@
-defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
+defmodule Onvif.Media.Ver10.Schemas.Profile.VideoEncoderConfiguration do
   @moduledoc """
-
+  Configurations for the video encoding
   """
 
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
 
-  alias Onvif.Media.Ver10.Profile.MulticastConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.MulticastConfiguration
+
+  @required [:reference_token, :name, :encoding]
+  @optional [:use_count, :guaranteed_frame_rate, :quality, :session_timeout]
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
-  @required [:reference_token, :name, :encoding]
-  @optional [:use_count, :guaranteed_frame_rate, :quality, :session_timeout]
   embedded_schema do
     field(:reference_token, :string)
     field(:name, :string)
@@ -126,7 +129,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfiguration do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.VideoEncoderConfiguration{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

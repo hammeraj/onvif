@@ -1,4 +1,4 @@
-defmodule Onvif.Devices.NetworkProtocol do
+defmodule Onvif.Devices.Schemas.NetworkProtocol do
   @moduledoc """
   A module describing a network protocol.
   """
@@ -9,6 +9,8 @@ defmodule Onvif.Devices.NetworkProtocol do
   import SweetXml
 
   @required [:name, :enabled, :port]
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder

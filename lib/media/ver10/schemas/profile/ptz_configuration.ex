@@ -1,10 +1,13 @@
-defmodule Onvif.Media.Ver10.Profile.PtzConfiguration do
+defmodule Onvif.Media.Ver10.Schemas.Profile.PtzConfiguration do
   @moduledoc """
   Optional configuration of the pan tilt zoom unit.
   """
 
   use Ecto.Schema
 
+  @type t :: %__MODULE__{}
+
+  @primary_key false
   @derive Jason.Encoder
   embedded_schema do
     field(:reference_token, :string)

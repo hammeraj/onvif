@@ -3,7 +3,7 @@ defmodule Onvif.Devices.SetNTP do
   import XmlBuilder
 
   alias Onvif.Device
-  alias Onvif.Devices.NTP
+  alias Onvif.Devices.Schemas.NTP
 
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/SetNTP"
 

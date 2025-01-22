@@ -14,6 +14,7 @@ defmodule Onvif.Media.Ver10.Media do
     "xmlns:tt": "http://www.onvif.org/ver10/schema"
   ]
 
+  @spec request(Device.t(), module()) :: {:error, map()} | {:ok, any()}
   @spec request(Device.t(), list, module()) :: {:ok, any} | {:error, map()}
   def request(%Device{} = device, args \\ [], operation) do
     content = generate_content(operation, args)

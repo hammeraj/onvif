@@ -5,7 +5,7 @@ defmodule Onvif.Devices.GetNetworkInterfaces do
   require Logger
 
   alias Onvif.Device
-  alias Onvif.Device.NetworkInterface
+  alias Onvif.Devices.Schemas.NetworkInterface
 
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/GetNetworkInterfaces"
 
