@@ -1,6 +1,6 @@
 defmodule Onvif.Devices.Schemas.Service do
   @moduledoc """
-  A media profile
+  Service schema that outlines namespaces and versions
   """
 
   require Logger
