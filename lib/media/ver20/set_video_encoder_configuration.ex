@@ -18,7 +18,8 @@ defmodule Onvif.Media.Ver20.SetVideoEncoderConfiguration do
           :"tr2:Configuration",
           %{
             "token" => video_encoder_config.reference_token,
-            "profile" => video_encoder_config.profile
+            "Profile" => video_encoder_config.profile,
+            "GovLength" => video_encoder_config.gov_length
           },
           [
             element(:"tt:Name", video_encoder_config.name),
