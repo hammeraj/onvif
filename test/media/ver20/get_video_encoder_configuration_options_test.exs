@@ -3,7 +3,7 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurationOptionsTest do
 
   @moduletag capture_log: true
 
-  alias Onvif.Media.Ver20.VideoEncoderConfigurationOption
+  alias Onvif.Media.Ver20.Schemas.Profile.VideoEncoderConfigurationOption
 
   describe "GetVideoEncoderConfigurationOptions/1" do
     test "should parse with correct values" do

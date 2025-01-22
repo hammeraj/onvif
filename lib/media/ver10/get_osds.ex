@@ -3,7 +3,7 @@ defmodule Onvif.Media.Ver10.GetOSDs do
   import XmlBuilder
   require Logger
 
-  alias Onvif.Media.Ver10.OSD
+  alias Onvif.Media.Ver10.Schemas.OSD
 
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetOSDs"
 

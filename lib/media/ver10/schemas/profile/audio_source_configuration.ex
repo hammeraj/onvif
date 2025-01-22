@@ -1,11 +1,13 @@
-defmodule Onvif.Media.Ver10.Profile.AudioSourceConfiguration do
+defmodule Onvif.Media.Ver10.Schemas.Profile.AudioSourceConfiguration do
   @moduledoc """
-
+  AudioSourceConfiguration schema for Media Ver10
   """
 
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -35,7 +37,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioSourceConfiguration do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.AudioSourceConfiguration{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

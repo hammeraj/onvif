@@ -3,7 +3,7 @@ defmodule Onvif.Media.Ver10.GetOSD do
   import XmlBuilder
 
   alias Onvif.Device
-  alias Onvif.Media.Ver10.OSD
+  alias Onvif.Media.Ver10.Schemas.OSD
 
   @spec soap_action :: String.t()
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetOSD"

@@ -19,7 +19,7 @@ defmodule Onvif.Media.Ver10.GetProfiles do
   @doc """
   Parses the device response into a `{:ok, profiles}` tuple where `profiles`
   is a list, discarding the invalid transformations from map into a
-  Onvif.Media.Ver10.Profile.t().
+  Onvif.Media.Ver10.Schemas.Profile.t().
   """
   def response(xml_response_body) do
     response =
@@ -31,9 +31,9 @@ defmodule Onvif.Media.Ver10.GetProfiles do
         |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
-      |> Enum.map(&Onvif.Media.Ver10.Profile.parse/1)
+      |> Enum.map(&Onvif.Media.Ver10.Schemas.Profile.parse/1)
       |> Enum.reduce([], fn raw_profile, acc ->
-        case Onvif.Media.Ver10.Profile.to_struct(raw_profile) do
+        case Onvif.Media.Ver10.Schemas.Profile.to_struct(raw_profile) do
           {:ok, profile} ->
             [profile | acc]
 

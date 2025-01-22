@@ -15,16 +15,17 @@ defmodule Onvif.Media.Ver10.GetServiceCapabilitiesTest do
 
       {:ok, service_capabilities} = Onvif.Media.Ver10.GetServiceCapabilities.request(device)
 
-      assert service_capabilities == %Onvif.Media.Ver10.ServiceCapabilities{
+      assert service_capabilities == %Onvif.Media.Ver10.Schemas.ServiceCapabilities{
                exi_compression: false,
                osd: true,
-               profile_capabilities: %Onvif.Media.Ver10.ServiceCapabilities.ProfileCapabilities{
-                 maximum_number_of_profiles: 24
-               },
+               profile_capabilities:
+                 %Onvif.Media.Ver10.Schemas.ServiceCapabilities.ProfileCapabilities{
+                   maximum_number_of_profiles: 24
+                 },
                rotation: false,
                snapshot_uri: true,
                streaming_capabilities:
-                 %Onvif.Media.Ver10.ServiceCapabilities.StreamingCapabilities{
+                 %Onvif.Media.Ver10.Schemas.ServiceCapabilities.StreamingCapabilities{
                    no_rtsp_streaming: false,
                    non_aggregated_control: false,
                    rtp_rtsp_tcp: true,

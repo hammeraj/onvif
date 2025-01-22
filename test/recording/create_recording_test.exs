@@ -16,10 +16,10 @@ defmodule Onvif.Recording.CreateRecordingTest do
       {:ok, response_uri} =
         Onvif.Recording.CreateRecording.request(
           device,
-          config: %Onvif.Recording.Recording.Configuration{
+          config: %Onvif.Recording.Schemas.Recording.Configuration{
             content: "test",
             maximum_retention_time: "PT1H",
-            source: %Onvif.Recording.Recording.Configuration.Source{
+            source: %Onvif.Recording.Schemas.Recording.Configuration.Source{
               name: "test"
             }
           }

@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption do
+defmodule Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption do
   @moduledoc """
   Optional configuration of the Audio encoder.
   """
@@ -7,11 +7,13 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption do
   import Ecto.Changeset
   import SweetXml
 
-  @primary_key false
-  @derive Jason.Encoder
   @required []
   @optional []
 
+  @type t :: %__MODULE__{}
+
+  @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     embeds_many :options, Options, primary_key: false, on_replace: :delete do
       @derive Jason.Encoder
@@ -69,7 +71,7 @@ defmodule Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

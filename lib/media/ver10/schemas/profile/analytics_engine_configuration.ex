@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
+defmodule Onvif.Media.Ver10.Schemas.Profile.AnalyticsEngineConfiguration do
   @moduledoc """
   Indication which AnalyticsModules shall output metadata. Note that the streaming behavior is undefined if the list includes items that are not part of the associated AnalyticsConfiguration.
   """
@@ -7,7 +7,9 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
   import Ecto.Changeset
   import SweetXml
 
-  alias Onvif.Media.Ver10.Profile.Parameters
+  alias Onvif.Media.Ver10.Schemas.Profile.Parameters
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -53,7 +55,7 @@ defmodule Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.AnalyticsEngineConfiguration{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

@@ -26,8 +26,8 @@ defmodule Onvif.Media.Ver10.GetServiceCapabilities do
         |> add_namespace("trt", "http://www.onvif.org/ver10/media/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
-      |> Onvif.Media.Ver10.ServiceCapabilities.parse()
-      |> Onvif.Media.Ver10.ServiceCapabilities.to_struct()
+      |> Onvif.Media.Ver10.Schemas.ServiceCapabilities.parse()
+      |> Onvif.Media.Ver10.Schemas.ServiceCapabilities.to_struct()
 
     response =
       case parsed do
@@ -36,7 +36,7 @@ defmodule Onvif.Media.Ver10.GetServiceCapabilities do
 
         {:error, changeset} ->
           Logger.error("Discarding invalid service capability: #{inspect(changeset)}")
-          %Onvif.Media.Ver10.ServiceCapabilities{}
+          %Onvif.Media.Ver10.Schemas.ServiceCapabilities{}
       end
 
     {:ok, response}

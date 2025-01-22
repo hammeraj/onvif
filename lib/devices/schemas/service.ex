@@ -1,4 +1,4 @@
-defmodule Onvif.Device.Service do
+defmodule Onvif.Devices.Schemas.Service do
   @moduledoc """
   A media profile
   """
@@ -9,6 +9,8 @@ defmodule Onvif.Device.Service do
   import SweetXml
 
   @required [:namespace, :xaddr, :version]
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -43,7 +45,7 @@ defmodule Onvif.Device.Service do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Device.Service{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

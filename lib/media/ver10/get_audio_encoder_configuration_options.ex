@@ -4,7 +4,7 @@ defmodule Onvif.Media.Ver10.GetAudioEncoderConfigurationOptions do
   require Logger
 
   alias Onvif.Device
-  alias Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption
+  alias Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption
 
   @spec soap_action :: String.t()
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetAudioEncoderConfigurationOptions"

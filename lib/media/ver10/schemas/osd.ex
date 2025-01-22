@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.OSD do
+defmodule Onvif.Media.Ver10.Schemas.OSD do
   @moduledoc """
   OSD (On-Screen Display) specification.
   """
@@ -7,11 +7,13 @@ defmodule Onvif.Media.Ver10.OSD do
   import Ecto.Changeset
   import SweetXml
 
-  @primary_key false
-  @derive Jason.Encoder
   @required [:token, :video_source_configuration_token, :type]
   @optional []
 
+  @type t :: %__MODULE__{}
+
+  @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:token, :string)
     field(:video_source_configuration_token, :string)
@@ -157,7 +159,7 @@ defmodule Onvif.Media.Ver10.OSD do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.OSD{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

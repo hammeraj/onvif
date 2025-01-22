@@ -15,9 +15,9 @@ defmodule Onvif.Media.Ver10.GetOSDOptionsTest do
 
       {:ok, osdoptions} = Onvif.Media.Ver10.GetOSDOptions.request(device, ["token"])
 
-      assert osdoptions == %Onvif.Media.Ver10.OSDOptions{
+      assert osdoptions == %Onvif.Media.Ver10.Schemas.OSDOptions{
                image_option: nil,
-               maximum_number_of_osds: %Onvif.Media.Ver10.OSDOptions.MaximumNumberOfOSDs{
+               maximum_number_of_osds: %Onvif.Media.Ver10.Schemas.OSDOptions.MaximumNumberOfOSDs{
                  date: 1,
                  date_and_time: 1,
                  image: 4,
@@ -26,17 +26,17 @@ defmodule Onvif.Media.Ver10.GetOSDOptionsTest do
                  total: 14
                },
                position_option: ["UpperLeft", "LowerLeft", "Custom"],
-               text_option: %Onvif.Media.Ver10.OSDOptions.TextOption{
+               text_option: %Onvif.Media.Ver10.Schemas.OSDOptions.TextOption{
                  background_color: nil,
                  date_format: ["MM/dd/yyyy", "dd/MM/yyyy", "yyyy/MM/dd", "yyyy-MM-dd"],
-                 font_color: %Onvif.Media.Ver10.OSDOptions.TextOption.FontColor{
-                   color: %Onvif.Media.Ver10.OSDOptions.TextOption.FontColor.Color{
+                 font_color: %Onvif.Media.Ver10.Schemas.OSDOptions.TextOption.FontColor{
+                   color: %Onvif.Media.Ver10.Schemas.OSDOptions.TextOption.FontColor.Color{
                      color_list: nil,
                      color_space_range: nil
                    },
                    transparent: nil
                  },
-                 font_size_range: %Onvif.Media.Ver10.OSDOptions.TextOption.FontSizeRange{
+                 font_size_range: %Onvif.Media.Ver10.Schemas.OSDOptions.TextOption.FontSizeRange{
                    max: 64,
                    min: 16
                  },

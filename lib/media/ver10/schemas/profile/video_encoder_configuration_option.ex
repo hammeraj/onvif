@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
+defmodule Onvif.Media.Ver10.Schemas.Profile.VideoEncoderConfigurationOption do
   @moduledoc """
   Optional configuration of the Video encoder.
   """
@@ -6,6 +6,8 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -238,7 +240,7 @@ defmodule Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver10.Profile.VideoEncoderConfigurationOption{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

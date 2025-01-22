@@ -19,38 +19,38 @@ defmodule Onvif.Media.Ver10.GetAudioEncoderConfigurationOptionsTest do
       {:ok, response} = Onvif.Media.Ver10.GetAudioEncoderConfigurationOptions.request(device)
 
       assert response == [
-               %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption{
+               %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption{
                  options: [
-                   %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options{
+                   %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options{
                      bitrate_list:
-                       %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
+                       %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
                          items: [32]
                        },
                      encoding: :G711,
                      sample_rate_list:
-                       %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
+                       %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
                          items: [8]
                        }
                    },
-                   %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options{
+                   %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options{
                      bitrate_list:
-                       %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
+                       %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
                          items: [32]
                        },
                      encoding: :G726,
                      sample_rate_list:
-                       %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
+                       %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
                          items: [8]
                        }
                    },
-                   %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options{
+                   %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options{
                      bitrate_list:
-                       %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
+                       %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options.BitrateList{
                          items: [32, 64]
                        },
                      encoding: :AAC,
                      sample_rate_list:
-                       %Onvif.Media.Ver10.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
+                       %Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfigurationOption.Options.SampleRateList{
                          items: [8, 16]
                        }
                    }

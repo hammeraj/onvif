@@ -2,11 +2,11 @@ defmodule Onvif.Media.Ver10.SetOSD do
   import SweetXml
   import XmlBuilder
 
-  alias Onvif.Media.Ver10.OSD.TextString.FontColor
-  alias Onvif.Media.Ver10.OSD.TextString.BackgroundColor
-  alias Onvif.Media.Ver10.OSD.Image
   alias Onvif.Device
-  alias Onvif.Media.Ver10.OSD
+  alias Onvif.Media.Ver10.Schemas.OSD
+  alias Onvif.Media.Ver10.Schemas.OSD.Image
+  alias Onvif.Media.Ver10.Schemas.OSD.TextString.BackgroundColor
+  alias Onvif.Media.Ver10.Schemas.OSD.TextString.FontColor
 
   @spec soap_action :: String.t()
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/SetOSD"

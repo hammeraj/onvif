@@ -1,4 +1,4 @@
-defmodule Onvif.Devices.SystemDateAndTime do
+defmodule Onvif.Devices.Schemas.SystemDateAndTime do
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml

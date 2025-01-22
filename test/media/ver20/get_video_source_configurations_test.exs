@@ -15,12 +15,12 @@ defmodule Onvif.Media.Ver20.GetVideoSourceConfigurationsTest do
 
       {:ok, [response]} = Onvif.Media.Ver20.GetVideoSourceConfigurations.request(device, [])
 
-      assert %Onvif.Media.Ver10.Profile.VideoSourceConfiguration{
+      assert %Onvif.Media.Ver10.Schemas.Profile.VideoSourceConfiguration{
                name: "user0",
                reference_token: "0",
                source_token: "0",
                use_count: 4,
-               bounds: %Onvif.Media.Ver10.Profile.VideoSourceConfiguration.Bounds{
+               bounds: %Onvif.Media.Ver10.Schemas.Profile.VideoSourceConfiguration.Bounds{
                  height: 2160,
                  width: 3840,
                  x: 0,

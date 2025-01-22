@@ -5,6 +5,7 @@ defmodule Onvif.Devices.GetServices do
   require Logger
 
   alias Onvif.Device
+  alias Onvif.Devices.Schemas.Service
 
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/GetServices"
 
@@ -18,7 +19,7 @@ defmodule Onvif.Devices.GetServices do
   @doc """
   Parses the device response into a `{:ok, services}` tuple where `services`
   is a list, discarding the invalid transformations from map into a
-  Onvif.Device.Service.t().
+  Onvif.Devices.Schemas.Service.t().
   """
   def response(xml_response_body) do
     result =
@@ -30,9 +31,9 @@ defmodule Onvif.Devices.GetServices do
         |> add_namespace("tds", "http://www.onvif.org/ver10/device/wsdl")
         |> add_namespace("tt", "http://www.onvif.org/ver10/schema")
       )
-      |> Enum.map(&Onvif.Device.Service.parse/1)
+      |> Enum.map(&Service.parse/1)
       |> Enum.reduce([], fn raw_service, acc ->
-        case Onvif.Device.Service.to_struct(raw_service) do
+        case Service.to_struct(raw_service) do
           {:ok, service} ->
             [service | acc]
 

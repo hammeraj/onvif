@@ -1,4 +1,4 @@
-defmodule Onvif.Media.Ver20.Profile do
+defmodule Onvif.Media.Ver20.Schemas.Profile do
   @moduledoc """
   A media profile
   """
@@ -7,17 +7,17 @@ defmodule Onvif.Media.Ver20.Profile do
   import Ecto.Changeset
   import SweetXml
 
-  alias Onvif.Media.Ver10.Profile.{
-    AudioSourceConfiguration,
-    AudioEncoderConfiguration,
-    MetadataConfiguration,
-    VideoAnalyticsConfiguration,
-    VideoSourceConfiguration
-  }
-
-  alias Onvif.Media.Ver20.Profile.VideoEncoder
+  alias Onvif.Media.Ver10.Schemas.Profile.AudioSourceConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.MetadataConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.PtzConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.VideoAnalyticsConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.VideoSourceConfiguration
+  alias Onvif.Media.Ver20.Schemas.Profile.VideoEncoder
 
   @profile_permitted [:reference_token, :fixed, :name]
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -29,7 +29,7 @@ defmodule Onvif.Media.Ver20.Profile do
     embeds_one(:audio_encoder_configuration, AudioEncoderConfiguration)
     embeds_one(:audio_source_configuration, AudioSourceConfiguration)
     embeds_one(:metadata_configuration, MetadataConfiguration)
-    embeds_one(:ptz_configuration, Onvif.Media.Ver10.Profile.PtzConfiguration)
+    embeds_one(:ptz_configuration, PtzConfiguration)
     embeds_one(:video_analytics_configuration, VideoAnalyticsConfiguration)
     embeds_one(:video_encoder_configuration, VideoEncoder)
     embeds_one(:video_source_configuration, VideoSourceConfiguration)
@@ -89,7 +89,7 @@ defmodule Onvif.Media.Ver20.Profile do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver20.Profile{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

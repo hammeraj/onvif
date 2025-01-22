@@ -5,7 +5,7 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurations do
   require Logger
 
   alias Onvif.Device
-  alias Onvif.Media.Ver20.Profile.VideoEncoder
+  alias Onvif.Media.Ver20.Schemas.Profile.VideoEncoder
 
   @spec soap_action :: String.t()
   def soap_action, do: "http://www.onvif.org/ver20/media/wsdl/GetVideoEncoderConfigurations"
@@ -16,7 +16,7 @@ defmodule Onvif.Media.Ver20.GetVideoEncoderConfigurations do
 
   def request_body(configuration_token \\ nil, profile_token \\ nil) do
     config =
-      with_configuration_token([], configuration_token) |> with_profile_token(profile_token)
+      [] |> with_configuration_token(configuration_token) |> with_profile_token(profile_token)
 
     element(:"s:Body", [
       element(:"tr2:GetVideoEncoderConfigurations", config)

@@ -9,7 +9,7 @@ The package can be installed by adding `onvif` to your list of dependencies in `
 ```elixir
 def deps do
   [
-    {:onvif, "~> 0.2.0"}
+    {:onvif, "~> 0.5.0"}
   ]
 end
 ```

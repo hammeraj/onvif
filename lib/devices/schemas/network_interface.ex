@@ -1,4 +1,4 @@
-defmodule Onvif.Device.NetworkInterface do
+defmodule Onvif.Devices.Schemas.NetworkInterface do
   @moduledoc """
   Device's network interface
   """
@@ -8,6 +8,8 @@ defmodule Onvif.Device.NetworkInterface do
   import SweetXml
 
   @required [:token, :enabled]
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder

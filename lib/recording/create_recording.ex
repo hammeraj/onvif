@@ -9,7 +9,7 @@ defmodule Onvif.Recording.CreateRecording do
     Onvif.Recording.request(device, args, __MODULE__)
   end
 
-  def request_body(config: %Onvif.Recording.Recording.Configuration{} = config) do
+  def request_body(config: %Onvif.Recording.Schemas.Recording.Configuration{} = config) do
     element(:"s:Body", [
       element(:"trc:CreateRecording", [
         element(:"trc:RecordingConfiguration", [

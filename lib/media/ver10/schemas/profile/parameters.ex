@@ -1,11 +1,13 @@
-defmodule Onvif.Media.Ver10.Profile.Parameters do
+defmodule Onvif.Media.Ver10.Schemas.Profile.Parameters do
   @moduledoc """
-
+  Parameters schema for Media Ver10
   """
 
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder

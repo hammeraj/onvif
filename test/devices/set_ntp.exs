@@ -1,6 +1,9 @@
 defmodule Onvif.Devices.SetNTPTest do
   use ExUnit.Case, async: true
 
+  alias Onvif.Devices.Schemas.NTP
+  alias Onvif.Devices.SetNTP
+
   @moduletag capture_log: true
 
   describe "SetNTP/2" do
@@ -13,8 +16,7 @@ defmodule Onvif.Devices.SetNTPTest do
         {:ok, %{status: 200, body: xml_response}}
       end)
 
-      {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device, config: %Onvif.Devices.NTP{from_dhcp: true})
+      {:ok, service_capabilities} = SetNTP.request(device, config: %NTP{from_dhcp: true})
 
       assert service_capabilities == ""
     end
@@ -29,10 +31,10 @@ defmodule Onvif.Devices.SetNTPTest do
       end)
 
       {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device,
-          config: %Onvif.Devices.NTP{
+        SetNTP.request(device,
+          config: %NTP{
             from_dhcp: false,
-            ntp_manual: %Onvif.Devices.NTP.NTPManual{type: :ipv4, ipv4_address: "6.6.6.0"}
+            ntp_manual: %NTP.NTPManual{type: :ipv4, ipv4_address: "6.6.6.0"}
           }
         )
 
@@ -49,10 +51,10 @@ defmodule Onvif.Devices.SetNTPTest do
       end)
 
       {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device,
-          config: %Onvif.Devices.NTP{
+        SetNTP.request(device,
+          config: %NTP{
             from_dhcp: false,
-            ntp_manual: %Onvif.Devices.NTP.NTPManual{
+            ntp_manual: %NTP.NTPManual{
               type: :ipv6,
               ipv6_address: "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
             }
@@ -72,10 +74,10 @@ defmodule Onvif.Devices.SetNTPTest do
       end)
 
       {:ok, service_capabilities} =
-        Onvif.Devices.SetNTP.request(device,
-          config: %Onvif.Devices.NTP{
+        SetNTP.request(device,
+          config: %NTP{
             from_dhcp: false,
-            ntp_manual: %Onvif.Devices.NTP.NTPManual{type: :dns, dns_name: "ntp.example.com"}
+            ntp_manual: %NTP.NTPManual{type: :dns, dns_name: "ntp.example.com"}
           }
         )
 

@@ -1,13 +1,15 @@
-defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
+defmodule Onvif.Media.Ver20.Schemas.Profile.VideoEncoder do
   @moduledoc """
-
+  VideoEncoder schema for Media Ver20
   """
 
   use Ecto.Schema
   import Ecto.Changeset
   import SweetXml
 
-  alias Onvif.Media.Ver10.Profile.MulticastConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.MulticastConfiguration
+
+  @type t :: %__MODULE__{}
 
   @primary_key false
   @derive Jason.Encoder
@@ -83,7 +85,7 @@ defmodule Onvif.Media.Ver20.Profile.VideoEncoder do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Media.Ver20.Profile.VideoEncoder{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

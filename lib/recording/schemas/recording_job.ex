@@ -1,4 +1,4 @@
-defmodule Onvif.Recording.RecordingJob do
+defmodule Onvif.Recording.Schemas.RecordingJob do
   @moduledoc """
   Recordings.
   """
@@ -7,11 +7,13 @@ defmodule Onvif.Recording.RecordingJob do
   import Ecto.Changeset
   import SweetXml
 
-  @primary_key false
-  @derive Jason.Encoder
   @required [:job_token]
   @optional []
 
+  @type t :: %__MODULE__{}
+
+  @primary_key false
+  @derive Jason.Encoder
   embedded_schema do
     field(:job_token, :string)
 
@@ -104,7 +106,7 @@ defmodule Onvif.Recording.RecordingJob do
     |> apply_action(:validate)
   end
 
-  @spec to_json(%Onvif.Recording.RecordingJob{}) ::
+  @spec to_json(__MODULE__.t()) ::
           {:error,
            %{
              :__exception__ => any,

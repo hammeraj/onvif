@@ -3,7 +3,7 @@ defmodule Onvif.Media.Ver20.SetAudioEncoderConfiguration do
   import XmlBuilder
 
   alias Onvif.Device
-  alias Onvif.Media.Ver10.Profile.AudioEncoderConfiguration
+  alias Onvif.Media.Ver10.Schemas.Profile.AudioEncoderConfiguration
 
   def soap_action, do: "http://www.onvif.org/ver20/media/wsdl/SetAudioEncoderConfiguration"
 

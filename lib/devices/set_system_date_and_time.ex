@@ -12,7 +12,7 @@ defmodule Onvif.Devices.SetSystemDateAndTime do
   import XmlBuilder
 
   alias Onvif.Device
-  alias Onvif.Devices.SystemDateAndTime
+  alias Onvif.Devices.Schemas.SystemDateAndTime
 
   def soap_action, do: "http://www.onvif.org/ver10/device/wsdl/SetSystemDateAndTime"
 
