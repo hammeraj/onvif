@@ -1,4 +1,6 @@
 defmodule Onvif.Factory do
+  @moduledoc false
+
   def device do
     %Onvif.Device{
       address: "http://192.168.254.89",
