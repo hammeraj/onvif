@@ -39,11 +39,14 @@ defmodule Onvif.Media.Ver20.SetVideoEncoderConfiguration do
                 element(:"tt:Height", video_encoder_config.resolution.height)
               ]
             ),
-            element(:"tt:RateControl", [
-              element(:"tt:FrameRateLimit", video_encoder_config.rate_control.frame_rate_limit),
-              element(:"tt:ConstantBitRate ", video_encoder_config.rate_control.constant_bitrate),
-              element(:"tt:BitrateLimit", video_encoder_config.rate_control.bitrate_limit)
-            ]),
+            element(
+              :"tt:RateControl",
+              %{"ConstantBitRate" => video_encoder_config.rate_control.constant_bitrate},
+              [
+                element(:"tt:FrameRateLimit", video_encoder_config.rate_control.frame_rate_limit),
+                element(:"tt:BitrateLimit", video_encoder_config.rate_control.bitrate_limit)
+              ]
+            ),
             element(:"tt:Multicast", [
               element(:"tt:Address", [
                 element(
