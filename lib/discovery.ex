@@ -23,7 +23,19 @@ defmodule Onvif.Discovery do
   @onvif_scope_prefix "onvif://www.onvif.org/"
 
   defmodule Probe do
-    @type t :: %__MODULE__{}
+    @moduledoc """
+    A struct representing a discovered device.
+    """
+
+    @type t :: %__MODULE__{
+            types: [String.t()],
+            scopes: [String.t()],
+            request_guid: String.t(),
+            address: [String.t()],
+            device_ip: String.t(),
+            device_port: pos_integer()
+          }
+
     @derive Jason.Encoder
     defstruct [:types, :scopes, :request_guid, :address, :device_ip, :device_port]
   end

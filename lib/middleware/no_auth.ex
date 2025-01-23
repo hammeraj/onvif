@@ -1,6 +1,5 @@
 defmodule Onvif.Middleware.NoAuth do
-  @moduledoc """
-  """
+  @moduledoc false
 
   @behaviour Tesla.Middleware
   import XmlBuilder

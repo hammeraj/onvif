@@ -1,9 +1,8 @@
 defmodule Onvif.Middleware.DigestAuth do
-  @moduledoc """
-  This is a direct fork of the `Tesla.Middleware.DigestAuth`, which, does not build the
-  [digest-response](https://datatracker.ietf.org/doc/html/rfc2617#section-3.2.2) in the order that
-  the UniView LAPI accepts/understands.
-  """
+  @moduledoc false
+  # This is a direct fork of the `Tesla.Middleware.DigestAuth`, which, does not build the
+  # [digest-response](https://datatracker.ietf.org/doc/html/rfc2617#section-3.2.2) in the order that
+  # the UniView LAPI accepts/understands.
 
   @behaviour Tesla.Middleware
 

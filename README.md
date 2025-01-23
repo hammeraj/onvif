@@ -1,5 +1,8 @@
 # Onvif
 
+[![Hex.pm](https://img.shields.io/hexpm/v/onvif.svg)](https://hex.pm/packages/onvif)
+[![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/onvif)
+
 **Elixir interface for Onvif functions**
 
 ## Installation

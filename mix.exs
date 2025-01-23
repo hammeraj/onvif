@@ -1,6 +1,8 @@
 defmodule Onvif.MixProject do
   use Mix.Project
 
+  @github_url "https://github.com/hammeraj/onvif"
+
   def project do
     [
       app: :onvif,
@@ -11,16 +13,14 @@ defmodule Onvif.MixProject do
 
       # ex_doc / hex
       name: "Onvif",
-      source_url: "https://github.com/hammeraj/onvif",
+      source_url: @github_url,
       description: "Elixir interface for Onvif functions",
-      docs: [
-        # The main page in the docs
-        main: "Onvif",
-        extras: ["README.md"]
-      ],
+      docs: docs(),
       package: [
         licenses: ["BSD-3-Clause"],
-        links: []
+        links: %{
+          "GitHub" => @github_url
+        }
       ]
     ]
   end
@@ -44,6 +44,55 @@ defmodule Onvif.MixProject do
       {:xml_builder, "~> 2.3"},
       {:jason, "~> 1.4"},
       {:mimic, "~> 1.7.4", only: :test}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Onvif",
+      extras: ["README.md"],
+      nest_modules_by_prefix: [
+        Onvif.Device,
+        Onvif.Devices,
+        Onvif.Devices.Schemas,
+        Onvif.Media.Ver10,
+        Onvif.Media.Ver10.Schemas,
+        Onvif.Media.Ver20,
+        Onvif.Media.Ver20.Schemas,
+        Onvif.Recording,
+        Onvif.Recording.Schemas,
+        Onvif.Replay,
+        Onvif.Replay.Schemas,
+        Onvif.Search,
+        Onvif.Search.Schemas
+      ],
+      groups_for_modules: [
+        Core: [
+          Onvif,
+          ~r/^Onvif.Discovery.*/,
+          Onvif.Device,
+          Onvif.MacAddress,
+          Onvif.Request
+        ],
+        "Device Management": [
+          ~r/^Onvif.Devices.*/
+        ],
+        Media10: [
+          ~r/^Onvif.Media.Ver10.*/
+        ],
+        Media20: [
+          ~r/^Onvif.Media.Ver20.*/
+        ],
+        Recording: [
+          ~r/^Onvif.Recording.*/
+        ],
+        Replay: [
+          ~r/^Onvif.Replay.*/
+        ],
+        Search: [
+          ~r/^Onvif.Search.*/
+        ]
+      ]
     ]
   end
 end
