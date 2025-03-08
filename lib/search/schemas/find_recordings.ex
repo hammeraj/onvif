@@ -43,14 +43,8 @@ defmodule Onvif.Search.Schemas.FindRecordings do
 
   def changeset(module, attrs) do
     module
-    |> cast(attrs, [
-      :start_point,
-      :end_point,
-      :include_start_state,
-      :max_matches,
-      :keep_alive_time
-    ])
-    |> validate_required([:start_point])
+    |> cast(attrs, [:max_matches, :keep_alive_time])
+    |> validate_required([:keep_alive_time])
     |> cast_embed(:scope)
   end
 
