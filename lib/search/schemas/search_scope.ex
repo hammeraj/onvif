@@ -29,14 +29,7 @@ defmodule Onvif.Search.Schemas.SearchScope do
     |> apply_action(:validate)
   end
 
-  @spec to_json(__MODULE__.t()) ::
-          {:error,
-           %{
-             :__exception__ => any,
-             :__struct__ => Jason.EncodeError | Protocol.UndefinedError,
-             optional(atom) => any
-           }}
-          | {:ok, binary}
+  @spec to_json(__MODULE__.t()) :: {:error, Jason.EncodeError.t() | Exception.t()} | {:ok, binary}
   def to_json(%__MODULE__{} = schema) do
     Jason.encode(schema)
   end
