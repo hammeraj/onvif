@@ -5,7 +5,7 @@ defmodule Onvif.Search.FindEventsTest do
 
   describe "FindEvents/2" do
     test "get an event search token" do
-      xml_response = File.read!("test/search/fixtures/find_events__success.xml")
+      xml_response = File.read!("test/search/fixtures/find_events_success.xml")
 
       device = Onvif.Factory.device()
 
