@@ -4,6 +4,7 @@ defmodule Onvif.PTZ.GetNodesTest do
   @moduletag capture_log: true
 
   alias Onvif.PTZ.Schemas.PTZNode
+  alias Onvif.Schemas.FloatRange
 
   describe "GetNodes/1" do
     test "get ptz nodes" do
@@ -26,68 +27,68 @@ defmodule Onvif.PTZ.GetNodesTest do
                  supported_ptz_spaces: %PTZNode.SupportedPTZSpaces{
                    absolute_pan_tilt_position_space: %Onvif.PTZ.Schemas.Space2DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/PanTiltSpaces/PositionGenericSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space2DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      },
-                     y_range: %Onvif.PTZ.Schemas.Space2DDescription.FloatRange{
+                     y_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      }
                    },
                    absolute_zoom_position_space: %Onvif.PTZ.Schemas.Space1DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/ZoomSpaces/PositionGenericSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space1DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: 0.0,
                        max: 1.0
                      }
                    },
                    relative_pan_tilt_translation_space: %Onvif.PTZ.Schemas.Space2DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/PanTiltSpaces/TranslationGenericSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space2DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      },
-                     y_range: %Onvif.PTZ.Schemas.Space2DDescription.FloatRange{
+                     y_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      }
                    },
                    relative_zoom_translation_space: %Onvif.PTZ.Schemas.Space1DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/ZoomSpaces/TranslationGenericSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space1DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      }
                    },
                    continuous_pan_tilt_velocity_space: %Onvif.PTZ.Schemas.Space2DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/PanTiltSpaces/VelocityGenericSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space2DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      },
-                     y_range: %Onvif.PTZ.Schemas.Space2DDescription.FloatRange{
+                     y_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      }
                    },
                    continuous_zoom_velocity_space: %Onvif.PTZ.Schemas.Space1DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/ZoomSpaces/VelocityGenericSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space1DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: -1.0,
                        max: 1.0
                      }
                    },
                    pan_tilt_speed_space: %Onvif.PTZ.Schemas.Space1DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/PanTiltSpaces/GenericSpeedSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space1DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: 0.0,
                        max: 1.0
                      }
                    },
                    zoom_speed_space: %Onvif.PTZ.Schemas.Space1DDescription{
                      uri: "http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace",
-                     x_range: %Onvif.PTZ.Schemas.Space1DDescription.FloatRange{
+                     x_range: %FloatRange{
                        min: 0.0,
                        max: 1.0
                      }

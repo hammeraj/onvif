@@ -8,6 +8,8 @@ defmodule Onvif.PTZ.Schemas.Space2DDescription do
   import Ecto.Changeset
   import SweetXml
 
+  alias Onvif.Schemas.FloatRange
+
   @type t :: %__MODULE__{}
 
   @primary_key false
@@ -15,17 +17,8 @@ defmodule Onvif.PTZ.Schemas.Space2DDescription do
   embedded_schema do
     field(:uri, :string)
 
-    embeds_one :x_range, FloatRange, primary_key: false do
-      @derive Jason.Encoder
-      field(:min, :float)
-      field(:max, :float)
-    end
-
-    embeds_one :y_range, FloatRange, primary_key: false do
-      @derive Jason.Encoder
-      field(:min, :float)
-      field(:max, :float)
-    end
+    embeds_one(:x_range, FloatRange)
+    embeds_one(:y_range, FloatRange)
   end
 
   def parse(nil), do: nil
@@ -34,27 +27,15 @@ defmodule Onvif.PTZ.Schemas.Space2DDescription do
     xmap(
       doc,
       uri: ~x"./tt:URI/text()"s,
-      x_range: ~x"./tt:XRange"e |> transform_by(&parse_range/1),
-      y_range: ~x"./tt:YRange"e |> transform_by(&parse_range/1)
+      x_range: ~x"./tt:XRange"e |> transform_by(&FloatRange.parse/1),
+      y_range: ~x"./tt:YRange"e |> transform_by(&FloatRange.parse/1)
     )
   end
 
   def changeset(space2d_description, attrs) do
     space2d_description
     |> cast(attrs, [:uri])
-    |> cast_embed(:x_range, with: &range_changeset(&1, &2))
-    |> cast_embed(:y_range, with: &range_changeset(&1, &2))
-  end
-
-  defp parse_range(doc) do
-    xmap(
-      doc,
-      min: ~x"./tt:Min/text()"s,
-      max: ~x"./tt:Max/text()"s
-    )
-  end
-
-  defp range_changeset(module, attrs) do
-    cast(module, attrs, [:min, :max])
+    |> cast_embed(:x_range, with: &FloatRange.changeset/2)
+    |> cast_embed(:y_range, with: &FloatRange.changeset/2)
   end
 end
