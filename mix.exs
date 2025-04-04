@@ -53,6 +53,7 @@ defmodule Onvif.MixProject do
       extras: ["README.md"],
       nest_modules_by_prefix: [
         Onvif.Device,
+        Onvif.Schemas,
         Onvif.Devices,
         Onvif.Devices.Schemas,
         Onvif.Media.Ver10,
@@ -64,7 +65,9 @@ defmodule Onvif.MixProject do
         Onvif.Replay,
         Onvif.Replay.Schemas,
         Onvif.Search,
-        Onvif.Search.Schemas
+        Onvif.Search.Schemas,
+        Onvif.PTZ,
+        Onvif.PTZ.Schemas
       ],
       groups_for_modules: [
         Core: [
@@ -72,7 +75,8 @@ defmodule Onvif.MixProject do
           ~r/^Onvif.Discovery.*/,
           Onvif.Device,
           Onvif.MacAddress,
-          Onvif.Request
+          Onvif.Request,
+          ~r/Onvif.Schemas.*/
         ],
         "Device Management": [
           ~r/^Onvif.Devices.*/
@@ -91,6 +95,9 @@ defmodule Onvif.MixProject do
         ],
         Search: [
           ~r/^Onvif.Search.*/
+        ],
+        PTZ: [
+          ~r/^Onvif.PTZ.*/
         ]
       ]
     ]
