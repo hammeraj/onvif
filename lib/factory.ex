@@ -90,7 +90,7 @@ defmodule Onvif.Factory do
           namespace: "http://www.onvif.org/ver20/ptz/wsdl",
           xaddr: "http://192.168.254.89/onvif/ptz_service",
           version: "22.12"
-        },
+        }
       ],
       time_diff_from_system_secs: 3597,
       username: "admin"
