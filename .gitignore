@@ -26,3 +26,6 @@ onvif-*.tar
 /tmp/
 
 /test/support/*
+
+/.expert/*
+/.elixir_ls/*

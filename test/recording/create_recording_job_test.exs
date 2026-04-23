@@ -3,6 +3,8 @@ defmodule Onvif.Recording.CreateRecordingJobTest do
 
   @moduletag capture_log: true
 
+  alias Onvif.Recording.Schemas.JobConfiguration
+
   describe "CreateRecordingJob/2" do
     test "create a recording" do
       xml_response = File.read!("test/recording/fixture/create_recording_job_success.xml")
@@ -14,11 +16,11 @@ defmodule Onvif.Recording.CreateRecordingJobTest do
       end)
 
       {:ok, response} =
-        Onvif.Recording.CreateRecordingJob.request(device, [
-          "SD_DISK_20241120_211729_9C896594",
-          "9",
-          "Active"
-        ])
+        Onvif.Recording.CreateRecordingJob.request(device, %JobConfiguration{
+          recording_token: "SD_DISK_20241120_211729_9C896594",
+          priority: 9,
+          mode: :active
+        })
 
       assert response == "SD_DISK_20241120_211729_9C896594"
     end

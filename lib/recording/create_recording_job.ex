@@ -1,7 +1,10 @@
 defmodule Onvif.Recording.CreateRecordingJob do
   import SweetXml
   import XmlBuilder
+
   require Logger
+
+  alias Onvif.Recording.Schemas.JobConfiguration
 
   def soap_action, do: "http://www.onvif.org/ver10/recording/wsdl/CreateRecordingJob"
 
@@ -9,14 +12,10 @@ defmodule Onvif.Recording.CreateRecordingJob do
     Onvif.Recording.request(device, args, __MODULE__)
   end
 
-  def request_body(recording_token, priority \\ "0", mode \\ "Active") do
+  def request_body(%JobConfiguration{} = config) do
     element(:"s:Body", [
       element(:"trc:CreateRecordingJob", [
-        element(:"trc:JobConfiguration", [
-          element(:"tt:RecordingToken", recording_token),
-          element(:"tt:Mode", mode),
-          element(:"tt:Priority", priority)
-        ])
+        element(:"trc:JobConfiguration", JobConfiguration.to_xml(config))
       ])
     ])
   end
