@@ -1,4 +1,4 @@
-name: CI Tests
+name: CI
 
 on:
   push:
@@ -14,34 +14,131 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
+    name: Test (Elixir ${{ matrix.elixir }} / OTP ${{ matrix.otp }})
+    runs-on: ubuntu-latest
 
-    name: Build and test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Floor: matches .tool-versions, proves the ~> 1.14 minimum still works
+          - elixir: "1.14.5"
+            otp: "25.3.2.10"
+          # Modern: runs coverage; bump this alongside OTP releases
+          - elixir: "1.17.3"
+            otp: "27.2"
+            coverage: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir }}
+          version-type: "strict"
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-mix-
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Run tests
+        if: ${{ !matrix.coverage }}
+        run: mix test
+
+      - name: Run tests with coverage
+        if: ${{ matrix.coverage }}
+        run: mix coveralls.github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Read .tool-versions
-      uses: marocchino/tool-versions-action@v1
-      id: versions
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: versions
 
-    - name: Set up Elixir
-      uses: erlef/setup-beam@v1
-      with:
-        otp-version: ${{ steps.versions.outputs.erlang }}
-        elixir-version: ${{ steps.versions.outputs.elixir }}
-        version-type: "strict"
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ steps.versions.outputs.erlang }}
+          elixir-version: ${{ steps.versions.outputs.elixir }}
+          version-type: "strict"
 
-    - name: Restore dependencies cache
-      uses: actions/cache@v4
-      with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-lint-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-lint-mix-
 
-    - name: Install dependencies
-      run: mix deps.get
+      - name: Install dependencies
+        run: mix deps.get
 
-    - name: Run tests
-      run: mix test
+      - name: Check formatting
+        run: mix format --check-formatted
+
+      - name: Check for unused dependencies
+        run: mix deps.unlock --check-unused
+
+      - name: Compile with warnings as errors
+        run: mix compile --warnings-as-errors
+
+  dialyzer:
+    name: Dialyzer
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: versions
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ steps.versions.outputs.erlang }}
+          elixir-version: ${{ steps.versions.outputs.elixir }}
+          version-type: "strict"
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-dialyzer-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-dialyzer-mix-
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Restore PLT cache
+        uses: actions/cache@v4
+        id: plt-cache
+        with:
+          path: priv/plts
+          key: ${{ runner.os }}-${{ steps.versions.outputs.elixir }}-${{ steps.versions.outputs.erlang }}-plt-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ steps.versions.outputs.elixir }}-${{ steps.versions.outputs.erlang }}-plt-
+
+      - name: Create PLTs
+        if: steps.plt-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p priv/plts
+          mix dialyzer --plt
+
+      - name: Run Dialyzer
+        run: mix dialyzer --format github

@@ -11,6 +11,21 @@ defmodule Onvif.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
 
+      # test coverage
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.html": :test,
+        "coveralls.github": :test
+      ],
+
+      # dialyzer
+      dialyzer: [
+        plt_file: {:no_warnings, "priv/plts/dialyzer.plt"},
+        plt_add_apps: [:mix, :ex_unit]
+      ],
+
       # ex_doc / hex
       name: "Onvif",
       source_url: @github_url,
@@ -43,7 +58,9 @@ defmodule Onvif.MixProject do
       {:tesla, "~> 1.13"},
       {:xml_builder, "~> 2.3"},
       {:jason, "~> 1.4"},
-      {:mimic, "~> 1.7.4", only: :test}
+      {:mimic, "~> 1.7.4", only: :test},
+      {:excoveralls, "~> 0.18", only: :test},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
