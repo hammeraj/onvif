@@ -13,6 +13,7 @@ defmodule Onvif.PTZ.GetNodes do
 
   require Logger
 
+  alias Onvif.Device
   alias Onvif.PTZ.Schemas.PTZNode
 
   def soap_action(), do: "http://www.onvif.org/ver20/ptz/wsdl/GetNodes"

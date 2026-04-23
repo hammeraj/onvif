@@ -8,6 +8,7 @@ defmodule Onvif.Recording.GetServiceCapabilities do
 
   require Logger
 
+  alias Onvif.Device
   alias Onvif.Recording.Schemas.ServiceCapabilities
 
   def soap_action(), do: "http://www.onvif.org/ver10/recording/wsdl/GetServiceCapabilities"

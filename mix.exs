@@ -23,7 +23,10 @@ defmodule Onvif.MixProject do
       # dialyzer
       dialyzer: [
         plt_file: {:no_warnings, "priv/plts/dialyzer.plt"},
-        plt_add_apps: [:mix, :ex_unit]
+        plt_add_apps: [:mix, :ex_unit],
+        format: :dialyxir,
+        list_unused_filters: true,
+        ignore_warnings: ".dialyzer_ignore.exs"
       ],
 
       # ex_doc / hex

@@ -8,6 +8,8 @@ defmodule Onvif.PTZ.GetStatus do
 
   require Logger
 
+  alias Onvif.Device
+
   def soap_action(), do: "http://www.onvif.org/ver20/ptz/wsdl/GetStatus"
 
   @spec request(Device.t(), String.t()) :: {:ok, any()} | {:error, map()}

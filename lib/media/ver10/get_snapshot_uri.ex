@@ -2,6 +2,8 @@ defmodule Onvif.Media.Ver10.GetSnapshotUri do
   import SweetXml
   import XmlBuilder
 
+  alias Onvif.Device
+
   def soap_action, do: "http://www.onvif.org/ver10/media/wsdl/GetSnapshotUri"
 
   @spec request(Device.t(), list) :: {:ok, any} | {:error, map()}
