@@ -14,7 +14,7 @@ defmodule Onvif.PTZ do
   ]
 
   @spec request(Device.t(), module()) :: {:ok, any} | {:error, map()}
-  @spec request(Device.t(), list(), atom()) :: {:ok, any} | {:error, map()}
+  @spec request(Device.t(), any(), atom()) :: {:ok, any} | {:error, map()}
   def request(%Device{} = device, args \\ [], operation) do
     content = generate_content(operation, args)
     do_request(device, operation, content)
