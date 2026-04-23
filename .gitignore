@@ -29,3 +29,7 @@ onvif-*.tar
 
 /.expert/*
 /.elixir_ls/*
+
+# Dialyzer PLT cache
+/priv/plts/*.plt
+/priv/plts/*.plt.hash

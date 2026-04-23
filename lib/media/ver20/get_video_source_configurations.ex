@@ -23,7 +23,7 @@ defmodule Onvif.Media.Ver20.GetVideoSourceConfigurations do
     ])
   end
 
-  @spec response(any) :: {:error, Ecto.Changeset.t()} | {:ok, struct()}
+  @spec response(any) :: {:ok, [struct()]}
   def response(xml_response_body) do
     response =
       xml_response_body
